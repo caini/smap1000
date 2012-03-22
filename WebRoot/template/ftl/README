@@ -1,0 +1,4 @@
+admin 目录放置系统管理员的模版页面
+front 放置用户中心的模版页面
+json.html对应json数据的返回
+xml.html 对应xml数据格式的返回
