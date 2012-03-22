@@ -163,7 +163,7 @@
 
 
  <!-- 阿里巴巴项目结束 -->
-  </dependencies>
+  </dependencies> 
  <build>
     <plugins>
       <plugin>
