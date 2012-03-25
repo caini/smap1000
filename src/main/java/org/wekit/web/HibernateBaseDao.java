@@ -26,8 +26,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 public abstract class HibernateBaseDao<T, PK extends Serializable> {
 
 	@Autowired
-	private SessionFactory sessionFactory;
-
+	private SessionFactory	sessionFactory;
 
 	/**
 	 * 获取Hibernate的Session会话
@@ -51,24 +50,16 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	protected abstract Class<T> getEntityClass();
 
 	/**
-	 * 获取hsql查询的
-	 * 
-	 * @param query
-	 * @param paginable
-	 * @return
-	 */
-	protected String getCountSql(Query query, IPaginable paginable) {
-		return null;
-	}
-
-	/**
 	 * 获取标准sql的总数统计函数
 	 * 
 	 * @param nativeSql
 	 * @return
 	 */
 	protected String getCountSql(String nativeSql) {
-		return null;
+		String lowcase = nativeSql.toLowerCase();
+		int index = lowcase.indexOf("from");
+		String countSql = "select count(1) " + nativeSql.substring(index);
+		return countSql;
 	}
 
 	/**
@@ -78,14 +69,22 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @return
 	 */
 	protected Query paginationParam(Query query, IPaginable paginable) {
-		return null;
+		if (paginable.isCount()) {
+			String nativeSql = this.QueryToNativeSql(query);
+			Query nativequery = getSession().createSQLQuery(getCountSql(nativeSql));
+			Object object = nativequery.uniqueResult();
+			paginable.setTotleCount(Integer.parseInt(object.toString()));
+		}
+		query.setFirstResult(paginable.getPageSize() * paginable.getCurrentPage() - 1);
+		query.setFetchSize(paginable.getPageSize());
+		return query;
 	}
 
-	public SessionFactory getSessionFactory() {
+	protected SessionFactory getSessionFactory() {
 		return sessionFactory;
 	}
 
-	public void setSessionFactory(SessionFactory sessionFactory) {
+	protected void setSessionFactory(SessionFactory sessionFactory) {
 		this.sessionFactory = sessionFactory;
 	}
 
@@ -95,7 +94,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @param id
 	 * @return
 	 */
-	public T get(PK id) {
+	protected T get(PK id) {
 		return get(id, false);
 	}
 
@@ -107,7 +106,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public T get(PK id, boolean isLock) {
+	protected T get(PK id, boolean isLock) {
 		if (isLock) {
 			return (T) getSession().get(getEntityClass(), id, LockOptions.UPGRADE);
 		} else {
@@ -121,7 +120,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @param id
 	 * @return
 	 */
-	public T load(PK id) {
+	protected T load(PK id) {
 		return load(id, false);
 	}
 
@@ -132,7 +131,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public T load(PK id, boolean isLock) {
+	protected T load(PK id, boolean isLock) {
 		if (isLock) {
 			return (T) getSession().load(getEntityClass(), id, LockOptions.UPGRADE);
 		} else {
@@ -146,7 +145,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @param hsql
 	 * @return
 	 */
-	public Query createrQuery(String hsql) {
+	protected Query createrQuery(String hsql) {
 		return getSession().createQuery(hsql);
 	}
 
@@ -156,7 +155,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @param sql
 	 * @return
 	 */
-	public SQLQuery createNativeQuery(String sql) {
+	protected SQLQuery createNativeQuery(String sql) {
 		return getSession().createSQLQuery(sql);
 
 	}
@@ -166,7 +165,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * 
 	 * @param object
 	 */
-	public void delete(T object) {
+	protected void delete(T object) {
 		getSession().delete(object);
 	}
 
@@ -175,8 +174,9 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * 
 	 * @param id
 	 */
-	public void deleteByPK(PK id) {
-
+	protected void deleteByPK(PK id) {
+		T object = get(id);
+		delete(object);
 	}
 
 	/**
@@ -184,8 +184,11 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * 
 	 * @return
 	 */
-	public List<T> queryByProperty() {
-		return null;
+	@SuppressWarnings("unchecked")
+	protected List<T> queryByProperty(String propertyName, Object propertyValeu) {
+		Query query= createrQuery("from "+getEntityClass().getName() +"bean where bean."+propertyName+"=:value");
+		query.setParameter("value",propertyValeu);
+		return query.list();
 	}
 
 	/**
@@ -193,8 +196,9 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * 
 	 * @param object
 	 */
-	public void save(T object) {
+	protected T save(T object) {
 		getSession().save(object);
+		return object;
 	}
 
 	/**
@@ -202,8 +206,9 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * 
 	 * @param object
 	 */
-	public void saveOrUpdate(T object) {
+	protected T saveOrUpdate(T object) {
 		getSession().saveOrUpdate(object);
+		return object;
 	}
 
 	/**
@@ -212,7 +217,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @param object
 	 * @return
 	 */
-	public LockMode getCurrentLockMode(T object) {
+	protected LockMode getCurrentLockMode(T object) {
 		return getSession().getCurrentLockMode(object);
 	}
 
@@ -225,7 +230,8 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 *            //多少数据刷新一次
 	 * @return
 	 */
-	public List<T> save(List<T> ojects, int batchSize) {
+	protected List<T> save(List<T> ojects, int batchSize) {
+
 		return null;
 	}
 
@@ -235,8 +241,9 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @param object
 	 * @return
 	 */
-	public T update(T object) {
-		return null;
+	protected T update(T object) {
+		getSession().update(object);
+		return object;
 	}
 
 	/**
@@ -246,24 +253,23 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public PK getIdentifier(T object) {
+	protected PK getIdentifier(T object) {
 		return (PK) getSession().getIdentifier(object);
 	}
 
 	/**
 	 * 获取实体的名称
-	 * 
 	 * @param object
 	 * @return
 	 */
-	public String getEntityName(T object) {
+	protected String getEntityName(T object) {
 		return getSession().getEntityName(object);
 	}
 
 	/**
 	 * 刷新当前的session对象
 	 */
-	public void flush() {
+	protected void flush() {
 		getSession().flush();
 	}
 
@@ -279,5 +285,17 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 		translator.compile(Collections.EMPTY_MAP, false);
 		return translator.getSQLString();
 	}
+	
+    @SuppressWarnings("unchecked")
+	protected List<T> getAll(){
+    	Query query=createrQuery("from "+ getEntityClass().getName());
+    	return query.list();
+    }
 
+    @SuppressWarnings("unchecked")
+	protected List<T> getObjectsWithPagination(IPaginable paginable){
+    	Query query=createrQuery("from "+ getEntityClass().getName());
+    	query =paginationParam(query, paginable);
+    	return query.list();
+    }
 }

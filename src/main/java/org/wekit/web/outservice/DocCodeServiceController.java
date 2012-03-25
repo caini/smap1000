@@ -5,9 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.wekit.web.BaseController;
 
 @Controller("docCodeServiceController")
-public class DocCodeServiceController {
+public class DocCodeServiceController extends BaseController {
 
 	/**
 	 * 查询文档类型编码

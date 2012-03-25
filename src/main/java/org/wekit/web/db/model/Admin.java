@@ -44,7 +44,7 @@ public class Admin implements Serializable {
 	@Column(name = "ctime", nullable = false)
 	private long createTime;
 
-	@Column(name = "logintimes")
+	@Column(name = "logintimes",nullable=true)
 	private long loginTimes;
 
 	@Column(name = "lastip", length = 128, nullable = true)
@@ -53,6 +53,25 @@ public class Admin implements Serializable {
 	public Admin() {
 
 	}
+	
+	/**
+	 * 系统管理员构造函数
+	 * @param username
+	 * @param displayName
+	 * @param password
+	 * @param createTime
+	 * @param loginTimes
+	 * @param lastip
+	 */
+	public Admin(String username,String displayName,String password,long createTime,long loginTimes,String lastip){
+		this.userName=username;
+		this.displayName=displayName;
+		this.password=password;
+		this.loginTimes=loginTimes;
+		this.createTime=createTime;
+		this.lastIp=lastip;
+	}
+	
 
 	public long getAdminId() {
 		return adminId;
@@ -91,7 +110,12 @@ public class Admin implements Serializable {
 	}
 
 	public void setLoginTimes(long loginTimes) {
-		this.loginTimes = loginTimes;
+	     try{
+		   this.loginTimes = loginTimes;
+	     }catch(Exception ex)
+	     {
+	    	this.loginTimes=0; 
+	     }
 	}
 
 	public String getLastIp() {

@@ -13,25 +13,25 @@ public interface IPaginable extends Serializable {
 	 * 获取查询总页数
 	 * @return
 	 */
-	long getTotleCount();
+	int getTotleCount();
 	
 	/**
 	 * 获取总页数
 	 * @return
 	 */
-	long getTotlePage();
+	int getTotlePage();
 	
 	/**
 	 * 获取每页的数目
 	 * @return
 	 */
-	long getPageSize();
+	int getPageSize();
 	
 	/**
 	 * 获取当前页的页码
 	 * @return
 	 */
-	long getCurrentPage();
+	int getCurrentPage();
 	
 	/**
 	 * 是否是第一页
@@ -49,11 +49,23 @@ public interface IPaginable extends Serializable {
 	 * 获取上一页
 	 * @return
 	 */
-	long  getPrePage();
+	int  getPrePage();
 	
 	/**
 	 * 获取下一页
 	 * @return
 	 */
-	long getNextPage();
+	int getNextPage();
+	
+	/**
+	 * 是否进行总数统计
+	 * @return
+	 */
+	boolean isCount();
+	
+	/**
+	 * 设置提交查询的总数
+	 * @param count
+	 */
+	void setTotleCount(int count);
 }

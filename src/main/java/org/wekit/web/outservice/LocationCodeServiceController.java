@@ -5,8 +5,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.wekit.web.BaseController;
 @Controller("locationCodeServiceController")
-public class LocationCodeServiceController {
+public class LocationCodeServiceController extends BaseController{
 
 	/**
 	 * 查询定位码信息
