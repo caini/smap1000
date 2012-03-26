@@ -25,6 +25,9 @@ public class SecurityServiceController extends BaseController {
 	private BaseDataService baseDataService;
 	
 	
+	
+	
+	
 	@RequestMapping(value="/security/admin/query.{extend}",method=RequestMethod.GET)
 	public String queryAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		int pageno=0;

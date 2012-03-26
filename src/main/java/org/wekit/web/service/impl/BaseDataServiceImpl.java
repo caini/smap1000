@@ -53,5 +53,6 @@ public class BaseDataServiceImpl implements BaseDataService {
 		// TODO Auto-generated method stub
 		return adminDao.getAdminsWithPagination(paginable);
 	}
+	
 
 }

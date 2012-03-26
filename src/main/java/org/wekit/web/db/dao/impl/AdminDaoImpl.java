@@ -13,32 +13,63 @@ public class AdminDaoImpl extends HibernateBaseDao<Admin, Long> implements Admin
 
 	@Override
 	public Admin getAdmin(long id) {
-		// TODO Auto-generated method stub
+
 		return this.get(id);
 	}
 
 	@Override
 	public Admin saveAdmin(Admin admin) {
-		// TODO Auto-generated method stub
+
 		return this.save(admin);
 	}
 
 	@Override
 	protected Class<Admin> getEntityClass() {
-		// TODO Auto-generated method stub
+
 		return Admin.class;
 	}
 
 	@Override
 	public List<Admin> getAllAdmins() {
-		// TODO Auto-generated method stub
+
 		return this.getAll();
 	}
 
 	@Override
 	public List<Admin> getAdminsWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
+
 		return getObjectsWithPagination(paginable);
+	}
+
+	@Override
+	public boolean updateAdmin(Admin admin) {
+		try {
+			this.update(admin);
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean deleteAdmin(Admin admin) {
+		try {
+
+			this.delete(admin);
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
+	public boolean deleteAdmin(long id) {
+		try{
+			this.deleteByPK(id);
+		}catch(Exception ex){
+			return false;
+		}
+		return true;
 	}
 
 }

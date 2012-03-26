@@ -21,6 +21,10 @@ public interface AdminDao {
 	 */
 	Admin saveAdmin(Admin admin);
 	
+	/**
+	 * 获取所有的系统管理员
+	 * @return
+	 */
 	List<Admin> getAllAdmins();
 	
 	/**
@@ -29,5 +33,26 @@ public interface AdminDao {
 	 * @return
 	 */
 	List<Admin> getAdminsWithPagination(IPaginable iPaginable);
+	
+	/**
+	 * 更新系统用户
+	 * @param admin
+	 * @return
+	 */
+	boolean updateAdmin(Admin admin);
+	
+	/**
+	 * 删除系统用户
+	 * @param admin
+	 * @return
+	 */
+	boolean deleteAdmin(Admin admin);
+	
+	/**
+	 * 根据ID删除系统用户
+	 * @param id
+	 * @return
+	 */
+	boolean deleteAdmin(long id);
 	
 }

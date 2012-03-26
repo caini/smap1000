@@ -37,7 +37,9 @@ public abstract class BaseController {
 	 * @return
 	 */
 	protected static Map<String, String> getParam(HttpServletRequest request) {
+	
 		HashMap<String, String> hashMap = new HashMap<String, String>();
+		
 		if (request.getParameter("param") != null) {
 			String param = request.getParameter("param");
 			String[] params = param.split("&");
@@ -51,6 +53,4 @@ public abstract class BaseController {
 		return hashMap;
 	}
 	
-	
-
 }
