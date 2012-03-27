@@ -61,8 +61,13 @@ public class RemoteAclDaoImpl extends HibernateBaseDao<RemoteAcl, Long> implemen
 	}
 
 	@Override
-	public RemoteAcl updateRemoteAcl(RemoteAcl remoteAcl) {
-		return this.update(remoteAcl);
+	public boolean updateRemoteAcl(RemoteAcl remoteAcl) {
+		try{
+		this.update(remoteAcl);
+		}catch(Exception ex){
+			return false;
+		}
+		return true;
 	}
 
 	@Override

@@ -59,5 +59,5 @@ public interface RemoteAclDao {
 	 * @param remoteAcl
 	 * @return
 	 */
-	public RemoteAcl updateRemoteAcl(RemoteAcl remoteAcl);
+	public boolean updateRemoteAcl(RemoteAcl remoteAcl);
 }

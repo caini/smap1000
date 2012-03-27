@@ -38,7 +38,7 @@ public interface RemoteAclService {
 	 * @param remoteAcl
 	 * @return
 	 */
-	public RemoteAcl updateRemoteAcl(RemoteAcl remoteAcl);
+	public boolean updateRemoteAcl(RemoteAcl remoteAcl);
 
 	/**
 	 * 删除远程用户

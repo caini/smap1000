@@ -21,7 +21,18 @@
 <context:component-scan base-package="org.wekit.web">
 <context:include-filter type="regex" expression="org.wekit.web.outservice.*"/>
 </context:component-scan>
+
+ <!-- 函数解析拦截器 -->
+ <bean id="paramsPaserInterceptor" class="com.wekit.web.interceptor.ParamsPaserInterceptor"/>
  
+ <!-- 安全拦截器 -->
+ <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="paramsPaserInterceptor"/>
+			</list>
+		</property>
+ </bean>
  
  <!-- 前端展示语言 -->
  <bean id="localeResolver" class="org.springframework.web.servlet.i18n.CookieLocaleResolver">

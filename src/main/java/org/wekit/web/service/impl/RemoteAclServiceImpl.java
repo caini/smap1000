@@ -42,7 +42,7 @@ public class RemoteAclServiceImpl implements RemoteAclService {
 	}
 
 	@Override
-	public RemoteAcl updateRemoteAcl(RemoteAcl remoteAcl) {
+	public boolean updateRemoteAcl(RemoteAcl remoteAcl) {
 		// TODO Auto-generated method stub
 		return this.remoteAclDao.updateRemoteAcl(remoteAcl);
 	}
