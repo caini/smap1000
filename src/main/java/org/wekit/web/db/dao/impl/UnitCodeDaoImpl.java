@@ -7,61 +7,70 @@ import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.UnitCodeDao;
 import org.wekit.web.db.model.UnitCode;
+
 /**
  * 机组码访问类
+ * 
  * @author HuangWeili
- *
+ * 
  */
 @Repository("unitCodeDao")
-public class UnitCodeDaoImpl extends HibernateBaseDao<UnitCode,Long> implements UnitCodeDao {
+public class UnitCodeDaoImpl extends HibernateBaseDao<UnitCode, Long> implements UnitCodeDao {
 
 	@Override
 	protected Class<UnitCode> getEntityClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return UnitCode.class;
 	}
 
 	@Override
 	public UnitCode addUnitCode(UnitCode unitCode) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(unitCode);
 	}
 
 	@Override
 	public UnitCode getUnitCode(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.get(id);
 	}
 
 	@Override
 	public boolean updateUnitCode(UnitCode unitCode) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.update(unitCode);
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
+
 	}
 
 	@Override
 	public boolean deleteUnitCode(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.deleteByPK(id);
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteUnitCode(UnitCode unitCode) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.delete(unitCode);
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public List<UnitCode> getAllCodes() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getAll();
 	}
 
 	@Override
 	public List<UnitCode> getCodesWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getObjectsWithPagination(paginable);
 	}
 
-	
 }

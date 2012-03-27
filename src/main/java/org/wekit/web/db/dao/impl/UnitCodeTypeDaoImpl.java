@@ -5,57 +5,70 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
-import org.wekit.web.db.dao.UnitCodeDao;
 import org.wekit.web.db.dao.UnitCodeTypeDao;
-import org.wekit.web.db.model.UnitCode;
 import org.wekit.web.db.model.UnitCodeType;
+
 /**
  * 机组码分类访问类
+ * 
  * @author HuangWeili
- *
+ * 
  */
 @Repository("unitCodeTypeDao")
-public class UnitCodeTypeDaoImpl extends HibernateBaseDao<UnitCode, Long> implements UnitCodeTypeDao{
+public class UnitCodeTypeDaoImpl extends HibernateBaseDao<UnitCodeType, Long> implements UnitCodeTypeDao {
 
 	@Override
-	protected Class<UnitCode> getEntityClass() {
-		// TODO Auto-generated method stub
-		return null;
+	protected Class<UnitCodeType> getEntityClass() {
+		return UnitCodeType.class;
 	}
 
 	@Override
 	public UnitCodeType addUnitCodeType(UnitCodeType unitCodeType) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(unitCodeType);
 	}
 
 	@Override
 	public UnitCodeType getUnitCodeType(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.get(id);
 	}
 
 	@Override
 	public boolean deleteUnitCodeType(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.deleteByPK(id);
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteUnitCodeType(UnitCodeType unitCodeType) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.delete(unitCodeType);
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public List<UnitCodeType> getAllUnitCodeTypes() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getAll();
 	}
 
 	@Override
 	public List<UnitCodeType> getUnitCodeTypesWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getObjectsWithPagination(paginable);
+	}
+
+	@Override
+	public boolean updateUnitCodeType(UnitCodeType unitCodeType) {
+		try {
+			this.update(unitCodeType);
+		} catch (Exception ex) {
+			return false;
+		}
+		return true;
 	}
 }

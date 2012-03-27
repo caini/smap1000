@@ -6,7 +6,7 @@ import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.FeedbackType;
 
 /**
- * 
+ * 反馈信息类型访问层
  * @author huangweili
  *
  */

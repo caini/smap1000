@@ -269,7 +269,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	/**
 	 * 刷新当前的session对象
 	 */
-	protected void flush() {
+	public void flush() {
 		getSession().flush();
 	}
 
