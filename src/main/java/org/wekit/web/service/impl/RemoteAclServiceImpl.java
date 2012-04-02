@@ -37,13 +37,11 @@ public class RemoteAclServiceImpl implements RemoteAclService {
 
 	@Override
 	public List<RemoteAcl> getRemoteAclsWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
 		return this.remoteAclDao.getRemoteAclsWithPagination(paginable);
 	}
 
 	@Override
 	public boolean updateRemoteAcl(RemoteAcl remoteAcl) {
-		// TODO Auto-generated method stub
 		return this.remoteAclDao.updateRemoteAcl(remoteAcl);
 	}
 

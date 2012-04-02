@@ -3,6 +3,7 @@ package org.wekit.web.service;
 import java.util.List;
 
 import org.wekit.web.IPaginable;
+import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.Code;
 import org.wekit.web.db.model.TempCode;
 
@@ -49,14 +50,14 @@ public interface CodeService {
 	 * 获取所有的编码
 	 * @return
 	 */
-	public List<Code> getAllCode();
+	public List<Code> getAllCodes();
 	
 	/**
 	 * 根据分页信息获取编码
 	 * @param paginable
 	 * @return
 	 */
-	public List<Code> getCodesWithPagination(IPaginable paginable);
+	public Pagination<Code> getCodesWithPagination(IPaginable paginable);
 	
 	/**
 	 * 添加编码
@@ -92,6 +93,7 @@ public interface CodeService {
 	 * @return
 	 */
 	public boolean deleteTempCode(String code);
+	
 	
 	
 	

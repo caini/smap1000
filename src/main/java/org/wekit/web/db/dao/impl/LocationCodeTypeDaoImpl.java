@@ -2,6 +2,7 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -15,52 +16,64 @@ import org.wekit.web.db.model.LocationCodeType;
 @Repository("locationCodeTypeDao")
 public class LocationCodeTypeDaoImpl  extends HibernateBaseDao<LocationCodeType, Long> implements LocationCodeTypeDao{
 
+	private static Logger logger=Logger.getLogger(LocationCodeTypeDaoImpl.class);
+	
 	@Override
 	protected Class<LocationCodeType> getEntityClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return LocationCodeType.class;
 	}
 
 	@Override
 	public LocationCodeType addLocationCodeType(LocationCodeType locationCodeType) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(locationCodeType);
 	}
 
 	@Override
 	public LocationCodeType getLocationCodeType(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.get(id);
 	}
 
 	@Override
 	public boolean deleteLocationCodeType(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			this.deleteByPK(id);
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteLocationCodeType(LocationCodeType locationCodeType) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			this.delete(locationCodeType);
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean updateLocationCodeType(LocationCodeType locationCodeType) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+		 this.update(locationCodeType);
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public List<LocationCodeType> getAllLocationCodeTypes() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getAll();
 	}
 
 	@Override
 	public List<LocationCodeType> getLocationCodeTypesWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getObjectsWithPagination(paginable);
 	}
 
 	

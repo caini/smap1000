@@ -11,7 +11,7 @@ public interface CodeDao {
 	 * 添加编码
 	 * @return
 	 */
-	public Code addCode();
+	public Code addCode(Code code);
 	
 	/**
 	 * 获取所有的编码
@@ -53,4 +53,11 @@ public interface CodeDao {
 	 * @return
 	 */
 	public Code getCode(Long id);
+	
+	/**
+	 * 根据code 获取code的详细信息，code为唯一标识
+	 * @param code
+	 * @return
+	 */
+	public Code getCode(String code);
 }

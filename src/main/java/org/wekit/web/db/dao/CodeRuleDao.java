@@ -2,6 +2,7 @@ package org.wekit.web.db.dao;
 
 import java.util.List;
 
+import org.apache.taglibs.standard.lang.jstl.Coercions;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.CodeRule;
 
@@ -18,6 +19,13 @@ public interface CodeRuleDao {
 	 * @return
 	 */
 	public CodeRule getCodeRule(long id);
+	
+	/**
+	 * 根据编码规则，获取编码规则的详细信息
+	 * @param codeRule
+	 * @return
+	 */
+	public CodeRule getCodeRule(String codeRule);
 	
 	/**
 	 * 添加编码规则
@@ -61,5 +69,7 @@ public interface CodeRuleDao {
 	 * @return
 	 */
 	public List<CodeRule> getCodeRulesWidthPagination(IPaginable paginable);
+	
+
 	
 }

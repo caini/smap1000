@@ -2,65 +2,80 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.OptLogDao;
 import org.wekit.web.db.model.OptLog;
+
 /**
  * 操作日志访问类
+ * 
  * @author HuangWeili
- *
+ * 
  */
 @Repository("optLogDao")
-public class OptLogDaoImpl extends HibernateBaseDao<OptLog, Long> implements OptLogDao{
+public class OptLogDaoImpl extends HibernateBaseDao<OptLog, Long> implements OptLogDao {
+
+	private static Logger	logger	= Logger.getLogger(OptLogDaoImpl.class);
 
 	@Override
 	protected Class<OptLog> getEntityClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return OptLog.class;
 	}
 
 	@Override
 	public OptLog getOptLog(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.get(id);
 	}
 
 	@Override
 	public OptLog addOptLog(OptLog optLog) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(optLog);
 	}
 
 	@Override
 	public boolean deleteOptLog(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.deleteByPK(id);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteOptLog(OptLog optLog) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.delete(optLog);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean updateOptLog(OptLog optLog) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.update(optLog);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public List<OptLog> getAllOptLogs() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getAll();
 	}
 
 	@Override
 	public List<OptLog> getOptLogsWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getOptLogsWithPagination(paginable);
 	}
 
 }

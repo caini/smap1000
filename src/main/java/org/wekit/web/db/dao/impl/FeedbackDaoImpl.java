@@ -2,64 +2,78 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.FeedbackDao;
 import org.wekit.web.db.model.Feedback;
+
 /**
  * 评论相关操作类
+ * 
  * @author HuangWeili
- *
+ * 
  */
-public class FeedbackDaoImpl extends HibernateBaseDao<Feedback, Long> implements FeedbackDao{
+public class FeedbackDaoImpl extends HibernateBaseDao<Feedback, Long> implements FeedbackDao {
+
+	private static Logger	logger	= Logger.getLogger(FeedbackDaoImpl.class);
 
 	@Override
 	protected Class<Feedback> getEntityClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return Feedback.class;
 	}
 
 	@Override
 	public Feedback addFeedback(Feedback feedback) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(feedback);
 	}
 
 	@Override
 	public Feedback getFeedback(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.get(id);
 	}
 
 	@Override
 	public boolean deleteFeedback(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.deleteByPK(id);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteFeedback(Feedback feedback) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.delete(feedback);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean updateFeedback(Feedback feedback) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.update(feedback);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public List<Feedback> getAllFeedbacks() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getAll();
 	}
 
 	@Override
 	public List<Feedback> getFeedbacksWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getObjectsWithPagination(paginable);
 	}
 
-	
 }

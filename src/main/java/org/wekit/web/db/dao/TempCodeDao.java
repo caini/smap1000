@@ -2,6 +2,7 @@ package org.wekit.web.db.dao;
 
 import java.util.List;
 
+import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.TempCode;
 /**
  * 临时规则码访问层
@@ -55,6 +56,6 @@ public interface TempCodeDao {
 	 * 根据分页信息获取临时编码
 	 * @return
 	 */
-	public List<TempCode> getTempCodesWithPagination();
+	public List<TempCode> getTempCodesWithPagination(IPaginable paginable);
 
 }

@@ -65,6 +65,12 @@ public class Code implements Serializable {
 	@Column(name = "doccode", length = 64)
 	private String docCode;
 
+	@Column(name="code",length=255,nullable=false,unique=true)
+	private String code;
+	
+	@Column(name="maskcode",length=255,nullable=false)
+	private String maskCode;
+	
 	// 编码状态
 	@Column(name = "state")
 	private int state;
@@ -181,4 +187,20 @@ public class Code implements Serializable {
 		this.createrId = createrId;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public String getMaskCode() {
+		return maskCode;
+	}
+
+	public void setMaskCode(String maskCode) {
+		this.maskCode = maskCode;
+	}
+	
 }

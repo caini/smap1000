@@ -3,6 +3,7 @@ package org.wekit.web.service;
 import java.util.List;
 
 import org.wekit.web.IPaginable;
+import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.Admin;
 
 public interface BaseDataService {
@@ -19,6 +20,6 @@ public interface BaseDataService {
 	 * @param paginable
 	 * @return
 	 */
-	public List<Admin> getAdminsWithPaginable(IPaginable paginable);
+	public Pagination<Admin> getAdminsWithPaginable(IPaginable paginable);
 	
 }

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wekit.web.BaseController;
+import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.Admin;
 import org.wekit.web.service.BaseDataService;
 
@@ -39,6 +40,8 @@ public class SecurityServiceController extends BaseController {
 		if(request.getParameter("pagesize")!=null){
 			
 		}
+		Pagination<Admin> pagination=new Pagination<Admin>();
+		
 	    List<Admin> admins=baseDataService.getAllAdmin();
 		return null;
 	}

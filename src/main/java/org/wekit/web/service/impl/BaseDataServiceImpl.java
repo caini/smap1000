@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wekit.web.IPaginable;
+import org.wekit.web.db.Pagination;
 import org.wekit.web.db.dao.AdminDao;
 import org.wekit.web.db.model.Admin;
 import org.wekit.web.service.BaseDataService;
@@ -32,7 +33,6 @@ public class BaseDataServiceImpl implements BaseDataService {
 		return adminDao.getAdmin(id);
 	}
 	
-	
 
 	public AdminDao getAdminDao() {
 		return adminDao;
@@ -44,14 +44,15 @@ public class BaseDataServiceImpl implements BaseDataService {
 
 	@Override
 	public List<Admin> getAllAdmin() {
-		// TODO Auto-generated method stub
 		return adminDao.getAllAdmins();
 	}
 
 	@Override
-	public List<Admin> getAdminsWithPaginable(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return adminDao.getAdminsWithPagination(paginable);
+	public Pagination<Admin> getAdminsWithPaginable(IPaginable paginable) {
+		List<Admin> list= adminDao.getAdminsWithPagination(paginable);
+		Pagination<Admin> pagination=new Pagination<Admin>(paginable);
+		pagination.setDatas(list);
+		return pagination;
 	}
 	
 

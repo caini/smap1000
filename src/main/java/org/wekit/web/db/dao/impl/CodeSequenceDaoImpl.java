@@ -2,6 +2,7 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -10,57 +11,72 @@ import org.wekit.web.db.model.CodeSequence;
 
 /**
  * 编码序列数据访问层实现
+ * 
  * @author huangweili
- *
+ * 
  */
 @Repository("codeSequenceDao")
-public class CodeSequenceDaoImpl extends HibernateBaseDao<CodeSequence,Long>  implements CodeSequenceDao{
+public class CodeSequenceDaoImpl extends HibernateBaseDao<CodeSequence, Long> implements CodeSequenceDao {
+
+	private static Logger	logger	= Logger.getLogger(CodeSequenceDaoImpl.class);
 
 	@Override
 	protected Class<CodeSequence> getEntityClass() {
-		// TODO Auto-generated method stub
 		return CodeSequence.class;
 	}
 
 	@Override
 	public CodeSequence getCodeSequence(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.get(id);
 	}
 
 	@Override
 	public CodeSequence addCodeSequence(CodeSequence codeSequence) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(codeSequence);
 	}
 
 	@Override
 	public boolean updateCodeSequence(CodeSequence codeSequence) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.update(codeSequence);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
 	public boolean deleteCodeSequence(CodeSequence codeSequence) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.delete(codeSequence);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteCodeSequence(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.deleteByPK(id);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
+
 	}
 
 	@Override
 	public List<CodeSequence> getAllCodeSequences() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getAll();
 	}
 
 	@Override
 	public List<CodeSequence> getCodeSequencesWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getObjectsWithPagination(paginable);
 	}
 }

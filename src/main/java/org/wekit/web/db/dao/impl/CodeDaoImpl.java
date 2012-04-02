@@ -2,6 +2,7 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.CodeDao;
@@ -9,50 +10,73 @@ import org.wekit.web.db.model.Code;
 
 public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao {
 
+	private static Logger logger=Logger.getLogger(CodeDaoImpl.class);
+	
 	@Override
 	protected Class<Code> getEntityClass() {
 		return Code.class;
 	}
 
 	@Override
-	public Code addCode() {
-		// TODO Auto-generated method stub
-		return null;
+	public Code addCode(Code code) {
+		return this.save(code);
 	}
 
 	@Override
 	public List<Code> getAllCodes() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getAll();
 	}
 
 	@Override
 	public List<Code> getCodesWithPaginable(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return getObjectsWithPagination(paginable);
 	}
 
 	@Override
 	public boolean updateCode(Code code) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			this.update(code);
+		}catch (Exception e) {
+			logger.error(e.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteCode(Code code) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			this.delete(code);
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteCode(Long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			this.deleteByPK(id);
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public Code getCode(Long id) {
-		// TODO Auto-generated method stub
+		return this.get(id);
+	}
+
+	@Override
+	public Code getCode(String code) {
+		List<Code> list=this.queryByProperty("code", code);
+		if(list!=null)
+		{
+			return list.get(0);
+		}
 		return null;
 	}
 

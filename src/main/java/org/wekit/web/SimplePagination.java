@@ -25,6 +25,21 @@ public class SimplePagination implements IPaginable {
 		isCount = false;
 	}
 
+	public SimplePagination(IPaginable paginable) {
+		this.totleCount = paginable.getTotleCount();
+		this.pageSize = paginable.getPageSize();
+		this.currentPage = paginable.getCurrentPage();
+		this.isCount = paginable.isCount();
+	}
+
+	public SimplePagination(int currentPage, int pageSize) {
+		this(currentPage, pageSize, false);
+	}
+
+	public SimplePagination(int currentPage, int pageSize, boolean isCount) {
+		this(currentPage, pageSize, isCount, 0);
+	}
+
 	public SimplePagination(int currentPage, int pageSize, boolean isCount, int totleCount) {
 		this.totleCount = totleCount;
 		this.currentPage = currentPage;

@@ -2,6 +2,7 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.LocationCodeDao;
@@ -9,53 +10,64 @@ import org.wekit.web.db.model.LocationCode;
 
 public class LocationCodeDaoImpl extends HibernateBaseDao<LocationCode, Long> implements LocationCodeDao {
 
+	private static Logger	logger	= Logger.getLogger(LocationCodeDaoImpl.class);
+
 	@Override
 	protected Class<LocationCode> getEntityClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return LocationCode.class;
 	}
 
 	@Override
 	public LocationCode addLocationCode(LocationCode locationCode) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(locationCode);
 	}
 
 	@Override
 	public LocationCode getLocationCode(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.get(id);
 	}
 
 	@Override
 	public boolean deleteLocationCode(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.deleteByPK(id);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteLocationCode(LocationCode locationCode) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.delete(locationCode);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean updateLocationCode(LocationCode locationCode) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.update(locationCode);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public List<LocationCode> getAllLocationCodes() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getAll();
 	}
 
 	@Override
 	public List<LocationCode> getLocationCodesWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getObjectsWithPagination(paginable);
 	}
 
-	
 }

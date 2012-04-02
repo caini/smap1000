@@ -2,6 +2,7 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -17,6 +18,8 @@ import org.wekit.web.db.model.RemoteAcl;
 @Repository("remoteAclDao")
 public class RemoteAclDaoImpl extends HibernateBaseDao<RemoteAcl, Long> implements RemoteAclDao {
 
+	private static Logger logger=Logger.getLogger(RemoteAclDaoImpl.class);
+	
 	@Override
 	public List<RemoteAcl> getAllRemoteAcls() {
 		return getAll();
@@ -45,6 +48,7 @@ public class RemoteAclDaoImpl extends HibernateBaseDao<RemoteAcl, Long> implemen
 		try {
 			this.deleteByPK(id);
 		} catch (Exception ex) {
+			logger.error(ex.getMessage());
 			return false;
 		}
 		return true;
@@ -55,6 +59,7 @@ public class RemoteAclDaoImpl extends HibernateBaseDao<RemoteAcl, Long> implemen
 		try {
 			this.delete(remoteAcl);
 		} catch (Exception ex) {
+			logger.error(ex.getMessage());
 			return false;
 		}
 		return true;
@@ -65,6 +70,7 @@ public class RemoteAclDaoImpl extends HibernateBaseDao<RemoteAcl, Long> implemen
 		try{
 		this.update(remoteAcl);
 		}catch(Exception ex){
+			logger.error(ex.getMessage());
 			return false;
 		}
 		return true;

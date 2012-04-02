@@ -2,6 +2,7 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -17,6 +18,8 @@ import org.wekit.web.db.model.UnitCode;
 @Repository("unitCodeDao")
 public class UnitCodeDaoImpl extends HibernateBaseDao<UnitCode, Long> implements UnitCodeDao {
 
+	private static Logger logger=Logger.getLogger(UnitCodeDaoImpl.class);
+	
 	@Override
 	protected Class<UnitCode> getEntityClass() {
 		return UnitCode.class;
@@ -37,6 +40,7 @@ public class UnitCodeDaoImpl extends HibernateBaseDao<UnitCode, Long> implements
 		try {
 			this.update(unitCode);
 		} catch (Exception ex) {
+			logger.error(ex.getMessage());
 			return false;
 		}
 		return true;
@@ -48,6 +52,7 @@ public class UnitCodeDaoImpl extends HibernateBaseDao<UnitCode, Long> implements
 		try {
 			this.deleteByPK(id);
 		} catch (Exception ex) {
+			logger.error(ex.getMessage());
 			return false;
 		}
 		return true;
@@ -58,6 +63,7 @@ public class UnitCodeDaoImpl extends HibernateBaseDao<UnitCode, Long> implements
 		try {
 			this.delete(unitCode);
 		} catch (Exception ex) {
+			logger.error(ex.getMessage());
 			return false;
 		}
 		return true;

@@ -3,6 +3,7 @@ package org.wekit.web;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
 import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
@@ -191,6 +192,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 		return query.list();
 	}
 
+	
 	/**
 	 * 保存对象
 	 * 

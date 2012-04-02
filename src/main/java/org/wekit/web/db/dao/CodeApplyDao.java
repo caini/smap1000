@@ -11,7 +11,7 @@ public interface CodeApplyDao {
 	 * 添加编码
 	 * @return
 	 */
-	public CodeApply addCodeApply();
+	public CodeApply addCodeApply(CodeApply codeApply);
 	
 	/**
 	 * 更新编码状态

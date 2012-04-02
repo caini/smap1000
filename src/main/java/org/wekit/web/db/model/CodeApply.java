@@ -76,11 +76,15 @@ public class CodeApply implements Serializable {
 	private int state;
 
 	// 审核通过人姓名
-	@Column(name = "applyed", length = 64)
-	private String applyed;
+	@Column(name = "applyedname", length = 64)
+	private String applyedName;
+	
+	@Column(name="applyedid",length=64)
+	private String applyedId;
 
 	public CodeApply() {
 	}
+	
 
 	public long getApplyId() {
 		return applyId;
@@ -178,12 +182,21 @@ public class CodeApply implements Serializable {
 		this.state = state;
 	}
 
-	public String getApplyed() {
-		return applyed;
+	public String getApplyedName() {
+		return applyedName;
 	}
 
-	public void setApplyed(String applyed) {
-		this.applyed = applyed;
+	public void setApplyedName(String applyedName) {
+		this.applyedName = applyedName;
 	}
 
+	public String getApplyedId() {
+		return applyedId;
+	}
+
+	public void setApplyedId(String applyedId) {
+		this.applyedId = applyedId;
+	}
+
+	
 }

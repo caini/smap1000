@@ -2,19 +2,24 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
+import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.TempCodeDao;
 import org.wekit.web.db.model.TempCode;
 
 /**
  * 临时数据操作表
+ * 
  * @author HuangWeili
- *
+ * 
  */
 @Repository("tempCodeDao")
-public class TempCodeDaoImpl extends HibernateBaseDao<TempCode,Long>  implements TempCodeDao{
+public class TempCodeDaoImpl extends HibernateBaseDao<TempCode, Long> implements TempCodeDao {
 
+    private static	Logger  logger=Logger.getLogger(TempCodeDaoImpl.class);
+	
 	@Override
 	protected Class<TempCode> getEntityClass() {
 		return TempCode.class;
@@ -22,45 +27,55 @@ public class TempCodeDaoImpl extends HibernateBaseDao<TempCode,Long>  implements
 
 	@Override
 	public TempCode addTempCode(TempCode tempCode) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(tempCode);
 	}
 
 	@Override
 	public TempCode getTempCode(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.get(id);
 	}
 
 	@Override
 	public boolean deleteTempCode(TempCode tempCode) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			this.delete(tempCode);
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteTempCode(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			this.deleteByPK(id);
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean updateTempCode(TempCode tempCode) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			this.update(tempCode);
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public List<TempCode> getAllTempCodes() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getAll();
 	}
 
 	@Override
-	public List<TempCode> getTempCodesWithPagination() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<TempCode> getTempCodesWithPagination(IPaginable paginable) {
+		return this.getObjectsWithPagination(paginable);
 	}
 
-	
 }

@@ -2,6 +2,7 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -10,11 +11,14 @@ import org.wekit.web.db.model.ExtendCode;
 
 /**
  * 无规则编码申请
+ * 
  * @author HuangWeili
- *
+ * 
  */
 @Repository("extendCodeDao")
-public class ExtendCodeDaoImpl extends HibernateBaseDao<ExtendCode,Long> implements ExtendCodeDao {
+public class ExtendCodeDaoImpl extends HibernateBaseDao<ExtendCode, Long> implements ExtendCodeDao {
+
+	private static Logger	logger	= Logger.getLogger(ExtendCodeDaoImpl.class);
 
 	@Override
 	protected Class<ExtendCode> getEntityClass() {
@@ -23,46 +27,55 @@ public class ExtendCodeDaoImpl extends HibernateBaseDao<ExtendCode,Long> impleme
 
 	@Override
 	public ExtendCode addExtendCode(ExtendCode extendCode) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(extendCode);
 	}
 
 	@Override
 	public ExtendCode getExtendCode(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.get(id);
 	}
 
 	@Override
 	public boolean deleteExtendCode(ExtendCode extendCode) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.delete(extendCode);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean deleteExtendCode(long id) {
-		// TODO Auto-generated method stub
-		return false;
+		try{
+			this.deleteByPK(id);
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public boolean updateExtendCode(ExtendCode extendCode) {
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			this.update(extendCode);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
 
 	@Override
 	public List<ExtendCode> getAllExtendCodes() {
-		// TODO Auto-generated method stub
-		return null;
+		return getAll();
 	}
 
 	@Override
 	public List<ExtendCode> getExtendCodesWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.getObjectsWithPagination(paginable);
 	}
 
-	
-	
 }

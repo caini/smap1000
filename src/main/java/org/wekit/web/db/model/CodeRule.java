@@ -25,43 +25,49 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "coderule")
 public class CodeRule implements Serializable {
 
-	private static final long serialVersionUID = -5360821840364956382L;
+	private static final long	serialVersionUID	= -5360821840364956382L;
 
 	@Id
 	@GeneratedValue(generator = "id_gen", strategy = GenerationType.TABLE)
 	@TableGenerator(name = "id_gen", table = "sys_id_gen", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "coderule", allocationSize = 100)
-	private long ruleId;
+	private long				ruleId;
 
 	// 编码名称(文件类型)
 	@Column(name = "rulename", length = 128)
-	private String ruleName;
+	private String				ruleName;
 
 	// 编码规则创建人
 	@Column(name = "creater", length = 64, nullable = false, updatable = false)
-	private String creater;
+	private String				creater;
 
 	@Column(name = "createrId", length = 64, nullable = false, updatable = false)
-	private String createrId;
+	private String				createrId;
 
 	// 编码创建时间
 	@Column(name = "ctime", updatable = false)
-	private long createTime;
+	private long				createTime;
 
 	// 掩码的信息
 	@Column(name = "mask", length = 128)
-	private String mask;
+	private String				mask;
 
 	// 编码规则列
 	@Column(name = "rule", length = 128)
-	private String rule;
+	private String				rule;
 
 	// 获取规则的封面
 	@Column(name = "face", length = 500)
-	private String face;
+	private String				face;
 
 	// 规则状态
 	@Column(name = "state")
-	private int state;
+	private int					state;
+
+	@Column(name = "maxseq", nullable = false)
+	private int					maxSequence;
+
+	@Column(name = "minseq", nullable = false)
+	private int					minSequence;
 
 	public CodeRule() {
 	}
@@ -138,4 +144,19 @@ public class CodeRule implements Serializable {
 		this.createrId = createrId;
 	}
 
+	public int getMaxSequence() {
+		return maxSequence;
+	}
+
+	public void setMaxSequence(int maxSequence) {
+		this.maxSequence = maxSequence;
+	}
+
+	public int getMinSequence() {
+		return minSequence;
+	}
+
+	public void setMinSequence(int minSequence) {
+		this.minSequence = minSequence;
+	}
 }
