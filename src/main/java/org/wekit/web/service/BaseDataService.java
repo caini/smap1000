@@ -5,6 +5,7 @@ import java.util.List;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.Admin;
+import org.wekit.web.db.model.UnitCodeType;
 
 public interface BaseDataService {
 
@@ -13,7 +14,7 @@ public interface BaseDataService {
 	
 	public Admin getAdminById(long id);
 	
-	public List<Admin> getAllAdmin();
+	public List<Admin> getAllAdmins();
 	
 	/**
 	 * 根据分页信息获取系统管理员
@@ -21,5 +22,6 @@ public interface BaseDataService {
 	 * @return
 	 */
 	public Pagination<Admin> getAdminsWithPaginable(IPaginable paginable);
-	
+
+	public Pagination<UnitCodeType> getAllUnitCodeTypes();
 }

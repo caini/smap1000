@@ -3,11 +3,13 @@ package org.wekit.web.db.dao.impl;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.LocationCodeDao;
 import org.wekit.web.db.model.LocationCode;
 
+@Repository("locationCodeDao")
 public class LocationCodeDaoImpl extends HibernateBaseDao<LocationCode, Long> implements LocationCodeDao {
 
 	private static Logger	logger	= Logger.getLogger(LocationCodeDaoImpl.class);

@@ -1,14 +1,18 @@
 package org.wekit.web.outservice;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wekit.web.BaseController;
+import org.wekit.web.db.model.UnitCode;
 
 @Controller("unitCodeServiceController")
-public class UnitCodeServiceController extends BaseController {
+public class UnitCodeServiceController extends BaseController<UnitCode> {
     
 	/**
 	 * 查询机组编码
@@ -17,7 +21,7 @@ public class UnitCodeServiceController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="/unitcode/query.{extend}",method=RequestMethod.GET)
-	public String queryUnitCode(@PathVariable("extend")String extend,Model model){
+	public String queryUnitCode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		return null;
 	}
 	
@@ -28,7 +32,7 @@ public class UnitCodeServiceController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="/unitcode/add.{extend}",method=RequestMethod.POST)
-	public String addUnitCode(@PathVariable("extend")String extend,Model model)
+	public String addUnitCode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model)
 	{
 	   return null;	
 	}
@@ -40,7 +44,7 @@ public class UnitCodeServiceController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="/unitcode/update.{extend}",method=RequestMethod.POST)
-	public String updateUntiCode(@PathVariable("exntend")String extend,Model model){
+	public String updateUntiCode(@PathVariable("exntend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		return null;
 	}
 	
@@ -51,7 +55,7 @@ public class UnitCodeServiceController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="/unitcode/delete.{extend}",method=RequestMethod.POST)
-	public String deleteUnitCode(@PathVariable("extend")String extend,Model model){
+	public String deleteUnitCode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		return null;
 	}
 	
@@ -62,60 +66,10 @@ public class UnitCodeServiceController extends BaseController {
 	 * @return
 	 */
 	@RequestMapping(value="/unitcode/find.{extend}",method=RequestMethod.GET)
-	public String findUntiCode(@PathVariable("extend")String extend,Model model){
+	public String findUntiCode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		return null;
 	}
 	
 	
 	
-	/**
-	 * 查询机组类型
-	 * @param extend
-	 * @param model
-	 * @return
-	 */
-    @RequestMapping(value="/unitcodetype/query.{extend}",method=RequestMethod.GET)
-	public String queryUnitCodeType(@PathVariable("extend")String extend,Model model){
-	   return null;
-	}
-    
-    
-    
-    /**
-     * 
-     * @param extend
-     * @param model
-     * @return
-     */
-    @RequestMapping(value="/unitcodetype/add.{extend}",method=RequestMethod.POST)
-    public String addUnitCodeType(@PathVariable("extend")String extend,Model model){
-       return null;
-    }
-    
-    /**
-     * 机组类型码更新
-     * @param extend
-     * @param model
-     * @return
-     */
-    @RequestMapping(value="/unitcodetype/update.{extend}",method=RequestMethod.POST)
-    public String updateUnitCodeType(@PathVariable("extend")String extend,Model model){
-    	return null;
-    }
-    
-    /**
-     * 机组类型码 详细数据获取
-     * @param extend
-     * @param model
-     * @return
-     */
-    @RequestMapping(value="/unitcodetype/find.{extend}",method=RequestMethod.GET)
-    public String findUnitCodeType(@PathVariable("extend")String extend,Model model){
-    	return null;
-    }
-    
-    @RequestMapping(value="/unticodetype/delete.{extend}",method=RequestMethod.POST)
-    public String deleteCodeType(@PathVariable("extend")String extend,Model model){
-    	return null;
-    }
 }

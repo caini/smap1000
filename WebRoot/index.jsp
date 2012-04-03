@@ -19,10 +19,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<!--
 	<link rel="stylesheet" type="text/css" href="styles.css">
 	-->
-
+	<script type="text/javascript" src="http://crypto-js.googlecode.com/files/2.5.3-crypto-sha1-hmac-pbkdf2-blockmodes-aes.js"> </script>
+	<script type="text/javascript">
+		function encrypt()
+		{
+			
+			var plaintxt=document.getElementById("plaintxt").value;
+			var result=Crypto.AES.encrypt(plaintxt,"hwlchina");
+			document.getElementById("result").value=result;
+			
+		}
+	</script>
   </head>
   
   <body>
-    This is my JSP page. <br>
+    原文：<input type="text" id="plaintxt">
+ <br/>   
+    密文：  <input type="text" id="result">
+    <button onclick="encrypt();">加密</button>
   </body>
 </html>

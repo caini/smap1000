@@ -1,7 +1,5 @@
 package org.wekit.web.outservice;
 
-import java.util.List;
-
 import javax.jws.WebParam.Mode;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -14,35 +12,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wekit.web.BaseController;
-import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.Admin;
 import org.wekit.web.service.BaseDataService;
 
-@Controller("securityServiceController")
-public class SecurityServiceController extends BaseController {
+@Controller("adminServiceController")
+public class AdminServiceController extends BaseController<Admin> {
+
 	
 	@Autowired
 	@Qualifier("baseDataService")
 	private BaseDataService baseDataService;
 	
 	
-	
-	
-	
 	@RequestMapping(value="/security/admin/query.{extend}",method=RequestMethod.GET)
 	public String queryAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-		int pageno=0;
-		int pagesize=0;
-		if(request.getParameter("pageno")!=null)
-		{
-			pageno=Integer.parseInt(request.getParameter("pageno"));
-		}
-		if(request.getParameter("pagesize")!=null){
-			
-		}
-		Pagination<Admin> pagination=new Pagination<Admin>();
-		
-	    List<Admin> admins=baseDataService.getAllAdmin();
 		return null;
 	}
 
@@ -74,7 +57,6 @@ public class SecurityServiceController extends BaseController {
 	public void setBaseDataService(BaseDataService baseDataService) {
 		this.baseDataService = baseDataService;
 	}
-	
 	
 	
 }

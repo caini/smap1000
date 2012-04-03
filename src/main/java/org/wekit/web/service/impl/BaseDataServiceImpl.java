@@ -9,6 +9,7 @@ import org.wekit.web.IPaginable;
 import org.wekit.web.db.Pagination;
 import org.wekit.web.db.dao.AdminDao;
 import org.wekit.web.db.model.Admin;
+import org.wekit.web.db.model.UnitCodeType;
 import org.wekit.web.service.BaseDataService;
 /**
  * 基础数据访问逻辑服务实现
@@ -43,7 +44,7 @@ public class BaseDataServiceImpl implements BaseDataService {
 	}
 
 	@Override
-	public List<Admin> getAllAdmin() {
+	public List<Admin> getAllAdmins() {
 		return adminDao.getAllAdmins();
 	}
 
@@ -54,6 +55,14 @@ public class BaseDataServiceImpl implements BaseDataService {
 		pagination.setDatas(list);
 		return pagination;
 	}
+
+	@Override
+	public Pagination<UnitCodeType> getAllUnitCodeTypes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 	
 
 }

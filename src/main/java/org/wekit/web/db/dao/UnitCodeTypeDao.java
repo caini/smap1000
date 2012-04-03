@@ -59,4 +59,12 @@ public interface UnitCodeTypeDao {
 	 * @return
 	 */
 	public List<UnitCodeType> getUnitCodeTypesWithPagination(IPaginable paginable);
+	
+	/**
+	 * 根据关键字查找
+	 * @param key
+	 * @param paginable
+	 * @return
+	 */
+	public List<UnitCodeType> queryUnitCodeTypes(String key,int state,IPaginable paginable);
 }

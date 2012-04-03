@@ -5,29 +5,41 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.ui.Model;
+import org.wekit.web.db.Pagination;
+import org.wekit.web.db.model.RemoteAcl;
+import org.wekit.web.service.RemoteAclService;
+import org.wekit.web.util.DataWrapUtil;
+
 /**
  * 动作函数的基础类，定义了一些常用的方法
  * 
  * @author HuangWeili
  * 
  */
-public abstract class BaseController {
+public abstract class BaseController<T> {
 
+	@Autowired
+	@Qualifier("remoteAclService")
+	protected RemoteAclService remoteAclService; //注入远程访问接口
+	
+	protected Pagination<T> pagination=new Pagination<T>();
+	protected Map<String, String> parameters=new HashMap<String, String>();
 	/**
 	 * 获取分页信息
 	 * 
 	 * @param request
 	 * @return
 	 */
-	protected static IPaginable paserPaginable(HttpServletRequest request) {
-		SimplePagination simplePagination = new SimplePagination();
+	protected  void paserPaginable(HttpServletRequest request) {
 		if (request.getParameter("pageno") != null) {
-			simplePagination.setCurrentPage(Integer.parseInt(request.getParameter("pageno")));
+			this.pagination.setCurrentPage(Integer.parseInt(request.getParameter("pageno")));
 		}
 		if (request.getParameter("pagesize") != null) {
-			simplePagination.setPageSize(Integer.parseInt(request.getParameter("pagesize")));
+			this.pagination.setPageSize(Integer.parseInt(request.getParameter("pagesize")));
 		}
-		return simplePagination;
 	}
 
 	/**
@@ -36,21 +48,46 @@ public abstract class BaseController {
 	 * @param request
 	 * @return
 	 */
-	protected static Map<String, String> getParam(HttpServletRequest request) {
-	
-		HashMap<String, String> hashMap = new HashMap<String, String>();
+	protected void initParam(HttpServletRequest request) {
+		if(request.getParameter("userkey")==null)
+			return;
+		String userkey=request.getParameter("userkey");
+		RemoteAcl acl=remoteAclService.getRemoteAclByUserName(userkey);
+		if(acl==null){
+			return;
+		}
 		
 		if (request.getParameter("param") != null) {
 			String param = request.getParameter("param");
+			//param=
 			String[] params = param.split("&");
 			for (String pm : params) {
 				String[] keyValue = pm.split("=");
 				if (keyValue != null && keyValue.length == 2) {
-					hashMap.put(keyValue[0], keyValue[1]);
+					parameters.put(keyValue[0], keyValue[1]);
 				}
 			}
 		}
-		return hashMap;
+	}
+	
+	
+	
+	protected void setState(int state){
+		this.pagination.setState(state);
+	}
+	
+	protected void setMessage(String message){
+		this.pagination.setMessage(message);
+	}
+	
+	
+	protected String displayAPIClient(String extend,Model model){
+		try {
+			model.addAttribute("content",DataWrapUtil.convertObject(pagination, extend));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "ftl/"+extend;
 	}
 	
 }

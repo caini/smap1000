@@ -40,8 +40,10 @@ public class AdminDaoImpl extends HibernateBaseDao<Admin, Long> implements Admin
 
 	@Override
 	public List<Admin> getAdminsWithPagination(IPaginable paginable) {
-
-		return getObjectsWithPagination(paginable);
+		if (paginable != null)
+			return getObjectsWithPagination(paginable);
+		else
+			return this.getAll();
 	}
 
 	@Override

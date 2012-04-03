@@ -3,6 +3,7 @@ package org.wekit.web.db.dao.impl;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -18,8 +19,8 @@ import org.wekit.web.db.model.UnitCodeType;
 @Repository("unitCodeTypeDao")
 public class UnitCodeTypeDaoImpl extends HibernateBaseDao<UnitCodeType, Long> implements UnitCodeTypeDao {
 
-	private static Logger logger=Logger.getLogger(UnitCodeTypeDaoImpl.class);
-	
+	private static Logger	logger	= Logger.getLogger(UnitCodeTypeDaoImpl.class);
+
 	@Override
 	protected Class<UnitCodeType> getEntityClass() {
 		return UnitCodeType.class;
@@ -64,8 +65,28 @@ public class UnitCodeTypeDaoImpl extends HibernateBaseDao<UnitCodeType, Long> im
 
 	@Override
 	public List<UnitCodeType> getUnitCodeTypesWithPagination(IPaginable paginable) {
-		return this.getObjectsWithPagination(paginable);
+		if (paginable != null)
+			return this.getObjectsWithPagination(paginable);
+		else
+			return this.getAll();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public List<UnitCodeType> queryUnitCodeTypes(String key,int state,IPaginable paginable){
+		StringBuffer buffer=new StringBuffer();
+		buffer.append("from UnitCodeType bean where bean.name like '%").append(key+"%' or bean.code like '%"+key+"%' ");
+		if(state>0){
+			buffer.append(" and bean.state="+state);
+		}
+		Query query=createrQuery(buffer.toString());
+		if(paginable!=null)
+		{
+			this.paginationParam(query, paginable);
+		}
+		return query.list();
+	}
+	
+	
 
 	@Override
 	public boolean updateUnitCodeType(UnitCodeType unitCodeType) {

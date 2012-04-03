@@ -23,7 +23,7 @@
 </context:component-scan>
 
  <!-- 函数解析拦截器 -->
- <bean id="paramsPaserInterceptor" class="com.wekit.web.interceptor.ParamsPaserInterceptor"/>
+ <bean id="paramsPaserInterceptor" class="org.wekit.web.interceptor.ParamsPaserInterceptor"/>
  
  <!-- 安全拦截器 -->
  <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping">

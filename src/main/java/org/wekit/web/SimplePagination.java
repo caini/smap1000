@@ -78,7 +78,6 @@ public class SimplePagination implements IPaginable {
 
 	@Override
 	public boolean isLastPage() {
-		// TODO Auto-generated method stub
 		return getCurrentPage() >= getTotlePage();
 	}
 

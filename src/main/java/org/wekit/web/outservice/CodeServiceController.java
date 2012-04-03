@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wekit.web.BaseController;
+import org.wekit.web.db.model.Code;
 import org.wekit.web.service.CodeService;
 
 @Controller("codeServiceController")
-public class CodeServiceController extends BaseController {
-    @Autowired
+public class CodeServiceController extends BaseController<Code> {
+   
+	@Autowired
     @Qualifier("codeService")
 	CodeService codeService;
 	/**

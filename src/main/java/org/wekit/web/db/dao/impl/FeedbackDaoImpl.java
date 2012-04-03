@@ -3,6 +3,7 @@ package org.wekit.web.db.dao.impl;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.FeedbackDao;
@@ -14,6 +15,7 @@ import org.wekit.web.db.model.Feedback;
  * @author HuangWeili
  * 
  */
+@Repository("feedbackDao")
 public class FeedbackDaoImpl extends HibernateBaseDao<Feedback, Long> implements FeedbackDao {
 
 	private static Logger	logger	= Logger.getLogger(FeedbackDaoImpl.class);

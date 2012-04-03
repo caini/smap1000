@@ -70,14 +70,15 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 * @return
 	 */
 	protected Query paginationParam(Query query, IPaginable paginable) {
+		
 		if (paginable.isCount()) {
 			String nativeSql = this.QueryToNativeSql(query);
 			Query nativequery = getSession().createSQLQuery(getCountSql(nativeSql));
 			Object object = nativequery.uniqueResult();
 			paginable.setTotleCount(Integer.parseInt(object.toString()));
 		}
-		query.setFirstResult(paginable.getPageSize() * paginable.getCurrentPage() - 1);
-		query.setFetchSize(paginable.getPageSize());
+		query.setFirstResult(paginable.getPageSize() * (paginable.getCurrentPage() - 1));
+		query.setMaxResults(paginable.getPageSize());
 		return query;
 	}
 
@@ -297,7 +298,6 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
     @SuppressWarnings("unchecked")
 	protected List<T> getObjectsWithPagination(IPaginable paginable){
     	Query query=createrQuery("from "+ getEntityClass().getName());
-    	query =paginationParam(query, paginable);
-    	return query.list();
+    	return paginationParam(query, paginable).list();
     }
 }

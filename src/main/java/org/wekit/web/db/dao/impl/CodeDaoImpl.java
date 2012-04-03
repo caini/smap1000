@@ -3,11 +3,13 @@ package org.wekit.web.db.dao.impl;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.CodeDao;
 import org.wekit.web.db.model.Code;
 
+@Repository("codeDao")
 public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao {
 
 	private static Logger logger=Logger.getLogger(CodeDaoImpl.class);

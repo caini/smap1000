@@ -17,24 +17,38 @@ public class Pagination<T> extends SimplePagination implements IPaginable {
 
 	private List<T>				datas;
 
+	private int state;
+	
+	private String message;
+	
 	public Pagination() {
 		super();
-		datas = null;
+		init();
+		
 	}
 
 	public Pagination(IPaginable paginable) {
 		super(paginable);
-		datas = null;
+		init();
 	}
 
 	public Pagination(int currentPage, int pageSize) {
 		this(currentPage, pageSize, false);
+		init();
 	}
 
 	public Pagination(int currentPage, int PageSize, boolean isCount) {
 		super(currentPage, PageSize, isCount);
+		init();
 	}
-
+	
+	private void init()
+	{
+		this.datas=null;
+		this.state=1;
+		this.message="调用成功！";
+	}
+	
 	public List<T> getDatas() {
 		return datas;
 	}
@@ -42,5 +56,23 @@ public class Pagination<T> extends SimplePagination implements IPaginable {
 	public void setDatas(List<T> datas) {
 		this.datas = datas;
 	}
+
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
+	public String getMessage() {
+		return message;
+	}
+
+	public void setMessage(String message) {
+		this.message = message;
+	}
+	
+	
 
 }
