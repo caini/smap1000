@@ -81,4 +81,9 @@ public class RemoteAclDaoImpl extends HibernateBaseDao<RemoteAcl, Long> implemen
 		return RemoteAcl.class;
 	}
 
+	@Override
+	public RemoteAcl getRemoteAcl(long id) {
+		return this.get(id);
+	}
+
 }

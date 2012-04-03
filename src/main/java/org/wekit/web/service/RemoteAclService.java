@@ -54,4 +54,10 @@ public interface RemoteAclService {
 	 */
 	public boolean deleteRemoteAclById(Long id);
 
+	/**
+	 * 根据ID查找对象
+	 * @param id
+	 * @return
+	 */
+	public RemoteAcl getRemoteAcl(long id);
 }

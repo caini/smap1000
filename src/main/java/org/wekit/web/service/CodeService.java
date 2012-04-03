@@ -66,34 +66,7 @@ public interface CodeService {
 	 */
 	public Code addCode(Code code);
 	
-	/**
-	 * 获取临时编码
-	 * @param id
-	 * @return
-	 */
-	public TempCode getTempCode(Long id);
-	
-	/**
-	 * 获取临时编码
-	 * @param code
-	 * @return
-	 */
-	public TempCode getTempCode(String code);
-	
-	/**
-	 * 根据Id删除临时编码
-	 * @param id
-	 * @return
-	 */
-	public boolean deleteTempCode(Long id);
-	
-	/**
-	 * 根据编码信息删除临时编码
-	 * @param code
-	 * @return
-	 */
-	public boolean deleteTempCode(String code);
-	
+
 	
 
  }

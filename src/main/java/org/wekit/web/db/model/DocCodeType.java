@@ -25,33 +25,37 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "doccodetype")
 public class DocCodeType implements Serializable {
 
-	private static final long serialVersionUID = -6536434181908620347L;
+	private static final long	serialVersionUID	= -6536434181908620347L;
 
 	@Id
 	@GeneratedValue(generator = "id_gen", strategy = GenerationType.TABLE)
 	@TableGenerator(name = "id_gen", table = "sys_id_gen", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "doccodetype", allocationSize = 100)
-	private long typeId;
+	private long				typeId;
 
 	@Column(name = "name", length = 128)
-	private String name;
+	private String				name;
 
-	@Column(name="ename",length=128)
-	private String ename;
-	
+	@Column(name = "ename", length = 128)
+	private String				ename;
+
 	@Column(name = "code", length = 64)
-	private String code;
+	private String				code;
 
 	@Column(name = "note", length = 500)
-	private String note;
+	private String				note;
 
 	@Column(name = "ctime")
-	private long createTime;
+	private long				createTime;
 
 	@Column(name = "creater", length = 64)
-	private String creater;
+	private String				creater;
 
 	@Column(name = "createrid", length = 64)
-	private String createrId;
+	private String				createrId;
+
+	// 类型状态
+	@Column(name = "state")
+	private int					state;
 
 	public DocCodeType() {
 	}
@@ -120,5 +124,12 @@ public class DocCodeType implements Serializable {
 		this.ename = ename;
 	}
 
-	
+	public int getState() {
+		return state;
+	}
+
+	public void setState(int state) {
+		this.state = state;
+	}
+
 }

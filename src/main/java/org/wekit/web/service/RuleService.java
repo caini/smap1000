@@ -3,7 +3,6 @@ package org.wekit.web.service;
 import java.util.List;
 
 import org.wekit.web.IPaginable;
-import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.CodeRule;
 
 public interface RuleService {
@@ -62,4 +61,12 @@ public interface RuleService {
 	 * @return
 	 */
 	public List<String> queryCodeRuleNames(IPaginable paginable);
+	
+	/**
+	 * 根据规则名称查找规则
+	 * @param name
+	 * @param paginable
+	 * @return
+	 */
+	public List<CodeRule> queryCodeRulesByName(String name,int state,IPaginable paginable);
 }

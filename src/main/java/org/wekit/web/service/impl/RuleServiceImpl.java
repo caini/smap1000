@@ -59,27 +59,29 @@ public class RuleServiceImpl implements RuleService {
 		return list;
 	}
 
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	@Override
 	public List<CodeRule> queryCodeRules(IPaginable paginable) {
-		if(paginable==null)
+		if (paginable == null)
 			return this.codeRuleDao.getAllCodeRules();
-		else	
+		else
 			return this.codeRuleDao.getCodeRulesWidthPagination(paginable);
 	}
 
 	@Override
 	public List<CodeRule> queryCodeRules(String key, int state, IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.codeRuleDao.queryCodeRules(key, state, paginable);
 	}
 
 	@Override
 	public List<String> queryCodeRuleNames(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.codeRuleDao.queryCodeRuleNames(paginable);
 	}
-	
-	
 
+	@Override
+	public List<CodeRule> queryCodeRulesByName(String name,int state, IPaginable paginable) {
+		return this.codeRuleDao.queryCodeRulesByName(name, state, paginable);		
+	}
+
+	
 }

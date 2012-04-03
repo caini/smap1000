@@ -3,7 +3,6 @@ package org.wekit.web.service;
 import java.util.List;
 
 import org.wekit.web.IPaginable;
-import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.UnitCodeType;
 
 public interface UnitCodeTypeService {

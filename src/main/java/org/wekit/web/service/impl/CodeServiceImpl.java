@@ -28,17 +28,7 @@ public class CodeServiceImpl implements CodeService {
 	@Qualifier("codeDao")
 	private CodeDao			codeDao;
 
-	@Autowired
-	@Qualifier("extendCodeDao")
-	private ExtendCodeDao	extendCodeDao;
 
-	@Autowired
-	@Qualifier("tempCodeDao")
-	private TempCodeDao		tempCodeDao;
-
-	@Autowired
-	@Qualifier("codeSequenceDao")
-	private CodeSequenceDao	codeSequenceDao;
 
 	@Override
 	public Code getCode(Long id) {
@@ -53,15 +43,11 @@ public class CodeServiceImpl implements CodeService {
 		return this.codeDao.getCode(code);
 	}
 
-	
 	@Override
 	public boolean deleteCode(Code code) {
 		return false;
 	}
 
-	
-	
-	
 	@Override
 	public boolean deleteCode(Long codeId) {
 		// TODO Auto-generated method stub
@@ -81,8 +67,8 @@ public class CodeServiceImpl implements CodeService {
 
 	@Override
 	public Pagination<Code> getCodesWithPagination(IPaginable paginable) {
-		List<Code> list=codeDao.getCodesWithPaginable(paginable);
-		Pagination<Code> pagination=new Pagination<Code>(paginable);
+		List<Code> list = codeDao.getCodesWithPaginable(paginable);
+		Pagination<Code> pagination = new Pagination<Code>(paginable);
 		return null;
 	}
 
@@ -90,30 +76,6 @@ public class CodeServiceImpl implements CodeService {
 	public Code addCode(Code code) {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public TempCode getTempCode(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public TempCode getTempCode(String code) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean deleteTempCode(Long id) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean deleteTempCode(String code) {
-		// TODO Auto-generated method stub
-		return false;
 	}
 
 	public CodeDao getCodeDao() {
@@ -124,28 +86,6 @@ public class CodeServiceImpl implements CodeService {
 		this.codeDao = codeDao;
 	}
 
-	public ExtendCodeDao getExtendCodeDao() {
-		return extendCodeDao;
-	}
 
-	public void setExtendCodeDao(ExtendCodeDao extendCodeDao) {
-		this.extendCodeDao = extendCodeDao;
-	}
 
-	public TempCodeDao getTempCodeDao() {
-		return tempCodeDao;
-	}
-
-	public void setTempCodeDao(TempCodeDao tempCodeDao) {
-		this.tempCodeDao = tempCodeDao;
-	}
-
-	public CodeSequenceDao getCodeSequenceDao() {
-		return codeSequenceDao;
-	}
-
-	public void setCodeSequenceDao(CodeSequenceDao codeSequenceDao) {
-		this.codeSequenceDao = codeSequenceDao;
-	}
-	
 }

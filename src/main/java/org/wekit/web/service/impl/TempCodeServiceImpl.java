@@ -11,14 +11,12 @@ import org.wekit.web.db.model.TempCode;
 import org.wekit.web.service.TempCodeService;
 
 @Service("tempCodeService")
-public class TempCodeServiceImpl  implements TempCodeService{
+public class TempCodeServiceImpl implements TempCodeService {
 
 	@Autowired
 	@Qualifier
-	private TempCodeDao tempCodeDao;
-	
-	
-	
+	private TempCodeDao	tempCodeDao;
+
 	public TempCodeDao getTempCodeDao() {
 		return tempCodeDao;
 	}
@@ -29,31 +27,28 @@ public class TempCodeServiceImpl  implements TempCodeService{
 
 	@Override
 	public TempCode getTempCode(long id) {
-		// TODO Auto-generated method stub
-		return null;
+		if (id < 1)
+			return null;
+		return this.tempCodeDao.getTempCode(id);
 	}
 
 	@Override
 	public boolean deleteTempCode(TempCode tempCode) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.tempCodeDao.deleteTempCode(tempCode);
 	}
 
 	@Override
 	public TempCode addTempCode(TempCode tempCode) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.tempCodeDao.addTempCode(tempCode);
 	}
-	
-	public boolean updateTempCode(TempCode tempCode){
-		//TODO
-		return false;
+
+	public boolean updateTempCode(TempCode tempCode) {
+		return this.tempCodeDao.updateTempCode(tempCode);
 	}
 
 	@Override
 	public List<TempCode> queryTempCodes(String rule, String unitcode, String locationCode, String doccode, IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.tempCodeDao.queryTempCodes(rule, unitcode, locationCode, doccode, paginable);
 	}
 
 }

@@ -15,8 +15,8 @@ public class RemoteAclServiceImpl implements RemoteAclService {
 
 	@Autowired
 	@Qualifier("remoteAclDao")
-	private RemoteAclDao remoteAclDao;
-	
+	private RemoteAclDao	remoteAclDao;
+
 	public RemoteAclDao getRemoteAclDao() {
 		return remoteAclDao;
 	}
@@ -53,5 +53,10 @@ public class RemoteAclServiceImpl implements RemoteAclService {
 	@Override
 	public boolean deleteRemoteAclById(Long id) {
 		return this.remoteAclDao.deleteRemoteAcl(id);
+	}
+
+	@Override
+	public RemoteAcl getRemoteAcl(long id) {
+		return this.remoteAclDao.getRemoteAcl(id);
 	}
 }

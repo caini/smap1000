@@ -57,5 +57,16 @@ public interface TempCodeDao {
 	 * @return
 	 */
 	public List<TempCode> getTempCodesWithPagination(IPaginable paginable);
+	
+	/**
+	 * 根据查询条件查找对象
+	 * @param rule
+	 * @param unitcode
+	 * @param locationCode
+	 * @param doccode
+	 * @param paginable
+	 * @return
+	 */
+	public List<TempCode> queryTempCodes(String rule, String unitcode, String locationCode, String doccode, IPaginable paginable);
 
 }

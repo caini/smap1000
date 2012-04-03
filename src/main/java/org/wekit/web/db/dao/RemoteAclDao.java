@@ -60,4 +60,11 @@ public interface RemoteAclDao {
 	 * @return
 	 */
 	public boolean updateRemoteAcl(RemoteAcl remoteAcl);
+	
+	/**
+	 * 根据Id查找对象
+	 * @param id
+	 * @return
+	 */
+	public RemoteAcl getRemoteAcl(long id);
 }
