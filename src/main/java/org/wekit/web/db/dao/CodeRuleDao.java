@@ -70,6 +70,29 @@ public interface CodeRuleDao {
 	 */
 	public List<CodeRule> getCodeRulesWidthPagination(IPaginable paginable);
 	
-
+	/**
+	 * 
+	 * @param key
+	 * @param state
+	 * @param paginable
+	 * @return
+	 */
+	public List<CodeRule> queryCodeRules(String key, int state, IPaginable paginable);
+	
+	/**
+	 * 根据规则的名称获取规则列表
+	 * @param name
+	 * @param state
+	 * @param paginable
+	 * @return
+	 */
+	public List<CodeRule> queryCodeRulesByName(String name,int state,IPaginable paginable);
+	
+	/**
+	 * 根据分页信息查找编码规则名称
+	 * @param paginable
+	 * @return
+	 */
+	public List<String>  queryCodeRuleNames(IPaginable paginable);
 	
 }

@@ -36,4 +36,10 @@ public interface UnitCodeService {
 	public UnitCode getUnitCode(long id);
 
 	
+	/**
+	 * 根据编码查找详细信息
+	 * @param code
+	 * @return
+	 */
+	public UnitCode getUnitCode(String code);
 }

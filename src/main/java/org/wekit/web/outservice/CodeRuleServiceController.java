@@ -31,17 +31,7 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	
 	@RequestMapping(value="/coderule/query.{extend}",method=RequestMethod.GET)
 	public String queryCodeRule(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-		int currentPage=1;
-		int pagesize=10;
-		boolean isCount=true;
-		if(request.getParameter("pageno")!=null){
-			currentPage=Integer.parseInt(request.getParameter("pageno"));
-		}
-		if(request.getParameter("pagesize")!=null){
-			pagesize=Integer.parseInt(request.getParameter("pagesize"));
-		}
-		
-		pagination=this.ruleService.queryCodeRules(currentPage, pagesize, isCount);
+		initParam(request);
 		
 		return displayAPIClient(extend, model);
 	}

@@ -29,6 +29,14 @@ public interface LocationCodeDao {
 	 */
 	public LocationCode getLocationCode(long id);
 
+	
+	/**
+	 * 根据编码获取详细信息
+	 * @param code
+	 * @return
+	 */
+	public LocationCode getLocationCode(String code);
+	
 	/**
 	 * 根据Id删除区域定位码
 	 * 
@@ -67,5 +75,15 @@ public interface LocationCodeDao {
 	 * @return
 	 */
 	public List<LocationCode> getLocationCodesWithPagination(IPaginable paginable);
+	
+	/**
+	 * 根据关键字查找对象
+	 * @param key
+	 * @param typeId
+	 * @param state
+	 * @param paginable
+	 * @return
+	 */
+	public List<LocationCode> queryLocationCodes(String key, long typeId, int state, IPaginable paginable);
 
 }

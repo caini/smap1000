@@ -30,7 +30,7 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
     @RequestMapping(value="/unitcodetype/query.{extend}",method=RequestMethod.GET)
 	public String queryUnitCodeType(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 	  this.initParam(request);
-	  
+	  this.baseDataService.getAllUnitCodeTypes();
 	  return null;
 	  
 	}

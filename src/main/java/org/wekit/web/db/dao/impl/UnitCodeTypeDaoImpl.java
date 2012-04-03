@@ -2,6 +2,7 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -70,23 +71,23 @@ public class UnitCodeTypeDaoImpl extends HibernateBaseDao<UnitCodeType, Long> im
 		else
 			return this.getAll();
 	}
-	
+
 	@SuppressWarnings("unchecked")
-	public List<UnitCodeType> queryUnitCodeTypes(String key,int state,IPaginable paginable){
-		StringBuffer buffer=new StringBuffer();
-		buffer.append("from UnitCodeType bean where bean.name like '%").append(key+"%' or bean.code like '%"+key+"%' ");
-		if(state>0){
-			buffer.append(" and bean.state="+state);
+	public List<UnitCodeType> queryUnitCodeTypes(String key, int state, IPaginable paginable) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("from UnitCodeType bean where 1=1");
+		if (StringUtils.isNotEmpty(key)) {
+			buffer.append(" and (bean.name like '%").append(key + "%' or bean.code like '%" + key + "%' )");
 		}
-		Query query=createrQuery(buffer.toString());
-		if(paginable!=null)
-		{
+		if (state > 0) {
+			buffer.append(" and bean.state=" + state);
+		}
+		Query query = createrQuery(buffer.toString());
+		if (paginable != null) {
 			this.paginationParam(query, paginable);
 		}
 		return query.list();
 	}
-	
-	
 
 	@Override
 	public boolean updateUnitCodeType(UnitCodeType unitCodeType) {

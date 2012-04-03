@@ -59,5 +59,15 @@ public interface LocationCodeTypeDao {
 	 * @return
 	 */
 	public List<LocationCodeType> getLocationCodeTypesWithPagination(IPaginable paginable);
+	
+	/**
+	 * 根据关键字获取编码类型的信息
+	 * @param key
+	 * @param state
+	 * @param paginable
+	 * @return
+	 */
+	public List<LocationCodeType> queryLocationCodeTypes(String key, int state, IPaginable paginable);
 
+	
 }

@@ -102,4 +102,12 @@ public class UnitCodeDaoImpl extends HibernateBaseDao<UnitCode, Long> implements
 		return query.list();
 	}
 
+	@Override
+	public UnitCode getUnitCode(String code) {
+		List<UnitCode> list=this.queryByProperty("code", code);
+		if(list!=null)
+			return list.get(0);
+		return null;
+	}
+
 }

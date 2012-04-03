@@ -2,7 +2,9 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -74,6 +76,25 @@ public class LocationCodeTypeDaoImpl  extends HibernateBaseDao<LocationCodeType,
 	@Override
 	public List<LocationCodeType> getLocationCodeTypesWithPagination(IPaginable paginable) {
 		return this.getObjectsWithPagination(paginable);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<LocationCodeType> queryLocationCodeTypes(String key, int state, IPaginable paginable) {
+		StringBuffer buffer=new StringBuffer();
+		buffer.append("from LocationCodeType bean where 1=1");
+		if(StringUtils.isNotEmpty(key)){
+			buffer.append(" and ( bean.name like '%"+key +"%' and bean.code like '%"+key+"%' )");
+		}
+		if(state>=0){
+			buffer.append(" and bean.state="+state);
+		}
+		Query query=createrQuery(buffer.toString());
+		if(paginable!=null){
+			this.paginationParam(query, paginable);
+		}
+		return query.list();
+			
 	}
 
 	

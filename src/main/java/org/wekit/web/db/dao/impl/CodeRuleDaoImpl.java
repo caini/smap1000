@@ -2,7 +2,9 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -85,6 +87,54 @@ public class CodeRuleDaoImpl extends HibernateBaseDao<CodeRule, Long> implements
 			return codeRules.get(0);
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CodeRule> queryCodeRules(String key, int state, IPaginable paginable) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("from CodeRule bean where 1=1 ");
+		if (StringUtils.isNotEmpty(key)) {
+			buffer.append(" and bean.rule like '%" + key + "%' ");
+		}
+		if (state >= 0) {
+			buffer.append(" and bean.state=" + state);
+		}
+		Query query = createrQuery(buffer.toString());
+		if (paginable != null) {
+			this.paginationParam(query, paginable);
+		}
+		return query.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<CodeRule> queryCodeRulesByName(String name, int state, IPaginable paginable) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("from CodeRule bean where 1=1 ");
+		if (StringUtils.isNotEmpty(name)) {
+			buffer.append(" and bean.ruleName like '%" + name + "%' ");
+		}
+		if (state >= 0) {
+			buffer.append(" and bean.state=" + state);
+		}
+		Query query = createrQuery(buffer.toString());
+		if (paginable != null) {
+			this.paginationParam(query, paginable);
+		}
+		return query.list();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> queryCodeRuleNames(IPaginable paginable) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("select distinct bean.ruleName from CodeRule bean");
+		Query query = createrQuery(buffer.toString());
+		if (paginable != null) {
+			this.paginationParam(query, paginable);
+		}
+		return query.list();
 	}
 
 }

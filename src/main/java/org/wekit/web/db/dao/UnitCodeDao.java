@@ -25,6 +25,15 @@ public interface UnitCodeDao {
 	 * @return
 	 */
 	public UnitCode getUnitCode(long id);
+	
+	
+	/**
+	 * 根据编码查找对象信息
+	 * @param code
+	 * @return
+	 */
+	public UnitCode getUnitCode(String code);
+	
 
 	/**
 	 * 更新机组编码信息
@@ -69,4 +78,6 @@ public interface UnitCodeDao {
 	 * @return
 	 */
 	public List<UnitCode> queryUnitCodes(String key, long typeId, int state, IPaginable paginable);
+	
+	
 }

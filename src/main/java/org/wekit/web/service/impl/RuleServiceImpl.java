@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.wekit.web.IPaginable;
 import org.wekit.web.db.Pagination;
 import org.wekit.web.db.dao.CodeRuleDao;
 import org.wekit.web.db.model.CodeRule;
@@ -52,11 +53,33 @@ public class RuleServiceImpl implements RuleService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public Pagination<CodeRule> queryCodeRules(int currentPage, int pagesize, boolean isCount) {
+	public List<CodeRule> queryCodeRules(int currentPage, int pagesize, boolean isCount) {
 		Pagination<CodeRule> paginable = new Pagination<CodeRule>(currentPage, pagesize, isCount);
 		List<CodeRule> list = this.codeRuleDao.getCodeRulesWidthPagination(paginable);
-		paginable.setDatas(list);
-		return paginable;
+		return list;
 	}
+
+	@Transactional(readOnly=true)
+	@Override
+	public List<CodeRule> queryCodeRules(IPaginable paginable) {
+		if(paginable==null)
+			return this.codeRuleDao.getAllCodeRules();
+		else	
+			return this.codeRuleDao.getCodeRulesWidthPagination(paginable);
+	}
+
+	@Override
+	public List<CodeRule> queryCodeRules(String key, int state, IPaginable paginable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> queryCodeRuleNames(IPaginable paginable) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 
 }
