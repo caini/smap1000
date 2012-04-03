@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
 import org.wekit.web.db.Pagination;
-import org.wekit.web.db.model.RemoteAcl;
 import org.wekit.web.service.RemoteAclService;
 import org.wekit.web.util.DataWrapUtil;
 
@@ -48,6 +47,7 @@ public abstract class BaseController<T> {
 	 * @param request
 	 * @return
 	 */
+	/*
 	protected void initParam(HttpServletRequest request) {
 		if(request.getParameter("userkey")==null)
 			return;
@@ -69,6 +69,12 @@ public abstract class BaseController<T> {
 			}
 		}
 	}
+	*/
+	protected void initParam(HttpServletRequest request){
+		paserPaginable(request);
+		this.parameters.putAll(request.getParameterMap());
+	}
+	
 	
 	
 	

@@ -5,10 +5,8 @@ import java.util.List;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.Admin;
-import org.wekit.web.db.model.UnitCodeType;
 
-public interface BaseDataService {
-
+public interface AdminService {
 	
 	public Admin saveAdmin(Admin admin);
 	
@@ -22,6 +20,4 @@ public interface BaseDataService {
 	 * @return
 	 */
 	public Pagination<Admin> getAdminsWithPaginable(IPaginable paginable);
-
-	public Pagination<UnitCodeType> getAllUnitCodeTypes();
 }

@@ -60,4 +60,13 @@ public interface UnitCodeDao {
 	 */
 	public List<UnitCode> getCodesWithPagination(IPaginable paginable);
 
+	/**
+	 * 根据关键字，类型ID，状态，分页信息查找对象
+	 * @param key
+	 * @param typeId
+	 * @param state
+	 * @param paginable
+	 * @return
+	 */
+	public List<UnitCode> queryUnitCodes(String key, long typeId, int state, IPaginable paginable);
 }

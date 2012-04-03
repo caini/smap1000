@@ -49,6 +49,26 @@ public class AES {
 		return null;
 	}
 
+	/**
+	 * @param content
+	 *            需要加密的内容
+	 * @param password
+	 *            加密密钥
+	 * @return String 加密后的字符串
+	 */
+	public static String encrypttoStr(String content, String password) {
+		return parseByte2HexStr(encrypt(content, password));
+	}
+
+	/**
+	 * 解密
+	 * 
+	 * @param content
+	 *            待解密内容
+	 * @param keyWord
+	 *            解密密钥
+	 * @return byte[]
+	 */
 	public static byte[] decrypt(byte[] content, String keyWord) {
 		try {
 			KeyGenerator kgen = KeyGenerator.getInstance("AES");
@@ -76,10 +96,23 @@ public class AES {
 		return null;
 	}
 
+	/**
+	 * @param content
+	 *            待解密内容(字符串)
+	 * @param keyWord
+	 *            解密密钥
+	 * @return byte[]
+	 */
 	public static byte[] decrypt(String content, String keyWord) {
 		return decrypt(parseHexStr2Byte(content), keyWord);
 	}
 
+	/**
+	 * 将二进制转换成16进制
+	 * 
+	 * @param buf
+	 * @return String
+	 */
 	public static String parseByte2HexStr(byte buf[]) {
 		StringBuffer sb = new StringBuffer();
 		for (int i = 0; i < buf.length; i++) {
@@ -92,6 +125,12 @@ public class AES {
 		return sb.toString();
 	}
 
+	/**
+	 * 将16进制转换为二进制
+	 * 
+	 * @param hexStr
+	 * @return byte[]
+	 */
 	public static byte[] parseHexStr2Byte(String hexStr) {
 		if (hexStr.length() < 1)
 			return null;
@@ -101,7 +140,7 @@ public class AES {
 			int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2), 16);
 			result[i] = (byte) (high * 16 + low);
 		}
-		return result; 
+		return result;
 	}
-	
+
 }

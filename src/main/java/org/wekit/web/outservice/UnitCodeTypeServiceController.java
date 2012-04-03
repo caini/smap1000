@@ -29,8 +29,8 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	 */
     @RequestMapping(value="/unitcodetype/query.{extend}",method=RequestMethod.GET)
 	public String queryUnitCodeType(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-	  this.paserPaginable(request);
-	  String key=null;
+	  this.initParam(request);
+	  
 	  return null;
 	  
 	}

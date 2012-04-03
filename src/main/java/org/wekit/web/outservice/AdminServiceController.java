@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wekit.web.BaseController;
 import org.wekit.web.db.model.Admin;
+import org.wekit.web.service.AdminService;
 import org.wekit.web.service.BaseDataService;
 
 @Controller("adminServiceController")
@@ -20,9 +21,8 @@ public class AdminServiceController extends BaseController<Admin> {
 
 	
 	@Autowired
-	@Qualifier("baseDataService")
-	private BaseDataService baseDataService;
-	
+	@Qualifier("adminService")
+	private AdminService adminService;
 	
 	@RequestMapping(value="/security/admin/query.{extend}",method=RequestMethod.GET)
 	public String queryAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
@@ -45,17 +45,13 @@ public class AdminServiceController extends BaseController<Admin> {
 	public String updateAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Mode mode){
 		return null;
 	}
-	
-	
-	
 
-	public BaseDataService getBaseDataService() {
-		return baseDataService;
+	public AdminService getAdminService() {
+		return adminService;
 	}
 
-
-	public void setBaseDataService(BaseDataService baseDataService) {
-		this.baseDataService = baseDataService;
+	public void setAdminService(AdminService adminService) {
+		this.adminService = adminService;
 	}
 	
 	
