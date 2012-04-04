@@ -63,4 +63,8 @@ public  class RC4CipherEntity
 
         return result;
     }
+    
+    public static void main(String[] args){
+    	System.out.println(	Data2ASCIIhex(RC4CipherEntity.RC4("hwlchina", "hwlchina")));
+    }
 }

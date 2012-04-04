@@ -3,9 +3,7 @@ package org.wekit.web.service;
 import java.util.List;
 
 import org.wekit.web.IPaginable;
-import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.Code;
-import org.wekit.web.db.model.TempCode;
 
 public interface CodeService {
 
@@ -39,12 +37,45 @@ public interface CodeService {
 	 */
 	public boolean deleteCode(Long codeId);
 	
+	
+	/**
+	 * 取消编码，正常的业务规则
+	 * @param codeId
+	 * @return
+	 */
+	public boolean cancelCode(Long codeId);
+	
+	
+	/**
+	 * 取消编码，正常的业务规则
+	 * @param code
+	 * @return
+	 */
+	public boolean cancelCode(String code);
+	
+	
+	/**
+	 * 根据传入的ID进行取号操作
+	 * @param rule
+	 * @param unitCode
+	 * @param locationCode
+	 * @param docCode
+	 * @param creater
+	 * @param createId
+	 * @param note
+	 * @return
+	 */
+	public Code fetchCode(String rule,String unitCode,String locationCode,String docCode,String creater,String createId,String note);
+	
+	
+	
+	
 	/**
 	 * 更新编码信息
 	 * @param code
 	 * @return
 	 */
-	public Code updateCode(Code code);
+	public boolean updateCode(Code code);
 	
 	/**
 	 * 获取所有的编码
@@ -57,7 +88,7 @@ public interface CodeService {
 	 * @param paginable
 	 * @return
 	 */
-	public Pagination<Code> getCodesWithPagination(IPaginable paginable);
+	public List<Code> getCodesWithPagination(IPaginable paginable);
 	
 	/**
 	 * 添加编码

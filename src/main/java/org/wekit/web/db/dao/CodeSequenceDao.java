@@ -53,4 +53,23 @@ public interface CodeSequenceDao {
 	 * @return
 	 */
 	public List<CodeSequence> getCodeSequencesWithPagination(IPaginable paginable);
+	
+	/**
+	 * 根据编码规则和年月日获取编码的序列 //一般情况下 这个序列都是唯一的
+	 * @param rule
+	 * @param year
+	 * @param month
+	 * @param day
+	 * @return
+	 */
+	public List<CodeSequence> queryCodeSequences(String rule,int year,int month,int day);
+	
+	/**
+	 * 增加编码的序列计数
+	 * @param sequence
+	 * @return
+	 */
+	public boolean incCodeSequence(CodeSequence sequence);
 }
+
+

@@ -79,4 +79,17 @@ public class CodeSequenceDaoImpl extends HibernateBaseDao<CodeSequence, Long> im
 	public List<CodeSequence> getCodeSequencesWithPagination(IPaginable paginable) {
 		return this.getObjectsWithPagination(paginable);
 	}
+
+	@Override
+	public List<CodeSequence> queryCodeSequences(String rule, int year, int month, int day) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean incCodeSequence(CodeSequence sequence) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+	
 }
