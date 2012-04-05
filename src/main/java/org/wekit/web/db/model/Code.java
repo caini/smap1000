@@ -31,62 +31,74 @@ import org.hibernate.annotations.BatchSize;
 @BatchSize(size = 20)
 public class Code implements Serializable {
 
-	private static final long serialVersionUID = 1728886805018009356L;
+	private static final long	serialVersionUID	= 1728886805018009356L;
 
 	@Id
 	@GeneratedValue(generator = "id_gen", strategy = GenerationType.TABLE)
 	@TableGenerator(name = "id_gen", table = "sys_id_gen", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "code", allocationSize = 100)
-	private long codeId;
+	private long				codeId;
 
 	// 编码创建时间
 	@Column(name = "ctime", nullable = false)
-	private long createTime;
+	private long				createTime;
 
 	// 编码对应的编码规则
 	@Column(name = "rule", length = 255, nullable = false)
-	private String rule;
+	private String				rule;
 
 	// 编码创建人
 	@Column(name = "creater", length = 64)
-	private String creater;
+	private String				creater;
 
 	@Column(name = "createrid", length = 64)
-	private String createrId;
+	private String				createrId;
 
 	// 机组号
 	@Column(name = "unitcode", length = 64)
-	private String unitCode;
+	private String				unitCode;
 
 	// 定位码
 	@Column(name = "locationcode", length = 64)
-	private String locationCode;
+	private String				locationCode;
 
 	// 文档类型码
 	@Column(name = "doccode", length = 64)
-	private String docCode;
+	private String				docCode;
 
-	@Column(name="code",length=255,nullable=false,unique=true)
-	private String code;
-	
-	@Column(name="maskcode",length=255,nullable=false)
-	private String maskCode;
-	
+	@Column(name = "code", length = 255, nullable = false, unique = true)
+	private String				code;
+
 	// 编码状态
 	@Column(name = "state")
-	private int state;
+	private int					state;
 
 	// 定义编码的版本，实现乐观锁机制，保证编码生成的唯一性
 	@Version
 	@Column(name = "version")
-	private long version;
+	private long				version;
 
 	// 批量申请ID号，一个uuid码
 	@Column(name = "batch")
-	private String batchId;
+	private String				batchId;
 
 	// 编码备注
 	@Column(name = "note", length = 512)
-	private String note;
+	private String				note;
+
+	// 初始化工作
+	public Code(String rule, String creater, String createrId, String unitCode, String locationCode, String docCode, String code, int state, String batchId, long createTime, String note) {
+		this.rule = rule;
+		this.creater = creater;
+		this.createrId = createrId;
+		this.unitCode = unitCode;
+		this.locationCode = locationCode;
+		this.docCode = docCode;
+		this.code = code;
+		this.state = state;
+		this.batchId = batchId;
+		this.createTime = createTime;
+		this.note = note;
+	}
 
 	public Code() {
 	}
@@ -195,12 +207,4 @@ public class Code implements Serializable {
 		this.code = code;
 	}
 
-	public String getMaskCode() {
-		return maskCode;
-	}
-
-	public void setMaskCode(String maskCode) {
-		this.maskCode = maskCode;
-	}
-	
 }

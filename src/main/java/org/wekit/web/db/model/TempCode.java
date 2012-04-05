@@ -58,6 +58,9 @@ public class TempCode implements Serializable {
 	@Column(name = "version")
 	private long version;
 
+	@Column(name="code",length=255,nullable=false,unique=true)
+	private String code;
+	
 	// 批量申请ID号，一个uuid码
 	@Column(name = "batch")
 	private String batchId;
@@ -150,6 +153,16 @@ public class TempCode implements Serializable {
 		this.note = note;
 	}
 
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	
+
 	public String getBatchId() {
 		return batchId;
 	}
@@ -166,4 +179,5 @@ public class TempCode implements Serializable {
 		this.createrId = createrId;
 	}
 
+	
 }

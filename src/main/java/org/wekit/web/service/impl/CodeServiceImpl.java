@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sound.midi.Sequence;
+
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,6 +18,8 @@ import org.wekit.web.db.dao.CodeSequenceDao;
 import org.wekit.web.db.dao.TempCodeDao;
 import org.wekit.web.db.model.Code;
 import org.wekit.web.db.model.CodeRule;
+import org.wekit.web.db.model.CodeSequence;
+import org.wekit.web.db.model.TempCode;
 import org.wekit.web.service.CodeService;
 
 /**
@@ -139,8 +143,34 @@ public class CodeServiceImpl implements CodeService {
 	 * 独立取号和批量取号的差别是独立取号有限查找可用的序列号，在生成新的序列号，而批量操作只生成联系的新号而不关心旧的号码
 	 */
 	@Override
-	public Code fetchCode(String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note) {
-
+	public Code fetchCode(String rule, String unitCode, String locationCode, String docCode, String creater, String createrId, String note) {
+		String mask=checkRule(rule, unitCode, locationCode, docCode);
+		if (mask==null)
+			return null; // 无效时返回空
+		CodeRule codeRule=codeRuleDao.getCodeRule(rule);
+		if (codeRule == null)
+			return null; // 当规则不存在时返回空
+		List<TempCode> tempCodes = tempCodeDao.queryTempCodes(rule, unitCode, locationCode, docCode, null);
+		if (tempCodes != null) {
+			TempCode tempCode = tempCodes.get(0);
+			Code code = new Code(rule, creater, createrId, unitCode, locationCode, docCode, tempCode.getCode(), 1, null, System.currentTimeMillis(), note);
+			code = codeDao.addCode(code);
+			tempCodeDao.deleteTempCode(tempCode);
+			return code;
+		} else {
+			MaskParser maskParser = paserMask(mask);
+			List<CodeSequence> codeSequences=codeSequenceDao.queryCodeSequences(rule, unitCode, locationCode, docCode, maskParser.getParam());
+			CodeSequence codeSequence=null;
+			if(codeSequences==null){
+				
+				codeSequence=new CodeSequence();
+				
+			}else
+			{
+				codeSequence=codeSequences.get(0);
+			}
+				
+		}
 		return null;
 
 	}
@@ -195,6 +225,20 @@ public class CodeServiceImpl implements CodeService {
 
 		return new MaskParser(param, mask, right - left - 1);
 	}
+	
+	/**
+	 * 添加新的序列
+	 * @param rule
+	 * @param unitCode
+	 * @param locationCode
+	 * @param docCode
+	 * @param params
+	 * @return
+	 */
+	private CodeSequence initCodeSequence(String rule,String unitCode,String locationCode,String docCode,Map<String, Integer> params){
+		//TODO
+		return null;
+	}
 
 	/**
 	 * 判断传递的参数是否有效
@@ -205,17 +249,17 @@ public class CodeServiceImpl implements CodeService {
 	 * @param docCode
 	 * @return
 	 */
-	public boolean checkRule(String codeRule, String unitCode, String locationCode, String docCode) {
+	public String checkRule(String codeRule, String unitCode, String locationCode, String docCode) {
 		String[] rules = codeRule.split("-");
 		if (rules.length != 4)
-			return false;
+			return null;
 		if (!(rules[0].endsWith("x") || rules.equals(unitCode)))
-			return false;
+			return null;
 		if (!(rules[1].equals("xxx") || rules[1].equals(locationCode)))
-			return false;
+			return null;
 		if (!(rules[2].equals("xxx") || rules[2].equals(docCode)))
-			return false;
-		return true;
+			return null;
+		return rules[3];
 	}
 
 }

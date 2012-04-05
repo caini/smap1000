@@ -1,6 +1,7 @@
 package org.wekit.web.db.dao.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -81,15 +82,33 @@ public class CodeSequenceDaoImpl extends HibernateBaseDao<CodeSequence, Long> im
 	}
 
 	@Override
-	public List<CodeSequence> queryCodeSequences(String rule, int year, int month, int day) {
-		// TODO Auto-generated method stub
+	public List<CodeSequence> queryCodeSequences(String rule,String unitCode,String locationCode,String docCode, int year, int month, int day) {
+
+		// TODO
 		return null;
+
 	}
 
 	@Override
 	public boolean incCodeSequence(CodeSequence sequence) {
-		// TODO Auto-generated method stub
-		return false;
+		if (sequence == null)
+			return false;
+
+		try {
+			sequence.setSeq(sequence.getSeq() + 1);
+			this.update(sequence);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			return false;
+		}
+		return true;
 	}
-	
+
+	@Override
+	public List<CodeSequence> queryCodeSequences(String rule,String unitCode,String locationCode,String docCode, Map<String, Integer> params) {
+		// TODO
+		return null;
+
+	}
+
 }
