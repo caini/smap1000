@@ -60,4 +60,18 @@ public interface CodeDao {
 	 * @return
 	 */
 	public Code getCode(String code);
+	
+	/**
+	 * 根据生成的编码规则批量的生成相应的编码
+	 * @param codes
+	 * @param rule
+	 * @param unitCode
+	 * @param locationCode
+	 * @param docCode
+	 * @param creater
+	 * @param createId
+	 * @param note
+	 * @return
+	 */
+	public List<Code> addCodes(List<String>codes,String rule,String unitCode,String locationCode,String docCode,String creater,String createId,String note);
 }

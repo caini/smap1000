@@ -1,6 +1,8 @@
 package org.wekit.web.db.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Repository;
@@ -82,5 +84,20 @@ public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao 
 		return null;
 	}
 
-	
+	@Override
+	public List<Code> addCodes(List<String> codes, String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note) {
+		List<Code> list=new ArrayList<Code>();
+		String uuid=UUID.randomUUID().toString();
+		int i=0;
+		for(String code:codes){
+			i++;
+			
+			Code newCode=new Code(rule, creater, createId, unitCode, locationCode, docCode, code, 1,uuid, System.currentTimeMillis(), note);
+			list.add(newCode);
+			if(i%20==0){
+				this.getSession().flush();
+			}
+		}
+		return list;
+	}
 }

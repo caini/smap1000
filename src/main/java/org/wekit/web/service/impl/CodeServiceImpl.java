@@ -5,13 +5,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.sound.midi.Sequence;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.wekit.web.IPaginable;
+import org.wekit.web.WekitException;
 import org.wekit.web.db.dao.CodeDao;
 import org.wekit.web.db.dao.CodeRuleDao;
 import org.wekit.web.db.dao.CodeSequenceDao;
@@ -33,19 +32,19 @@ public class CodeServiceImpl implements CodeService {
 
 	@Autowired
 	@Qualifier("codeDao")
-	private CodeDao			codeDao;
+	private CodeDao codeDao;
 
 	@Autowired
 	@Qualifier("tempCodeDao")
-	private TempCodeDao		tempCodeDao;
+	private TempCodeDao tempCodeDao;
 
 	@Autowired
 	@Qualifier("codeSequenceDao")
-	private CodeSequenceDao	codeSequenceDao;
+	private CodeSequenceDao codeSequenceDao;
 
 	@Autowired
 	@Qualifier("codeRuleDao")
-	private CodeRuleDao		codeRuleDao;
+	private CodeRuleDao codeRuleDao;
 
 	@Override
 	public Code getCode(Long id) {
@@ -144,41 +143,63 @@ public class CodeServiceImpl implements CodeService {
 	 */
 	@Override
 	public Code fetchCode(String rule, String unitCode, String locationCode, String docCode, String creater, String createrId, String note) {
-		String mask=checkRule(rule, unitCode, locationCode, docCode);
-		if (mask==null)
-			return null; // 无效时返回空
-		CodeRule codeRule=codeRuleDao.getCodeRule(rule);
-		if (codeRule == null)
-			return null; // 当规则不存在时返回空
 		List<TempCode> tempCodes = tempCodeDao.queryTempCodes(rule, unitCode, locationCode, docCode, null);
-		if (tempCodes != null) {
+		if (tempCodes != null && tempCodes.size() > 0) {
 			TempCode tempCode = tempCodes.get(0);
 			Code code = new Code(rule, creater, createrId, unitCode, locationCode, docCode, tempCode.getCode(), 1, null, System.currentTimeMillis(), note);
 			code = codeDao.addCode(code);
 			tempCodeDao.deleteTempCode(tempCode);
 			return code;
 		} else {
-			MaskParser maskParser = paserMask(mask);
-			List<CodeSequence> codeSequences=codeSequenceDao.queryCodeSequences(rule, unitCode, locationCode, docCode, maskParser.getParam());
-			CodeSequence codeSequence=null;
-			if(codeSequences==null){
-				
-				codeSequence=new CodeSequence();
-				
-			}else
-			{
-				codeSequence=codeSequences.get(0);
-			}
-				
+			List<Code> codes = batchCode(rule, unitCode, locationCode, docCode, creater, createrId, note, 1);
+			if (codes != null && codes.size() > 0)
+				return codes.get(0);
 		}
 		return null;
 
 	}
 
-	public Code batchCode(String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note, int batchSize) {
-
-		// TODO
-		return null;
+	/**
+	 * 批量获取编码,会抛出运行时异常
+	 * 
+	 * @param rule
+	 * @param unitCode
+	 * @param locationCode
+	 * @param docCode
+	 * @param creater
+	 * @param createId
+	 * @param note
+	 * @param batchSize
+	 * @return
+	 */
+	public List<Code> batchCode(String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note, int batchSize) {
+		String mask = checkRule(rule, unitCode, locationCode, docCode);
+		if (mask == null)
+			throw new WekitException("规则验证无效!");
+		CodeRule codeRule = codeRuleDao.getCodeRule(rule);
+		if (codeRule == null)
+			throw new WekitException("所选择的规则不存在!");
+		MaskParser maskParser = paserMask(mask);
+		List<CodeSequence> codeSequences = codeSequenceDao.queryCodeSequences(rule, unitCode, locationCode, docCode, maskParser.getParam());
+		CodeSequence codeSequence = null;
+		int minSeq = codeRule.getMinSequence();
+		int maxSeq = codeRule.getMaxSequence();
+		if (codeSequences != null && codeSequences.size() > 0) {
+			codeSequence = codeSequences.get(0);
+			if (maxSeq > 0 && (codeSequence.getSeq() + batchSize) > maxSeq)
+				throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!");
+		} else {
+			// 构造新的dequence
+			codeSequence = initCodeSequence(rule, unitCode, locationCode, docCode, maskParser.getParam());
+			if (maxSeq > 0 && (maxSeq - minSeq + 1) < batchSize)
+				throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!");
+		}
+		List<String> codes = generationCode(maskParser.getMask(), codeSequence.getSeq(), batchSize);
+		List<Code> generationCodes = codeDao.addCodes(codes, rule, unitCode, locationCode, docCode, creater, createId, note);
+		codeSequence.setSeq(codeSequence.getSeq() + batchSize);
+		if (!codeSequenceDao.updateCodeSequence(codeSequence))
+			throw new WekitException("生成编码时发生意外请与管理员联系!");
+		return generationCodes;
 	}
 
 	/**
@@ -225,9 +246,14 @@ public class CodeServiceImpl implements CodeService {
 
 		return new MaskParser(param, mask, right - left - 1);
 	}
-	
+
+	protected List<String> generationCode(String rule, long seq, int batchNums) {
+		return null;
+	}
+
 	/**
 	 * 添加新的序列
+	 * 
 	 * @param rule
 	 * @param unitCode
 	 * @param locationCode
@@ -235,8 +261,8 @@ public class CodeServiceImpl implements CodeService {
 	 * @param params
 	 * @return
 	 */
-	private CodeSequence initCodeSequence(String rule,String unitCode,String locationCode,String docCode,Map<String, Integer> params){
-		//TODO
+	private CodeSequence initCodeSequence(String rule, String unitCode, String locationCode, String docCode, Map<String, Integer> params) {
+		// TODO
 		return null;
 	}
 
