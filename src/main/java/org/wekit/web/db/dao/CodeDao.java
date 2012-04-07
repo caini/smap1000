@@ -74,4 +74,6 @@ public interface CodeDao {
 	 * @return
 	 */
 	public List<Code> addCodes(List<String>codes,String rule,String unitCode,String locationCode,String docCode,String creater,String createId,String note);
+	
+
 }

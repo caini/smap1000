@@ -69,6 +69,21 @@ public class TempCode implements Serializable {
 	@Column(name = "note", length = 512)
 	private String note;
 
+	public TempCode(String rule,String creater,String createrId,String unitCode,String locationCode,String docCode,int state,String code,String batchId,String note,long createTime){
+		this.rule=rule;
+		this.creater=creater;
+		this.createrId=createrId;
+		this.unitCode=unitCode;
+		this.locationCode=locationCode;
+		this.docCode=docCode;
+		this.state=state;
+		this.code=code;
+		this.batchId=batchId;
+		this.note=note;
+		this.createTime=createTime;
+	}
+	
+	
 	public TempCode() {
 
 	}

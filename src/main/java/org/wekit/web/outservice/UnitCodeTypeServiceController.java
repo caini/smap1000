@@ -5,21 +5,29 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wekit.web.BaseController;
+import org.wekit.web.db.dao.UnitCodeTypeDao;
 import org.wekit.web.db.model.UnitCodeType;
-import org.wekit.web.service.BaseDataService;
 
+/**
+ * 
+ * @author HuangWeili
+ *
+ */
 @Controller("unitCodeTypeServiceController")
+@Scope(org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST)
 public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> {
 
 	@Autowired
-	@Qualifier("baseDataService")
-	private BaseDataService baseDataService;
+	@Qualifier("unitCodeTypeDao")
+	private UnitCodeTypeDao unitCodeTypeDao;
+
 
 	/**
 	 * 查询机组类型
@@ -29,10 +37,9 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	 */
     @RequestMapping(value="/unitcodetype/query.{extend}",method=RequestMethod.GET)
 	public String queryUnitCodeType(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-	  this.initParam(request);
-	  this.baseDataService.getAllUnitCodeTypes();
-	  return null;
-	  
+	  initParam(request);
+
+	  return displayAPIClient(extend, model);
 	}
     
     
@@ -45,7 +52,9 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
      */
     @RequestMapping(value="/unitcodetype/add.{extend}",method=RequestMethod.POST)
     public String addUnitCodeType(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-       return null;
+       initParam(request);
+       //TODO
+       return displayAPIClient(extend, model);
     }
     
     /**
@@ -56,7 +65,9 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
      */
     @RequestMapping(value="/unitcodetype/update.{extend}",method=RequestMethod.POST)
     public String updateUnitCodeType(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-    	return null;
+    	initParam(request);
+    	//TODO
+    	return displayAPIClient(extend, model);
     }
     
     /**
@@ -67,26 +78,37 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
      */
     @RequestMapping(value="/unitcodetype/find.{extend}",method=RequestMethod.GET)
     public String findUnitCodeType(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-    	return null;
+    	initParam(request);
+    	//TODO
+    	return displayAPIClient(extend, model);
     }
     
+    /**
+     * 
+     * @param extend
+     * @param request
+     * @param response
+     * @param model
+     * @return
+     */
     @RequestMapping(value="/unticodetype/delete.{extend}",method=RequestMethod.POST)
     public String deleteCodeType(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-    	return null;
+    	initParam(request);
+    	//TODO
+    	return displayAPIClient(extend, model);
+    
     }
 
 
-
-	public BaseDataService getBaseDataService() {
-		return baseDataService;
+	public UnitCodeTypeDao getUnitCodeTypeDao() {
+		return unitCodeTypeDao;
 	}
 
 
 
-	public void setBaseDataService(BaseDataService baseDataService) {
-		this.baseDataService = baseDataService;
+	public void setUnitCodeTypeDao(UnitCodeTypeDao unitCodeTypeDao) {
+		this.unitCodeTypeDao = unitCodeTypeDao;
 	}
-    
-    
-	
+
+    	
 }

@@ -3,7 +3,6 @@ package org.wekit.web;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.LockMode;
 import org.hibernate.LockOptions;
@@ -188,7 +187,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 	 */
 	@SuppressWarnings("unchecked")
 	protected List<T> queryByProperty(String propertyName, Object propertyValeu) {
-		Query query= createrQuery("from "+getEntityClass().getName() +"bean where bean."+propertyName+"=:value");
+		Query query= createrQuery("from "+getEntityClass().getName() +" bean where bean."+propertyName+"=:value");
 		query.setParameter("value",propertyValeu);
 		return query.list();
 	}
@@ -224,20 +223,7 @@ public abstract class HibernateBaseDao<T, PK extends Serializable> {
 		return getSession().getCurrentLockMode(object);
 	}
 
-	/**
-	 * 批量添加数据
-	 * 
-	 * @param ojects
-	 *            //要添加的数据列表
-	 * @param batchSize
-	 *            //多少数据刷新一次
-	 * @return
-	 */
-	protected List<T> save(List<T> ojects, int batchSize) {
-
-		return null;
-	}
-
+	
 	/**
 	 * 更新数据对象
 	 * 

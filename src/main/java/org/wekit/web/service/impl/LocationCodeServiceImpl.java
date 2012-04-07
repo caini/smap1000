@@ -26,6 +26,7 @@ public class LocationCodeServiceImpl implements LocationCodeService{
 		this.locationCodeDao = locationCodeDao;
 	}
 
+	@Transactional(readOnly=true)
 	@Override
 	public LocationCode getLocationCode(long id) {
 		return this.locationCodeDao.getLocationCode(id);

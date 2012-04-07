@@ -20,4 +20,6 @@ public interface AdminService {
 	 * @return
 	 */
 	public Pagination<Admin> getAdminsWithPaginable(IPaginable paginable);
+	
+
 }

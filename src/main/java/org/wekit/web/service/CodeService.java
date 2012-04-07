@@ -43,7 +43,8 @@ public interface CodeService {
 	 * @param codeId
 	 * @return
 	 */
-	public boolean cancelCode(Long codeId);
+	
+	public boolean cancelCode(Long codeId,String creater,String createrid,String ip,String note);
 	
 	
 	/**
@@ -51,11 +52,11 @@ public interface CodeService {
 	 * @param code
 	 * @return
 	 */
-	public boolean cancelCode(String code);
+	public boolean cancelCode(String code,String creater,String createrid,String ip,String note);
 	
 	
 	/**
-	 * 根据传入的ID进行取号操作
+	 * 根据传入的信息进行取号操作
 	 * @param rule
 	 * @param unitCode
 	 * @param locationCode
@@ -67,7 +68,19 @@ public interface CodeService {
 	 */
 	public Code fetchCode(String rule,String unitCode,String locationCode,String docCode,String creater,String createId,String note);
 	
-	
+	/**
+	 * 根据传入的信息进行批量取号操作
+	 * @param rule
+	 * @param unitCode
+	 * @param locationCode
+	 * @param docCode
+	 * @param creater
+	 * @param createId
+	 * @param note
+	 * @param batchSize
+	 * @return
+	 */
+	public List<Code> batchCode(String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note, int batchSize);
 	
 	
 	/**
@@ -97,6 +110,7 @@ public interface CodeService {
 	 */
 	public Code addCode(Code code);
 	
+
 
 	
 

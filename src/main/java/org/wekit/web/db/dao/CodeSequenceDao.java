@@ -87,5 +87,5 @@ public interface CodeSequenceDao {
 	 * @param params
 	 * @return
 	 */
-	public List<CodeSequence> queryCodeSequences(String rule, String unitCode, String locationCode, String docCode, Map<String, Integer> params);
+	public List<CodeSequence> queryCodeSequences(String rule, String unitCode, String locationCode, String docCode, Map<String, Integer> params,IPaginable paginable);
 }

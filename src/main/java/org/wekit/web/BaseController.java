@@ -2,6 +2,8 @@ package org.wekit.web;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -70,11 +72,21 @@ public abstract class BaseController<T> {
 		}
 	}
 	*/
+	@SuppressWarnings("unchecked")
 	protected void initParam(HttpServletRequest request){
 		paserPaginable(request);
-		this.parameters.putAll(request.getParameterMap());
+		Map<String, String[]> map=request.getParameterMap();
+		Set<Entry<String, String[]>> entries=map.entrySet();
+		for(Entry<String, String[]> entry:entries){
+			this.parameters.put(entry.getKey(), entry.getValue()[0]);
+		}
+		
 	}
 	
+	
+	protected void addData(T data){
+		pagination.getDatas().add(data);
+	}
 	
 	
 	

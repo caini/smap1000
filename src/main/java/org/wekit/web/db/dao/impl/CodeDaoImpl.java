@@ -77,7 +77,7 @@ public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao 
 	@Override
 	public Code getCode(String code) {
 		List<Code> list=this.queryByProperty("code", code);
-		if(list!=null)
+		if(list!=null&&list.size()>0)
 		{
 			return list.get(0);
 		}
@@ -91,11 +91,11 @@ public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao 
 		int i=0;
 		for(String code:codes){
 			i++;
-			
 			Code newCode=new Code(rule, creater, createId, unitCode, locationCode, docCode, code, 1,uuid, System.currentTimeMillis(), note);
+			this.save(newCode);
 			list.add(newCode);
 			if(i%20==0){
-				this.getSession().flush();
+				this.flush();
 			}
 		}
 		return list;

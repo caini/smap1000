@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,6 +22,7 @@ import org.wekit.web.service.RuleService;
  *
  */
 @Controller("codeRuleServiceController")
+@Scope(org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST)
 public class CodeRuleServiceController extends BaseController<CodeRule> {
 
 	private static Logger logger=Logger.getLogger(CodeRuleServiceController.class);
@@ -32,33 +34,37 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	@RequestMapping(value="/coderule/query.{extend}",method=RequestMethod.GET)
 	public String queryCodeRule(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		initParam(request);
-		
+		//TODO
 		return displayAPIClient(extend, model);
 	}
 	
 	
 	@RequestMapping(value="/coderule/update.{extend}",method=RequestMethod.POST)
-	public String updateCodeRule(@PathVariable("extend")String extend,Model model){
+	public String updateCodeRule(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
+		initParam(request);
 		//TODO
-		return null;
+		return displayAPIClient(extend, model);
 	}
 	
 	@RequestMapping(value="/coderule/delete.{extend}",method=RequestMethod.POST)
-	public String deleteCodeRule(@PathVariable("extend")String extend,Model model){
+	public String deleteCodeRule(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
+		initParam(request);
 		//TODO
-		return null;
+		return displayAPIClient(extend, model);
 	}
 	
 	@RequestMapping(value="/coderule/find.{extend}",method=RequestMethod.POST)
-	public String findCodeRule(@PathVariable("extend")String extend,Model model){
+	public String findCodeRule(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
+		initParam(request);
 		//TODO
-		return null;
+		return displayAPIClient(extend, model);
 	}
 	
 	@RequestMapping(value="/coderule/add.{extend}",method=RequestMethod.POST)
-	public String addCodeRule(@PathVariable("extend")String extend,Model model){
+	public String addCodeRule(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
+		initParam(request);
 		//TODO
-		return null;
+		return displayAPIClient(extend, model);
 	}
 
 	

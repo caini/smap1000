@@ -1,5 +1,6 @@
 package org.wekit.web.db;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.wekit.web.IPaginable;
@@ -24,7 +25,6 @@ public class Pagination<T> extends SimplePagination implements IPaginable {
 	public Pagination() {
 		super();
 		init();
-		
 	}
 
 	public Pagination(IPaginable paginable) {
@@ -50,6 +50,9 @@ public class Pagination<T> extends SimplePagination implements IPaginable {
 	}
 	
 	public List<T> getDatas() {
+		if(datas==null){
+			this.datas=new ArrayList<T>();
+		}
 		return datas;
 	}
 

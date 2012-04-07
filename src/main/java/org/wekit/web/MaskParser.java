@@ -1,4 +1,4 @@
-package org.wekit.web.service.impl;
+package org.wekit.web;
 
 import java.util.Map;
 

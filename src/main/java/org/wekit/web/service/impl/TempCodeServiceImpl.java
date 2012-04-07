@@ -14,7 +14,7 @@ import org.wekit.web.service.TempCodeService;
 public class TempCodeServiceImpl implements TempCodeService {
 
 	@Autowired
-	@Qualifier
+	@Qualifier("tempCodeDao")
 	private TempCodeDao	tempCodeDao;
 
 	public TempCodeDao getTempCodeDao() {
