@@ -53,6 +53,7 @@ public interface DocCodeDao {
 	 */
 	public boolean deleteDocCdoe(long id);
 
+	
 	/**
 	 * 获取所有的分页信息
 	 * 

@@ -45,4 +45,14 @@ public interface LocationCodeService {
 	 */
 	public List<LocationCode> queryLocationCodes(String key,long typeId,int state,IPaginable paginable);
 	
+	/**
+	 * 根据参数删除指定的定位码
+	 * @param key
+	 * @param creatername
+	 * @param createrId
+	 * @param ip
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean deleteLocationCode(Long key,String creatername,String createrId,String ip) throws Exception;
 }

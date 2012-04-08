@@ -71,4 +71,6 @@ public interface DocCodeTypeDao {
 	 * @return
 	 */
 	public List<DocCodeType> queryDocCodeTypes(String key, int state, IPaginable paginable);
+	
+	
 }

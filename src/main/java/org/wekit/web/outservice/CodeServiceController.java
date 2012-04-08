@@ -40,10 +40,15 @@ public class CodeServiceController extends BaseController<Code> {
 	 */
 	@RequestMapping(value = "/code/query.{extend}", method = RequestMethod.GET)
 	public String queryCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
-		initParam(request);
-		//TODO
-		
-		
+		try {
+			initParam(request);
+
+			// TODO
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}
 		return this.displayAPIClient(extend, model);
 	}
 
@@ -55,10 +60,16 @@ public class CodeServiceController extends BaseController<Code> {
 	 * @return
 	 */
 	@RequestMapping(value = "/code/update.{extend}", method = RequestMethod.POST)
-	public String updateCode(@PathVariable("extned") String extend, HttpServletRequest request, HttpServletResponse response,Model model) {
-		initParam(request);
-		//TODO
-		
+	public String updateCode(@PathVariable("extned") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+			initParam(request);
+			//TODO
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}
+
 		return this.displayAPIClient(extend, model);
 	}
 
@@ -70,26 +81,42 @@ public class CodeServiceController extends BaseController<Code> {
 	 * @return
 	 */
 	@RequestMapping(value = "/code/delete.{extend}", method = RequestMethod.POST)
-	public String deleteCode(@PathVariable("extend") String extend,HttpServletRequest request, HttpServletResponse response, Model model) {
-		initParam(request);
-		//TODO
-		
-		
+	public String deleteCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+			initParam(request);
+			if (StringUtils.isEmpty(key)) {
+				throw new WekitException("key参数的值不能为空!");
+			}
+			this.codeService.deleteCode(Long.parseLong(key), creatername, createrid, ip);
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			setState(0);
+			setMessage(e.getMessage());
+		}
 		return this.displayAPIClient(extend, model);
 	}
 
 	/**
-	 * 根据编码返回编码信息
+	 * 根据编码ID返回编码信息
 	 * 
 	 * @param extend
 	 * @param model
 	 * @return
 	 */
 	@RequestMapping(value = "/code/find.{extend}", method = RequestMethod.GET)
-	public String findCode(@PathVariable("extend") String extend,HttpServletRequest request, HttpServletResponse response, Model model) {
-		initParam(request);
-		
-		// TODO
+	public String findCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+			initParam(request);
+			if (StringUtils.isEmpty(key)) {
+				throw new WekitException("key的参数不能为空!");
+			}
+			Code code = this.codeService.getCode(Long.parseLong(key));
+			this.addData(code);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}
 		return this.displayAPIClient(extend, model);
 	}
 
@@ -101,13 +128,17 @@ public class CodeServiceController extends BaseController<Code> {
 	 * @return
 	 */
 	@RequestMapping(value = "/code/add.{extend}", method = RequestMethod.GET)
-	public String addCode(@PathVariable("extend") String extend,HttpServletRequest request, HttpServletResponse response, Model model) {
-		initParam(request);
-		
-		// TODO
-		
+	public String addCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try {
+			initParam(request);
+			// TODO
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}
 		return this.displayAPIClient(extend, model);
-		
+
 	}
 
 	/**
@@ -151,29 +182,29 @@ public class CodeServiceController extends BaseController<Code> {
 		String creater = null;
 		String createrid = null;
 		String ip = "";
-		String note="";
+		String note = "";
 		if (parameters.containsKey("code")) {
-			code=parameters.get(code);
+			code = parameters.get(code);
 		}
 		if (parameters.containsKey("creater")) {
-			creater=parameters.get("creater");
+			creater = parameters.get("creater");
 		}
 		if (parameters.containsKey("createrid")) {
-			createrid=parameters.get("createrid");
+			createrid = parameters.get("createrid");
 		}
 		if (parameters.containsKey("ip")) {
-			ip=parameters.get("ip");
+			ip = parameters.get("ip");
 		}
-		if(parameters.containsKey("note")){
-			note=parameters.get(note);
+		if (parameters.containsKey("note")) {
+			note = parameters.get(note);
 		}
 		if (StringUtils.isEmpty(code) || StringUtils.isEmpty(createrid) || StringUtils.isEmpty(creater)) {
 			pagination.setState(0);
 			pagination.setMessage("传入的参数错误，请检测参数是否正确!");
 		} else {
-			try{
+			try {
 				this.codeService.cancelCode(code, creater, createrid, ip, note);
-			}catch(Exception ex){
+			} catch (Exception ex) {
 				pagination.setState(0);
 				pagination.setMessage(ex.getMessage());
 			}

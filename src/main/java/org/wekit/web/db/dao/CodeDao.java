@@ -1,6 +1,7 @@
 package org.wekit.web.db.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.Code;
@@ -75,5 +76,11 @@ public interface CodeDao {
 	 */
 	public List<Code> addCodes(List<String>codes,String rule,String unitCode,String locationCode,String docCode,String creater,String createId,String note);
 	
+	/**
+	 * 根据查询的数组查询编码
+	 * @param map
+	 * @return
+	 */
+	public List<Code> queryCodes(Map<String , String> map,IPaginable paginable);
 
 }

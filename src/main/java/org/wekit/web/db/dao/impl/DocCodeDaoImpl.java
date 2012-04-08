@@ -85,14 +85,17 @@ public class DocCodeDaoImpl extends HibernateBaseDao<DocCode, Long> implements D
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("from DocCode bean where 1=1 ");
 		if (StringUtils.isNotEmpty(key)) {
-			buffer.append(" and (bean.code like '%" + key + "%' or bean.name like '%" + key + "%') ");
+			buffer.append(" and (bean.code like '%" + key + "%' or bean.name like '%" + key + "%' or bean.ename like '%"+key+"%' ) ");
 		}
-		if (typeId >= 0) {
+		if (typeId >0) {
 			buffer.append(" and bean.typeId=" + typeId);
 		}
 		if (state >= 0) {
 			buffer.append(" and bean.state=" + state);
 		}
+		
+		buffer.append(" order by bean.code ");
+		
 		Query query = createrQuery(buffer.toString());
 		if (paginable != null) {
 			this.paginationParam(query, paginable);

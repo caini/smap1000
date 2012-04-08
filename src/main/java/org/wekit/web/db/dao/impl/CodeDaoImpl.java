@@ -2,9 +2,13 @@ package org.wekit.web.db.dao.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -12,10 +16,10 @@ import org.wekit.web.db.dao.CodeDao;
 import org.wekit.web.db.model.Code;
 
 @Repository("codeDao")
-public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao {
+public class CodeDaoImpl extends HibernateBaseDao<Code, Long> implements CodeDao {
 
-	private static Logger logger=Logger.getLogger(CodeDaoImpl.class);
-	
+	private static Logger	logger	= Logger.getLogger(CodeDaoImpl.class);
+
 	@Override
 	protected Class<Code> getEntityClass() {
 		return Code.class;
@@ -38,9 +42,9 @@ public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao 
 
 	@Override
 	public boolean updateCode(Code code) {
-		try{
+		try {
 			this.update(code);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			logger.error(e.getMessage());
 			return false;
 		}
@@ -49,9 +53,9 @@ public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao 
 
 	@Override
 	public boolean deleteCode(Code code) {
-		try{
+		try {
 			this.delete(code);
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 			return false;
 		}
@@ -60,9 +64,9 @@ public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao 
 
 	@Override
 	public boolean deleteCode(Long id) {
-		try{
+		try {
 			this.deleteByPK(id);
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 			return false;
 		}
@@ -76,9 +80,8 @@ public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao 
 
 	@Override
 	public Code getCode(String code) {
-		List<Code> list=this.queryByProperty("code", code);
-		if(list!=null&&list.size()>0)
-		{
+		List<Code> list = this.queryByProperty("code", code);
+		if (list != null && list.size() > 0) {
 			return list.get(0);
 		}
 		return null;
@@ -86,18 +89,41 @@ public class CodeDaoImpl extends HibernateBaseDao<Code,Long> implements CodeDao 
 
 	@Override
 	public List<Code> addCodes(List<String> codes, String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note) {
-		List<Code> list=new ArrayList<Code>();
-		String uuid=UUID.randomUUID().toString();
-		int i=0;
-		for(String code:codes){
+		List<Code> list = new ArrayList<Code>();
+		String uuid = UUID.randomUUID().toString();
+		int i = 0;
+		for (String code : codes) {
 			i++;
-			Code newCode=new Code(rule, creater, createId, unitCode, locationCode, docCode, code, 1,uuid, System.currentTimeMillis(), note);
+			Code newCode = new Code(rule, creater, createId, unitCode, locationCode, docCode, code, 1, uuid, System.currentTimeMillis(), note);
 			this.save(newCode);
 			list.add(newCode);
-			if(i%20==0){
+			if (i % 20 == 0) {
 				this.flush();
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * 通过动态参数匹配函数
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<Code> queryCodes(Map<String, String> map, IPaginable paginable) {
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("from Code bean  where 1=1 ");
+		Set<Entry<String, String>> entries = map.entrySet();
+		for (Entry<String, String> entry : entries) {
+			if (entry.getValue().equalsIgnoreCase("code")) {
+				buffer.append("  and bean.code like '%" + entry.getValue() + "%' ");
+			} else {
+				buffer.append(" and bean."+entry.getKey()+"='"+entry.getValue()+"' ");
+			}
+		}
+		Query query = createrQuery(buffer.toString());
+		if (paginable != null) {
+			paginationParam(query, paginable);
+		}
+		return query.list();
 	}
 }

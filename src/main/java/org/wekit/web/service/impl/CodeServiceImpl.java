@@ -1,6 +1,5 @@
 package org.wekit.web.service.impl;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -8,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.ibatis.logging.LogException;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -29,9 +27,6 @@ import org.wekit.web.db.model.CodeSequence;
 import org.wekit.web.db.model.TempCode;
 import org.wekit.web.service.CodeService;
 import org.wekit.web.util.DataWrapUtil;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * 编码功能申请服务实现
@@ -383,8 +378,27 @@ public class CodeServiceImpl implements CodeService {
 		}
 		codeDao.deleteCode(code);
 		tempCodeDao.addTempCode(tempCode);
-		
 		logger.info("creater:"+creater+"||createrid:"+createrid+"取消:编码 "+oldinfo);
+		return true;
+	}
+
+	@Transactional(readOnly=true)
+	@Override
+	public List<Code> queryCodes(Map<String, String> map,IPaginable paginable) {
+		return this.codeDao.queryCodes(map, paginable);
+	}
+
+	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	@Override
+	public boolean deleteCode(Long id, String creatername, String createrid, String ip) throws Exception {
+		Code code=codeDao.getCode(id);
+		if(code!=null){
+			if(codeDao.deleteCode(code)){
+			logger.info(creatername+"("+createrid+"-- ip:"+ip+") 删除编码:"+DataWrapUtil.ObjectToJson(code));
+			}else{
+				throw new WekitException("删除编码失败!");
+			}
+		}
 		return true;
 	}
 

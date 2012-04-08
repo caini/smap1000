@@ -94,6 +94,12 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
     @RequestMapping(value="/unticodetype/delete.{extend}",method=RequestMethod.POST)
     public String deleteCodeType(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
     	initParam(request);
+    	String id="";
+    	if(parameters.containsKey("id")){
+    		id=parameters.get(id);
+    	}
+    	
+    	
     	//TODO
     	return displayAPIClient(extend, model);
     

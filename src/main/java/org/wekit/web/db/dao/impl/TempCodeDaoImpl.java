@@ -97,10 +97,13 @@ public class TempCodeDaoImpl extends HibernateBaseDao<TempCode, Long> implements
 		if (StringUtils.isNotEmpty(doccode)) {
 			buffer.append(" and bean.docCode='" + doccode + "'");
 		}
+		
+		buffer.append(" order by bean.seq asc ");
 		Query query = createrQuery(buffer.toString());
 		if (paginable != null) {
 			paginationParam(query, paginable);
 		}
+		
 		return query.list();
 	}
 

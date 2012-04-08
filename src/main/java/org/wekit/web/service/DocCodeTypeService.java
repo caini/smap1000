@@ -53,4 +53,15 @@ public interface DocCodeTypeService {
 	 * @return
 	 */
 	public List<DocCodeType> queryDocCodeTypes(String key, int state, IPaginable paginable);
+	
+	/**
+	 * 根据主键删除文档编码的分类信息
+	 * @param key
+	 * @param creatername
+	 * @param createrId
+	 * @param ip
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean deleteDocCodeTypes(Long key,String creatername,String createrId,String ip)throws Exception;
 }

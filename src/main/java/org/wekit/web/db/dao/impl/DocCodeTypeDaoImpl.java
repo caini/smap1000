@@ -106,4 +106,6 @@ public class DocCodeTypeDaoImpl extends HibernateBaseDao<DocCodeType, Long> impl
 		return query.list();
 	}
 
+	
+
 }

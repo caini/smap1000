@@ -54,5 +54,12 @@ public interface DocCodeService {
 	 * @return
 	 */
 	public List<DocCode> queryDocCodes(String key, long typeId, int state, IPaginable paginable);
+	
+	/**
+	 * 根据传入的关键字删除文档类型编码
+	 * @param key
+	 * @return
+	 */
+	public boolean deleteDocCodes(long docCodeId,String createrName,String createrid,String ip) throws Exception;
 
 }

@@ -1,6 +1,7 @@
 package org.wekit.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.Code;
@@ -111,7 +112,23 @@ public interface CodeService {
 	public Code addCode(Code code);
 	
 
+	/**
+	 * 根据动态参数匹配数据
+	 * @param map
+	 * @param paginable
+	 * @return
+	 */
+	public List<Code> queryCodes(Map<String, String> map,IPaginable paginable);
 
+	/**
+	 * 根据参数删除编码
+	 * @param id
+	 * @param creater
+	 * @param createrid
+	 * @param ip
+	 * @return
+	 */
+	public boolean deleteCode(Long id,String creater,String createrid,String ip) throws Exception;
 	
 
  }

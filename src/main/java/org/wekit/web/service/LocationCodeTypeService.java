@@ -36,4 +36,14 @@ public interface LocationCodeTypeService {
 	 */
 	public List<LocationCodeType> queryLocationCodeTypes(String key,int state,IPaginable paginable);
 	
+	
+	/**
+	 * 根据删除定位码的类型
+	 * @param id
+	 * @param createrName
+	 * @param createrId
+	 * @param ip
+	 * @return
+	 */
+	public boolean deleteLocationType(long id,String createrName,String createrId,String ip);
 }

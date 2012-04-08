@@ -3,6 +3,7 @@ package org.wekit.web.outservice;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.wekit.web.BaseController;
 import org.wekit.web.db.dao.LocationCodeTypeDao;
 import org.wekit.web.db.model.LocationCodeType;
+import org.wekit.web.service.LocationCodeTypeService;
 /**
  * 
  * @author HuangWeili
@@ -23,11 +25,12 @@ import org.wekit.web.db.model.LocationCodeType;
 @Scope(org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST)
 public class LocationCodeTypeServiceController extends BaseController<LocationCodeType> {
 
-	
 	@Autowired
-	@Qualifier("locationCodeTypeDao")
-	private LocationCodeTypeDao locationCodeTypeDao;
-
+	@Qualifier("locationCodeTypeService")
+	private LocationCodeTypeService locationCodeTypeService;
+	
+	private static Logger logger=Logger.getLogger(LocationCodeTypeServiceController.class);
+	
 	/**
 	 * 查询定位吗类型信息
 	 * 
@@ -70,14 +73,5 @@ public class LocationCodeTypeServiceController extends BaseController<LocationCo
 		return displayAPIClient(extend, model);
 	}
 
-	public LocationCodeTypeDao getLocationCodeTypeDao() {
-		return locationCodeTypeDao;
-	}
 
-	public void setLocationCodeTypeDao(LocationCodeTypeDao locationCodeTypeDao) {
-		this.locationCodeTypeDao = locationCodeTypeDao;
-	}
-
-	
-	
 }

@@ -2,6 +2,7 @@ package org.wekit.web.service.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ import org.wekit.web.service.CodeApplyService;
 @Service("codeApplyService")
 public class CodeApplyServiceImpl implements CodeApplyService {
 
+	private static Logger logger=Logger.getLogger(CodeApplyServiceImpl.class);
+	
 	@Autowired
 	@Qualifier("codeApplyDao")
 	private CodeApplyDao	codeApplyDao;
@@ -32,32 +35,33 @@ public class CodeApplyServiceImpl implements CodeApplyService {
 
 	@Override
 	public boolean deleteCodeApply(Long id) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.codeApplyDao.deleteCodeApply(id);
 	}
 
 	@Override
-	public List<CodeApply> getAllCodeApplies() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<CodeApply> getAllCodeApplies() {	
+		return this.codeApplyDao.getAllCodeApplies();
 	}
 
 	@Override
 	public List<CodeApply> getCodeAppliesWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		if(paginable==null){
+			return this.codeApplyDao.getAllCodeApplies();
+		}else{
+			return this.codeApplyDao.getCodeAppliesWithPagination(paginable);
+		}
 	}
 
 	@Override
 	public CodeApply addCodeApply(CodeApply apply) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.codeApplyDao.addCodeApply(apply);
 	}
 
 	@Override
 	public boolean udpateCodeApply(CodeApply apply) {
-		// TODO Auto-generated method stub
-		return false;
+		return this.udpateCodeApply(apply);
 	}
+	
+	
 
 }

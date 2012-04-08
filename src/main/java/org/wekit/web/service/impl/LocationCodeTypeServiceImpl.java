@@ -2,9 +2,11 @@ package org.wekit.web.service.impl;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.LocationCodeTypeDao;
@@ -17,6 +19,8 @@ public class LocationCodeTypeServiceImpl implements LocationCodeTypeService {
 	@Autowired
 	@Qualifier("locationCodeTypeDao")
 	private LocationCodeTypeDao	locationCodeTypeDao;
+	
+	private static Logger logger=Logger.getLogger(LocationCodeTypeServiceImpl.class);
 
 	public LocationCodeTypeDao getLocationCodeTypeDao() {
 		return locationCodeTypeDao;
@@ -51,6 +55,15 @@ public class LocationCodeTypeServiceImpl implements LocationCodeTypeService {
 	@Override
 	public List<LocationCodeType> queryLocationCodeTypes(String key, int state, IPaginable paginable) {
 		return this.locationCodeTypeDao.queryLocationCodeTypes(key, state, paginable);
+	}
+
+	@Transactional(propagation=Propagation.REQUIRED)
+	@Override
+	public boolean deleteLocationType(long id, String createrName, String createrId, String ip) {
+	
+		
+		
+		return false;
 	}
 
 }

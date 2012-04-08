@@ -69,4 +69,15 @@ public interface RuleService {
 	 * @return
 	 */
 	public List<CodeRule> queryCodeRulesByName(String name,int state,IPaginable paginable);
+	
+	
+	/**
+	 * 根据编码ID删除编码信息
+	 * @param id
+	 * @param creatername
+	 * @param createrid
+	 * @param ip
+	 * @return
+	 */
+	public boolean deleteCodeRule(long id,String creater,String createrid,String ip)throws Exception;
 }
