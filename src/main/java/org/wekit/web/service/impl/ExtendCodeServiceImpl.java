@@ -27,32 +27,30 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 
 	@Override
 	public boolean deleteExtendCode(Long id) {
-		// TODO Auto-generated method stub
-		return false;
+		return extendCodeDao.deleteExtendCode(id);
 	}
 
 	@Override
 	public boolean updateExtendCode(ExtendCode code) {
-		// TODO Auto-generated method stub
-		return false;
+		return extendCodeDao.updateExtendCode(code);
 	}
 
 	@Override
 	public List<ExtendCode> getAllExtendCodes() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.extendCodeDao.getAllExtendCodes();
 	}
 
 	@Override
 	public List<ExtendCode> getExtendCodesWithPagination(IPaginable paginable) {
-		// TODO Auto-generated method stub
-		return null;
+		if(paginable==null)
+			return extendCodeDao.getAllExtendCodes();
+		else
+			return extendCodeDao.getExtendCodesWithPagination(paginable);
 	}
 
 	@Override
 	public ExtendCode addExtendCode(ExtendCode code) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.extendCodeDao.addExtendCode(code);
 	}
 
 	@Override

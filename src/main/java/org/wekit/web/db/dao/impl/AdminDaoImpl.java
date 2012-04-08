@@ -3,7 +3,6 @@ package org.wekit.web.db.dao.impl;
 import java.util.List;
 
 import org.apache.log4j.Logger;
-import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -23,10 +22,6 @@ public class AdminDaoImpl extends HibernateBaseDao<Admin, Long> implements Admin
 
 	@Override
 	public Admin saveAdmin(Admin admin) {
-		
-	Transaction transaction=	this.getSession().getTransaction();
-	
-	boolean test=	transaction.isActive();
 		return this.save(admin);
 	}
 

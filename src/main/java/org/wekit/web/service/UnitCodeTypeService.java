@@ -29,4 +29,16 @@ public interface UnitCodeTypeService {
 	 * @return
 	 */
 	public UnitCodeType getUnitCodeType(long id);
+	
+	
+	/**
+	 * 根据ID删除机组定位码的类型码
+	 * @param id
+	 * @param creatername
+	 * @param createrId
+	 * @param ip
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean deleteUnitCodeType(long id,String creatername,String createrId,String ip) throws Exception;
 }

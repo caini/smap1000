@@ -9,9 +9,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.wekit.web.IPaginable;
+import org.wekit.web.WekitException;
 import org.wekit.web.db.dao.LocationCodeTypeDao;
 import org.wekit.web.db.model.LocationCodeType;
 import org.wekit.web.service.LocationCodeTypeService;
+import org.wekit.web.util.DataWrapUtil;
 
 @Service("locationCodeTypeService")
 public class LocationCodeTypeServiceImpl implements LocationCodeTypeService {
@@ -59,11 +61,16 @@ public class LocationCodeTypeServiceImpl implements LocationCodeTypeService {
 
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
-	public boolean deleteLocationType(long id, String createrName, String createrId, String ip) {
-	
-		
-		
-		return false;
+	public boolean deleteLocationType(long id, String createrName, String createrId, String ip) throws Exception{
+		LocationCodeType locationCodeType=locationCodeTypeDao.getLocationCodeType(id);
+		if(locationCodeType!=null){
+			if(this.locationCodeTypeDao.deleteLocationCodeType(locationCodeType)){
+				logger.info(createrName+"("+createrId+"-- ip:"+ip+") 删除定位码的类型的信息:"+DataWrapUtil.ObjectToJson(locationCodeType));
+			}else{
+				throw new WekitException("删除定位码的类型失败!");
+			}
+		}
+		return true;
 	}
 
 }

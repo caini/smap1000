@@ -50,4 +50,15 @@ public interface CodeApplyService {
 	 * @return
 	 */
 	public boolean udpateCodeApply(CodeApply apply);
+	
+	/**
+	 * 删除编码申请信息
+	 * @param id
+	 * @param creatername
+	 * @param createrId
+	 * @param ip
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean deleteCodeApply(long id,String creatername,String createrId,String ip) throws Exception;
 }

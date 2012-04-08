@@ -86,14 +86,6 @@ public class CodeSequenceDaoImpl extends HibernateBaseDao<CodeSequence, Long> im
 	}
 
 	@Override
-	public List<CodeSequence> queryCodeSequences(String rule, String unitCode, String locationCode, String docCode, int year, int month, int day) {
-
-		// TODO
-		return null;
-
-	}
-
-	@Override
 	public boolean incCodeSequence(CodeSequence sequence) {
 		if (sequence == null)
 			return false;

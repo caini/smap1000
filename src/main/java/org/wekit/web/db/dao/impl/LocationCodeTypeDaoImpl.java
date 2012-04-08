@@ -84,7 +84,7 @@ public class LocationCodeTypeDaoImpl  extends HibernateBaseDao<LocationCodeType,
 		StringBuffer buffer=new StringBuffer();
 		buffer.append("from LocationCodeType bean where 1=1");
 		if(StringUtils.isNotEmpty(key)){
-			buffer.append(" and ( bean.name like '%"+key +"%' and bean.code like '%"+key+"%' )");
+			buffer.append(" and ( bean.name like '%"+key +"%' or bean.code like '%"+key+"%' )");
 		}
 		if(state>=0){
 			buffer.append(" and bean.state="+state);

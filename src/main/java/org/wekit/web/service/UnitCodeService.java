@@ -42,4 +42,14 @@ public interface UnitCodeService {
 	 * @return
 	 */
 	public UnitCode getUnitCode(String code);
+	
+	/**
+	 * 根据编码ID删除编码信息
+	 * @param id
+	 * @param creatername
+	 * @param createrid
+	 * @param ip
+	 * @return
+	 */
+	public boolean deleteUnitCode(long id,String creatername,String createrid,String ip) throws Exception;
 }

@@ -45,5 +45,5 @@ public interface LocationCodeTypeService {
 	 * @param ip
 	 * @return
 	 */
-	public boolean deleteLocationType(long id,String createrName,String createrId,String ip);
+	public boolean deleteLocationType(long id,String createrName,String createrId,String ip)throws Exception;
 }
