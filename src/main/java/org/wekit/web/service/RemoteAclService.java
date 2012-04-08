@@ -60,4 +60,15 @@ public interface RemoteAclService {
 	 * @return
 	 */
 	public RemoteAcl getRemoteAcl(long id);
+	
+	
+	/**
+	 * 
+	 * @param id
+	 * @param creatername
+	 * @param createrid
+	 * @param ip
+	 * @return
+	 */
+	public boolean deleteRemoteAcl(long id,String creatername,String createrid,String ip)throws Exception;
 }

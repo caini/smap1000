@@ -32,7 +32,7 @@ public class AdminServiceController extends BaseController<Admin> {
 	@Qualifier("adminService")
 	private AdminService adminService;
 	
-	@RequestMapping(value="/security/admin/query.{extend}",method=RequestMethod.GET)
+	@RequestMapping(value="/security/admin/query.{extend}")
 	public String queryAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		return null;
 	}

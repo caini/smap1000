@@ -137,4 +137,16 @@ public class CodeRuleDaoImpl extends HibernateBaseDao<CodeRule, Long> implements
 		return query.list();
 	}
 
+	@Override
+	public CodeRule addCodeRule(String creater, String createrid, long createTime, String rule, String face, int state, int minSequence, int maxSequence) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CodeRule updateCodeRule(String rulename, String face, int state, int minSequence, int maxSequence) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

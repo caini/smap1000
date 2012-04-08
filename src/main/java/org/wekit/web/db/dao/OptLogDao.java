@@ -59,5 +59,19 @@ public interface OptLogDao {
 	 * @return
 	 */
 	public List<OptLog> getOptLogsWithPagination(IPaginable paginable);
+	
+	/**
+	 * 根据条件增加访问对象信息
+	 * @param systemid
+	 * @param systemname
+	 * @param username
+	 * @param userid
+	 * @param content
+	 * @param operatorTime
+	 * @param ip
+	 * @param opter
+	 * @return
+	 */
+	public OptLog addOptLog(String systemid,String systemname,String username,String userid,String content,long operatorTime,String ip,String opter);
 
 }

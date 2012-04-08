@@ -78,4 +78,17 @@ public class OptLogDaoImpl extends HibernateBaseDao<OptLog, Long> implements Opt
 		return this.getOptLogsWithPagination(paginable);
 	}
 
+	@Override
+	public OptLog addOptLog(String systemid, String systemname, String username, String userid, String content, long operatorTime, String ip, String opter) {
+		OptLog log=new OptLog();
+		log.setSystemId(systemid);
+		log.setSystemName(systemname);
+		log.setUserName(username);
+		log.setUserId(userid);
+		log.setContent(content);
+		log.setOperatorTime(operatorTime);
+		log.setOperate(opter);
+		return this.addOptLog(log);
+	}
+
 }

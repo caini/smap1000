@@ -45,7 +45,7 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/coderule/query.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/coderule/query.{extend}")
 	public String queryCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request);
@@ -62,7 +62,7 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 		return displayAPIClient(extend, model);
 	}
 
-	@RequestMapping(value = "/coderule/delete.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/coderule/delete.{extend}")
 	public String deleteCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request);
@@ -78,7 +78,7 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 		return displayAPIClient(extend, model);
 	}
 
-	@RequestMapping(value = "/coderule/find.{extend}", method =RequestMethod.GET)
+	@RequestMapping(value = "/coderule/find.{extend}")
 	public String findCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request);
@@ -104,7 +104,7 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/coderule/querybyname.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/coderule/querybyname.{extend}")
 	public String querybyname(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request);
@@ -124,20 +124,32 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	
 	
 
-	@RequestMapping(value = "/coderule/add.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/coderule/add.{extend}")
 	public String addCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try{
 		initParam(request);
-		// TODO
+		//TODO
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}
 		return displayAPIClient(extend, model);
 	}
 	
-	@RequestMapping(value = "/coderule/update.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/coderule/update.{extend}")
 	public String updateCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
+		try{
 		initParam(request);
-		// TODO
+		
+		
+		}catch(Exception ex){
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}
 		return displayAPIClient(extend, model);
 	}
-
 
 	public RuleService getRuleService() {
 		return ruleService;

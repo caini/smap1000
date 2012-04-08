@@ -1,6 +1,7 @@
 package org.wekit.web.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.ExtendCode;
@@ -45,7 +46,18 @@ public interface ExtendCodeService {
 	 * 查询无规则编码
 	 * @return
 	 */
-	public List<ExtendCode> queryExtendCode();
+	public List<ExtendCode> queryExtendCode(Map<String, String> param,IPaginable iPaginable);
 	
+	
+	/**
+	 * 根据Id删除规则外的编码
+	 * @param id
+	 * @param creatername
+	 * @param createrid
+	 * @param ip
+	 * @return
+	 * @throws Exception
+	 */
+	public boolean deleteExtendCode(long id,String creatername,String createrid,String ip) throws Exception;
 	
 }

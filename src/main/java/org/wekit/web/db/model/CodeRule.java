@@ -47,9 +47,7 @@ public class CodeRule implements Serializable {
 	@Column(name = "ctime", updatable = false)
 	private long				createTime;
 
-	// 掩码的信息
-	@Column(name = "mask", length = 128)
-	private String				mask;
+
 
 	// 编码规则列
 	@Column(name = "rule", length = 128)
@@ -70,8 +68,23 @@ public class CodeRule implements Serializable {
 	private int					minSequence;
 
 	public CodeRule() {
+		this.maxSequence=0;
+		this.minSequence=0;
+		this.state=1;
 	}
 
+	public CodeRule(String ruleName,String creater,String createrId,long createrTime,String rule,String face,int state,int minSequence,int maxSequence){
+		this.ruleName=ruleName;
+		this.creater=creater;
+		this.createrId=createrId;
+		this.createTime=createrTime;
+		this.rule=rule;
+		this.face=face;
+		this.state=state;
+		this.minSequence=minSequence;
+		this.maxSequence=maxSequence;
+	}
+	
 	public String getFace() {
 		return face;
 	}
@@ -104,13 +117,6 @@ public class CodeRule implements Serializable {
 		this.createTime = createTime;
 	}
 
-	public String getMask() {
-		return mask;
-	}
-
-	public void setMask(String mask) {
-		this.mask = mask;
-	}
 
 	public String getRule() {
 		return rule;
