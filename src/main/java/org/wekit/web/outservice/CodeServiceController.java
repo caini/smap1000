@@ -63,7 +63,7 @@ public class CodeServiceController extends BaseController<Code> {
 	public String updateCode(@PathVariable("extned") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request);
-			//TODO
+			// TODO
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 			setState(0);
@@ -151,8 +151,8 @@ public class CodeServiceController extends BaseController<Code> {
 	 */
 	@RequestMapping(value = "/code/fetch.{extend}", method = RequestMethod.GET)
 	public String fetchCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
-		initParam(request);
 		try {
+			initParam(request);
 			this.fetchCode(true);
 		} catch (Exception ex) {
 			logger.error(ex);
@@ -164,8 +164,9 @@ public class CodeServiceController extends BaseController<Code> {
 
 	@RequestMapping(value = "/code/batch.{extend}", method = RequestMethod.GET)
 	public String batchCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
-		initParam(request);
+
 		try {
+			initParam(request);
 			this.fetchCode(false);
 		} catch (Exception ex) {
 			logger.error(ex);
@@ -177,37 +178,38 @@ public class CodeServiceController extends BaseController<Code> {
 
 	@RequestMapping(value = "/code/cancel.{extend}", method = RequestMethod.GET)
 	public String cancelCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
-		initParam(request);
-		String code = null;
-		String creater = null;
-		String createrid = null;
-		String ip = "";
-		String note = "";
-		if (parameters.containsKey("code")) {
-			code = parameters.get(code);
-		}
-		if (parameters.containsKey("creater")) {
-			creater = parameters.get("creater");
-		}
-		if (parameters.containsKey("createrid")) {
-			createrid = parameters.get("createrid");
-		}
-		if (parameters.containsKey("ip")) {
-			ip = parameters.get("ip");
-		}
-		if (parameters.containsKey("note")) {
-			note = parameters.get(note);
-		}
-		if (StringUtils.isEmpty(code) || StringUtils.isEmpty(createrid) || StringUtils.isEmpty(creater)) {
-			pagination.setState(0);
-			pagination.setMessage("传入的参数错误，请检测参数是否正确!");
-		} else {
-			try {
-				this.codeService.cancelCode(code, creater, createrid, ip, note);
-			} catch (Exception ex) {
-				pagination.setState(0);
-				pagination.setMessage(ex.getMessage());
+		try {
+			initParam(request);
+			String code = null;
+			String creater = null;
+			String createrid = null;
+			String ip = "";
+			String note = "";
+			if (parameters.containsKey("code")) {
+				code = parameters.get(code);
 			}
+			if (parameters.containsKey("creater")) {
+				creater = parameters.get("creater");
+			}
+			if (parameters.containsKey("createrid")) {
+				createrid = parameters.get("createrid");
+			}
+			if (parameters.containsKey("ip")) {
+				ip = parameters.get("ip");
+			}
+			if (parameters.containsKey("note")) {
+				note = parameters.get(note);
+			}
+			if (StringUtils.isEmpty(code) || StringUtils.isEmpty(createrid) || StringUtils.isEmpty(creater)) {
+				pagination.setState(0);
+				pagination.setMessage("传入的参数错误，请检测参数是否正确!");
+			} else {
+
+				this.codeService.cancelCode(code, creater, createrid, ip, note);
+			}
+		} catch (Exception ex) {
+			pagination.setState(0);
+			pagination.setMessage(ex.getMessage());
 		}
 		return displayAPIClient(extend, model);
 	}

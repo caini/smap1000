@@ -85,6 +85,10 @@ public class CodeApply implements Serializable {
 	public CodeApply() {
 	}
 	
+	
+	public CodeApply(String creater,String createrid,long creatertime,String unit,String location ,String doc,String file,String mask,String note,int state,String applayName,String applyedId){
+		
+	}
 
 	public long getApplyId() {
 		return applyId;

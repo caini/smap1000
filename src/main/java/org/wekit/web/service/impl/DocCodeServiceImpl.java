@@ -85,4 +85,16 @@ public class DocCodeServiceImpl implements DocCodeService {
 		return true;
 	}
 
+	@Override
+	public DocCode saveDocCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DocCode updateDocCode() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

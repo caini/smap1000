@@ -83,6 +83,18 @@ public class ExtendCode implements Serializable{
 	@Column(name="state")
 	private int state;
 	
+	@Column(name="applyedid",length=64)
+	private String applyedId;
+	
+	@Column(name="applyedname",length=64)
+	private String applyedName;
+	
+	public ExtendCode(String cratername,String createrid,long createtime,String note,String applyTitle,String applyid,String docCode,String unitCode,String locationCode,int state,String applyedid,String applyedname,String result){
+		
+		
+	}
+	
+	
 	public ExtendCode()
 	{}
 
@@ -180,6 +192,22 @@ public class ExtendCode implements Serializable{
 
 	public void setCreaterId(String createrId) {
 		this.createrId = createrId;
+	}
+
+	public String getApplyedId() {
+		return applyedId;
+	}
+
+	public void setApplyedId(String applyedId) {
+		this.applyedId = applyedId;
+	}
+
+	public String getApplyedName() {
+		return applyedName;
+	}
+
+	public void setApplyedName(String applyedName) {
+		this.applyedName = applyedName;
 	}
 	
 	

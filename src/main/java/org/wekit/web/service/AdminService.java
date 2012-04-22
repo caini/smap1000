@@ -51,4 +51,22 @@ public interface AdminService {
 	 */
 	public boolean updateAdmin(Admin admin,String creatername,String createrid,String ip) throws Exception;
 	
+	/**
+	 * 添加系统管理员
+	 * @param username
+	 * @param displayname
+	 * @param password
+	 * @param ip
+	 * @return
+	 */
+	public Admin saveAdmin(String username,String displayname,String password,String ip);
+	
+	/**
+	 * 更新系统管理员信息
+	 * @param id
+	 * @param display
+	 * @param password
+	 * @return
+	 */
+	public Admin updateAdmin(long id,String display,String password);
 }

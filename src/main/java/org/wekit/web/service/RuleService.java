@@ -80,4 +80,30 @@ public interface RuleService {
 	 * @return
 	 */
 	public boolean deleteCodeRule(long id,String creater,String createrid,String ip)throws Exception;
+	
+	/**
+	 * 
+	 * @param creater
+	 * @param createrid
+	 * @param createTime
+	 * @param rule
+	 * @param face
+	 * @param state
+	 * @param minSequence
+	 * @param maxSequence
+	 * @return
+	 */
+	public CodeRule addCodeRule(String rulename,String creater,String createrid,long createTime,String rule,String face,int state,int minSequence,int maxSequence);
+	
+	
+	/**
+	 * 
+	 * @param rulename
+	 * @param face
+	 * @param state
+	 * @param minSequence
+	 * @param maxSequence
+	 * @return
+	 */
+	public CodeRule updateCodeRule(long id,String rulename,String face,int state,int minSequence,int maxSequence);
 }

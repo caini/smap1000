@@ -2,6 +2,7 @@ package org.wekit.web.service.impl;
 
 import java.util.List;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -82,6 +83,44 @@ public class AdminServiceImpl implements AdminService {
 		   return true;
 		}
 		return false;
+	}
+	
+	@Transactional(propagation=Propagation.REQUIRED)
+	/**
+	 * 
+	 * @param username
+	 * @param displayname
+	 * @param password
+	 * @param ip
+	 * @return
+	 */
+	
+	public Admin saveAdmin(String username,String displayname,String password,String ip){
+		Admin admin=new Admin(username, displayname, password, System.currentTimeMillis(), 0, ip);
+		return this.adminDao.saveAdmin(admin);
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @param display
+	 * @param password
+	 * @return
+	 */
+	@Transactional(propagation=Propagation.REQUIRED)
+	public Admin updateAdmin(long id,String display,String password){
+		Admin admin=this.adminDao.getAdmin(id);
+		if(admin!=null){
+			if(StringUtils.isNotEmpty(display))
+				admin.setDisplayName(display);
+			if(StringUtils.isNotEmpty(password))
+				admin.setPassword(password);
+			if(this.adminDao.updateAdmin(admin))
+				return admin;
+			else
+				throw new WekitException("更新管理员信息失败");
+		}
+		return null;
 	}
 
 }

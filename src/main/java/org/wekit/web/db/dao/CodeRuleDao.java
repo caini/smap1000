@@ -95,29 +95,5 @@ public interface CodeRuleDao {
 	 */
 	public List<String>  queryCodeRuleNames(IPaginable paginable);
 
-	/**
-	 * 
-	 * @param creater
-	 * @param createrid
-	 * @param createTime
-	 * @param rule
-	 * @param face
-	 * @param state
-	 * @param minSequence
-	 * @param maxSequence
-	 * @return
-	 */
-	public CodeRule addCodeRule(String creater,String createrid,long createTime,String rule,String face,int state,int minSequence,int maxSequence);
 	
-	
-	/**
-	 * 
-	 * @param rulename
-	 * @param face
-	 * @param state
-	 * @param minSequence
-	 * @param maxSequence
-	 * @return
-	 */
-	public CodeRule updateCodeRule(String rulename,String face,int state,int minSequence,int maxSequence);
 }

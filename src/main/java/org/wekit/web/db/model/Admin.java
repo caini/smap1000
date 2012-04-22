@@ -50,8 +50,8 @@ public class Admin implements Serializable {
 	@Column(name = "lastip", length = 128, nullable = true)
 	private String lastIp;
 
-	public Admin() {
 
+	public Admin() {
 	}
 	
 	/**

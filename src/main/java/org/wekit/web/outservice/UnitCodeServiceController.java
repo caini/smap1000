@@ -129,8 +129,11 @@ public class UnitCodeServiceController extends BaseController<UnitCode> {
 	 */
 	@RequestMapping(value="/unitcode/find.{extend}",method=RequestMethod.GET)
 	public String findUntiCode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
+		try{
 		initParam(request);
-		//TODO
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
 		return displayAPIClient(extend, model);
 	}
 

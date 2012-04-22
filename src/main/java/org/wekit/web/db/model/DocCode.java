@@ -24,54 +24,66 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "doccode")
 public class DocCode implements Serializable {
-	private static final long serialVersionUID = -77721154122274573L;
+	private static final long	serialVersionUID	= -77721154122274573L;
 
 	@Id
 	@GeneratedValue(generator = "id_gen", strategy = GenerationType.TABLE)
 	@TableGenerator(name = "id_gen", table = "sys_id_gen", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "doccode", allocationSize = 100)
-	private long docId;
+	private long				docId;
 
 	@Column(name = "code", nullable = false, unique = true)
-	private String code;
+	private String				code;
 
 	// 编码创建时间
 	@Column(name = "ctime", nullable = false)
-	private long createTime;
+	private long				createTime;
 
 	// 编码状态
 	@Column(name = "state")
-	private int state;
+	private int					state;
 
 	// 编码名称
 	@Column(name = "name", length = 128)
-	private String name;
+	private String				name;
 
-	@Column(name="ename",length=128)
-	private String ename;
-	
-	
+	@Column(name = "ename", length = 128)
+	private String				ename;
+
 	// 编码表述
 	@Column(name = "illustrate")
-	private String illustrate;
+	private String				illustrate;
 
 	// 编码类型ID
 	@Column(name = "typeid")
-	private long typeId;
+	private long				typeId;
 
 	// 编码类型名称
 	@Column(name = "typename")
-	private String typeName;
+	private String				typeName;
 
 	// 编码创建人
 	@Column(name = "creater", length = 64)
-	private String creater;
+	private String				creater;
 
 	@Column(name = "createrid", length = 64)
-	private String createrId;
+	private String				createrId;
 
 	// 编码描述
 	@Column(name = "note", length = 128)
-	private String note;
+	private String				note;
+
+	public DocCode(String code, String name, String ename, String illustrate, long typeId, String typeName, String creater, String createrid, long creatertime, int state) {
+		this.code = code;
+		this.name = name;
+		this.ename = ename;
+		this.illustrate = illustrate;
+		this.typeId = typeId;
+		this.typeName = typeName;
+		this.creater = creater;
+		this.createrId = createrid;
+		this.createTime = creatertime;
+		this.state = state;
+	}
 
 	public DocCode() {
 
@@ -172,7 +184,5 @@ public class DocCode implements Serializable {
 	public void setEname(String ename) {
 		this.ename = ename;
 	}
-	
-	
 
 }

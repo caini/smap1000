@@ -61,5 +61,13 @@ public interface DocCodeService {
 	 * @return
 	 */
 	public boolean deleteDocCodes(long docCodeId,String createrName,String createrid,String ip) throws Exception;
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public DocCode saveDocCode();
+	
+	public DocCode updateDocCode();
 
 }

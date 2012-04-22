@@ -39,8 +39,8 @@ public class AdminServiceController extends BaseController<Admin> {
 
 	@RequestMapping(value="/security/admin/add.{extend}")
 	public String addAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-		initParam(request);
 		try{
+			initParam(request);
 			String userName=null;
 			String displayName=null;
 			String password=null;

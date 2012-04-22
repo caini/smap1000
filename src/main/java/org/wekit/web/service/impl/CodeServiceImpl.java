@@ -234,7 +234,7 @@ public class CodeServiceImpl implements CodeService {
 		Map<String, Integer> param = new HashMap<String, Integer>();
 		Calendar calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
+		int month = calendar.get(Calendar.MONTH+1); //英文的1月份是0开始的
 		int day = calendar.get(Calendar.MONDAY);
 
 		if (mask.indexOf("[yyyy]") > 0) {

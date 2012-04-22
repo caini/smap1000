@@ -1,17 +1,20 @@
 package org.wekit.web;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
+import org.wekit.security.RC4CipherEntity;
 import org.wekit.web.db.Pagination;
+import org.wekit.web.db.model.RemoteAcl;
 import org.wekit.web.service.RemoteAclService;
 import org.wekit.web.util.DataWrapUtil;
 
@@ -45,7 +48,9 @@ public abstract class BaseController<T> {
 
 	public final static String		NOTE			= "note";
 
-	public final static String		USERKEY			= "userkey";
+	public final static String		USERKEY			= "u";
+
+	public final static String		USERPARAMS		= "p";
 
 	public final static String		KEY				= "key";
 
@@ -53,6 +58,8 @@ public abstract class BaseController<T> {
 
 	public final static String		TYPEID			= "typeid";
 	protected String				userkey;
+
+	protected String				userparams;
 
 	protected String				creatername;
 
@@ -62,7 +69,7 @@ public abstract class BaseController<T> {
 
 	protected String				code;
 
-	protected long					typeId=0;
+	protected long					typeId			= 0;
 
 	protected String				docCode;
 
@@ -76,7 +83,7 @@ public abstract class BaseController<T> {
 
 	protected String				key;
 
-	protected int					state=-1;
+	protected int					state			= -1;
 
 	@Autowired
 	@Qualifier("remoteAclService")
@@ -105,25 +112,31 @@ public abstract class BaseController<T> {
 	 * 
 	 * @param request
 	 * @return
+	 * @throws Exception 
 	 */
-	/*
-	 * protected void initParam(HttpServletRequest request) {
-	 * if(request.getParameter("userkey")==null) return; String
-	 * userkey=request.getParameter("userkey"); RemoteAcl
-	 * acl=remoteAclService.getRemoteAclByUserName(userkey); if(acl==null){
-	 * return; } if (request.getParameter("param") != null) { String param =
-	 * request.getParameter("param"); //param= String[] params =
-	 * param.split("&"); for (String pm : params) { String[] keyValue =
-	 * pm.split("="); if (keyValue != null && keyValue.length == 2) {
-	 * parameters.put(keyValue[0], keyValue[1]); } } } }
-	 */
-	@SuppressWarnings("unchecked")
-	protected void initParam(HttpServletRequest request) {
-
-		Map<String, String[]> map = request.getParameterMap();
-		Set<Entry<String, String[]>> entries = map.entrySet();
-		for (Entry<String, String[]> entry : entries) {
-			this.parameters.put(entry.getKey(), entry.getValue()[0]);
+	protected void initParam(HttpServletRequest request) throws Exception {
+		if (StringUtils.isEmpty(request.getParameter(USERKEY))) {
+			throw new WekitException("请输入用户信息");
+		}
+		this.userkey = request.getParameter(USERKEY);
+		if (StringUtils.isEmpty(request.getParameter(USERPARAMS))) {
+			throw new WekitException("请输入请求参数");
+		}
+		RemoteAcl acl = remoteAclService.getRemoteAclByUserName(userkey);
+		if (acl == null)
+			throw new WekitException("不存在该授权用户");
+		String password = acl.getPassword();
+		this.userparams=request.getParameter(USERPARAMS).trim();
+		this.userparams = new String(Base64.decodeBase64(this.userparams));
+		this.userparams=RC4CipherEntity.code(this.userparams, password);
+		String[] params =this.userparams.split("&");
+		if (params != null) {
+			for (String param : params) {
+				String[] entrys = param.split("=");
+				if (entrys.length == 2) {
+					this.parameters.put(entrys[0], entrys[1]);
+				}
+			}
 		}
 		paserPaginable();
 		initCommonParam();
@@ -167,13 +180,13 @@ public abstract class BaseController<T> {
 				throw new WekitException("state的参数范围必须是自然数!");
 			}
 		}
-		if(parameters.containsKey(TYPEID)){
-			try{
-				this.typeId=Long.parseLong(parameters.get(TYPEID));
-			}catch(Exception ex){
+		if (parameters.containsKey(TYPEID)) {
+			try {
+				this.typeId = Long.parseLong(parameters.get(TYPEID));
+			} catch (Exception ex) {
 				throw new WekitException("typeid的参数范围必须是自然数!");
 			}
-			
+
 		}
 	}
 
@@ -197,8 +210,8 @@ public abstract class BaseController<T> {
 		}
 		return "ftl/" + extend;
 	}
-	
-	protected void setDatas(List<T> datas){
+
+	protected void setDatas(List<T> datas) {
 		this.pagination.setDatas(datas);
 	}
 

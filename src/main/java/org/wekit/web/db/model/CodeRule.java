@@ -47,8 +47,6 @@ public class CodeRule implements Serializable {
 	@Column(name = "ctime", updatable = false)
 	private long				createTime;
 
-
-
 	// 编码规则列
 	@Column(name = "rule", length = 128)
 	private String				rule;

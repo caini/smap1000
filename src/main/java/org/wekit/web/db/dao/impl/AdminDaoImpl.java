@@ -77,5 +77,5 @@ public class AdminDaoImpl extends HibernateBaseDao<Admin, Long> implements Admin
 		}
 		return true;
 	}
-
+	
 }
