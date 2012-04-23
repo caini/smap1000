@@ -52,10 +52,4 @@ public  class RC4CipherEntity
          
          return new String(iOutputChar);
     }    
-   
-   public static void main(String[] args) throws UnsupportedEncodingException{
-	 String temp="中文";
-	 System.out.println(new String(temp.getBytes("UTF-8"),"UTF-8"));
-	 
-   }
 }

@@ -138,7 +138,6 @@ public class CodeServiceController extends BaseController<Code> {
 			setMessage(ex.getMessage());
 		}
 		return this.displayAPIClient(extend, model);
-
 	}
 
 	/**

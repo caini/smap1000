@@ -3,6 +3,8 @@ package org.wekit.web.outservice;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.wekit.web.BaseController;
+import org.wekit.web.WekitException;
 import org.wekit.web.db.dao.UnitCodeTypeDao;
 import org.wekit.web.db.model.UnitCodeType;
 
@@ -28,6 +31,8 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	@Qualifier("unitCodeTypeDao")
 	private UnitCodeTypeDao	unitCodeTypeDao;
 
+	private final static Logger logger=Logger.getLogger(UnitCodeTypeServiceController.class);
+	
 	/**
 	 * 查询机组类型
 	 * 
@@ -39,8 +44,15 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	public String queryUnitCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request);
+			if(StringUtils.isEmpty(this.key)){
+				throw new WekitException("参数key不能为空!");
+			}
+			//TODO
+	
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.error(e.getMessage());
+			setState(0);
+			setMessage(e.getMessage());
 		}
 		return displayAPIClient(extend, model);
 	}
@@ -55,9 +67,11 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	public String addUnitCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request);
-
+			//TODO
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.error(e.getMessage());
+			setState(0);
+			setMessage(e.getMessage());
 		}
 		return displayAPIClient(extend, model);
 	}
@@ -73,8 +87,12 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	public String updateUnitCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request);
-		} catch (Exception e) {
+		
 			// TODO: handle exception
+		} catch (Exception e) {
+			logger.error(e.getMessage());
+			setState(0);
+			setMessage(e.getMessage());
 		}
 
 		return displayAPIClient(extend, model);
@@ -91,8 +109,14 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	public String findUnitCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request);
+			if(StringUtils.isEmpty(this.key)){
+				throw new WekitException("参数key不能为空!");
+			}
+			
 		} catch (Exception e) {
-			// TODO: handle exception
+			logger.error(e.getMessage());
+			setState(0);
+			setMessage(e.getMessage());
 		}
 		return displayAPIClient(extend, model);
 	}
@@ -109,13 +133,14 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	public String deleteCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try{
 		initParam(request);
-		
-		String id = "";
-		if (parameters.containsKey("id")) {
-			id = parameters.get(id);
+		if(StringUtils.isEmpty(this.key)){
+			throw new WekitException("参数key不能为空!");
+		//TODO
 		}
 		}catch (Exception e) {
-			// TODO: handle exception
+			logger.error(e.getMessage());
+			setState(0);
+			setMessage(e.getMessage());
 		}
 	
 		return displayAPIClient(extend, model);
