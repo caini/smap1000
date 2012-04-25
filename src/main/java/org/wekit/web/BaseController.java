@@ -1,5 +1,7 @@
 package org.wekit.web;
 
+import java.net.URL;
+import java.net.URLDecoder;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -91,6 +93,7 @@ public abstract class BaseController<T> {
 
 	protected Pagination<T>			pagination		= new Pagination<T>();
 	protected Map<String, String>	parameters		= new HashMap<String, String>();
+	protected RemoteAcl				remoteAcl;
 
 	/**
 	 * 获取分页信息
@@ -112,24 +115,12 @@ public abstract class BaseController<T> {
 	 * 
 	 * @param request
 	 * @return
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	protected void initParam(HttpServletRequest request) throws Exception {
-		if (StringUtils.isEmpty(request.getParameter(USERKEY))) {
-			throw new WekitException("请输入用户信息");
-		}
-		this.userkey = request.getParameter(USERKEY);
-		if (StringUtils.isEmpty(request.getParameter(USERPARAMS))) {
-			throw new WekitException("请输入请求参数");
-		}
-		RemoteAcl acl = remoteAclService.getRemoteAclByUserName(userkey);
-		if (acl == null)
-			throw new WekitException("不存在该授权用户");
-		String password = acl.getPassword();
-		this.userparams=request.getParameter(USERPARAMS).trim();
-		this.userparams = new String(Base64.decodeBase64(this.userparams));
-		this.userparams=RC4CipherEntity.code(this.userparams, password);
-		String[] params =this.userparams.split("&");
+		//this.userparams = decode(request);
+		this.userparams=URLDecoder.decode(request.getQueryString(),"UTF-8");
+		String[] params = this.userparams.split("&");
 		if (params != null) {
 			for (String param : params) {
 				String[] entrys = param.split("=");
@@ -140,6 +131,31 @@ public abstract class BaseController<T> {
 		}
 		paserPaginable();
 		initCommonParam();
+	}
+
+	/**
+	 * 编码解码工作
+	 * 
+	 * @param request
+	 * @return
+	 */
+	private String decode(HttpServletRequest request) {
+		if (StringUtils.isEmpty(request.getParameter(USERKEY))) {
+			throw new WekitException("请输入用户信息");
+		}
+		this.userkey = request.getParameter(USERKEY);
+		if (StringUtils.isEmpty(request.getParameter(USERPARAMS))) {
+			throw new WekitException("请输入请求参数");
+		}
+		remoteAcl = remoteAclService.getRemoteAclByUserName(userkey);
+		if (remoteAcl == null)
+			throw new WekitException("不存在该授权用户");
+		String password = remoteAcl.getPassword();
+		String temp = request.getParameter(USERPARAMS).trim();
+		temp = request.getParameter(USERPARAMS).trim();
+		temp = new String(Base64.decodeBase64(temp));
+		temp = RC4CipherEntity.code(temp, password);
+		return this.userparams;
 	}
 
 	protected void initCommonParam() {

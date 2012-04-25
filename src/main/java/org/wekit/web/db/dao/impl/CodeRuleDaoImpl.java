@@ -83,7 +83,7 @@ public class CodeRuleDaoImpl extends HibernateBaseDao<CodeRule, Long> implements
 	@Override
 	public CodeRule getCodeRule(String codeRule) {
 		List<CodeRule> codeRules = this.queryByProperty("rule", codeRule);
-		if (codeRule != null) {
+		if (codeRules != null&&codeRules.size()>0) {
 			return codeRules.get(0);
 		}
 		return null;

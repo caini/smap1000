@@ -6,7 +6,7 @@ import java.io.UnsupportedEncodingException;
 
 public  class RC4CipherEntity 
 {
-   public  static String code(String aInput,String aKey) throws UnsupportedEncodingException 
+   public  static String code(String aInput,String aKey) 
     {
 	     
     	 int[] iS = new int[256]; 

@@ -185,7 +185,7 @@ public class CodeServiceController extends BaseController<Code> {
 			String ip = "";
 			String note = "";
 			if (parameters.containsKey("code")) {
-				code = parameters.get(code);
+				code = parameters.get("code");
 			}
 			if (parameters.containsKey("creater")) {
 				creater = parameters.get("creater");
