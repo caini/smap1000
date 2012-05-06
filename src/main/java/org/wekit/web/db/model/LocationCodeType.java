@@ -36,6 +36,10 @@ public class LocationCodeType implements Serializable {
 	@Column(name = "name", length = 64)
 	private String name;
 
+	
+	@Column(name="ename",length=64,nullable=true)
+	private String ename;
+	
 	// 类型编码
 	@Column(name = "code", length = 64)
 	private String code;
@@ -61,6 +65,28 @@ public class LocationCodeType implements Serializable {
 
 	public LocationCodeType() {
 	}
+	
+	/**
+	 * 全参数匹配构造函数
+	 * @param name
+	 * @param ename
+	 * @param code
+	 * @param note
+	 * @param creater
+	 * @param createrId
+	 * @param createTime
+	 * @param state
+	 */
+	public LocationCodeType(String name,String ename,String code,String note,String creater,String createrId,long createTime,int state){
+		this.name=name;
+		this.code=code;
+		this.note=note;
+		this.creater=creater;
+		this.createrId=createrId;
+		this.createTime=createTime;
+		this.state=state;
+	}
+	
 
 	public long getTypeId() {
 		return typeId;
@@ -125,5 +151,19 @@ public class LocationCodeType implements Serializable {
 	public void setCreaterId(String createrId) {
 		this.createrId = createrId;
 	}
+
+
+
+	public String getEname() {
+		return ename;
+	}
+
+
+
+	public void setEname(String ename) {
+		this.ename = ename;
+	}
+	
+	
 
 }

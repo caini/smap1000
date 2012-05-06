@@ -36,6 +36,9 @@ public class UnitCodeType implements Serializable {
 	@Column(name = "name", length = 64)
 	private String name;
 
+	@Column(name="ename",length=64)
+	private String ename;
+	
 	// 机组类型码
 	@Column(name = "code", length = 64)
 	private String code;
@@ -61,6 +64,30 @@ public class UnitCodeType implements Serializable {
 
 	public UnitCodeType() {
 	}
+	
+	/**
+	 * 全参数匹配构造函数
+	 * @param name
+	 * @param ename
+	 * @param code
+	 * @param note
+	 * @param createTime
+	 * @param creater
+	 * @param createrId
+	 * @param state
+	 */
+	public UnitCodeType(String name,String ename,String code,String note,long createTime,String creater,String createrId,int state){
+		this.name=name;
+		this.ename=ename;
+		this.code=code;
+		this.note=note;
+		this.createTime=createTime;
+		this.creater=creater;
+		this.createrId=createrId;
+		this.state=state;
+	}
+	
+	
 
 	public long getTypeId() {
 		return typeId;

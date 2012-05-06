@@ -72,6 +72,19 @@ public class DocCode implements Serializable {
 	@Column(name = "note", length = 128)
 	private String				note;
 
+	/**
+	 * 全参数匹配构造函数
+	 * @param code
+	 * @param name
+	 * @param ename
+	 * @param illustrate
+	 * @param typeId
+	 * @param typeName
+	 * @param creater
+	 * @param createrid
+	 * @param creatertime
+	 * @param state
+	 */
 	public DocCode(String code, String name, String ename, String illustrate, long typeId, String typeName, String creater, String createrid, long creatertime, int state) {
 		this.code = code;
 		this.name = name;

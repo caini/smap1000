@@ -61,7 +61,23 @@ public class RemoteAcl implements Serializable{
 	public RemoteAcl()
 	{}
 
-
+	/**
+	 * 全参数匹配构造函数
+	 * @param systemtname
+	 * @param username
+	 * @param password
+	 * @param createTime
+	 * @param state
+	 */
+	public RemoteAcl(String systemtname,String username,String password,long createTime,int state){
+		this.systemName=systemtname;
+		this.username=username;
+		this.password=password;
+		this.createTime=createTime;
+		this.state=state;
+	}
+	
+	
 	public long getAclId() {
 		return aclId;
 	}

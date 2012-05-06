@@ -70,6 +70,30 @@ public class UnitCode implements Serializable {
 	public UnitCode() {
 	}
 
+	/**
+	 * 全参数匹配构造函数
+	 * @param name
+	 * @param ename
+	 * @param code
+	 * @param typeName
+	 * @param typeId
+	 * @param creater
+	 * @param createrId
+	 * @param createTime
+	 * @param state
+	 */
+	public UnitCode(String name,String ename,String code,String typeName,long typeId,String creater,String createrId,long createTime,int state){
+		this.name=name;
+		this.ename=ename;
+		this.code=code;
+		this.typeName=typeName;
+		this.typeId=typeId;
+		this.creater=creater;
+		this.createrId=createrId;
+		this.createTime=createTime;
+		this.state=state;
+	}
+	
 	public long getUnitId() {
 		return unitId;
 	}

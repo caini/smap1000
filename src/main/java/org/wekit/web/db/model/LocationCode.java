@@ -79,6 +79,34 @@ public class LocationCode implements Serializable {
 
 	}
 
+	/**
+	 * 全参数匹配构造函数
+	 * @param code
+	 * @param name
+	 * @param ename
+	 * @param illustrate
+	 * @param extend
+	 * @param state
+	 * @param typeId
+	 * @param typeName
+	 * @param creater
+	 * @param createrid
+	 * @param createTime
+	 */
+	public LocationCode(String code,String name,String ename,String illustrate,String extend,int state,long typeId,String typeName,String creater,String createrid,long createTime){
+		this.code=code;
+		this.name=name;
+		this.ename=ename;
+		this.illustrate=illustrate;
+		this.extend=extend;
+		this.state=state;
+		this.typeId=typeId;
+		this.typeName=typeName;
+		this.creater=creater;
+		this.createrId=createrid;
+		this.createTime=createTime;
+	}
+
 	public long getLocationId() {
 		return locationId;
 	}

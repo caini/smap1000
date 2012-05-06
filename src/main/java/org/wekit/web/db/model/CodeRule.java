@@ -71,6 +71,18 @@ public class CodeRule implements Serializable {
 		this.state=1;
 	}
 
+	/**
+	 * 全参数匹配构造函数
+	 * @param ruleName
+	 * @param creater
+	 * @param createrId
+	 * @param createrTime
+	 * @param rule
+	 * @param face
+	 * @param state
+	 * @param minSequence
+	 * @param maxSequence
+	 */
 	public CodeRule(String ruleName,String creater,String createrId,long createrTime,String rule,String face,int state,int minSequence,int maxSequence){
 		this.ruleName=ruleName;
 		this.creater=creater;

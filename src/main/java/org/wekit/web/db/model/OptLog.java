@@ -66,6 +66,27 @@ public class OptLog  implements Serializable{
 	public OptLog()
 	{}
 
+	/**
+	 * 全参数匹配构造函数
+	 * @param systemId
+	 * @param systemName
+	 * @param userid
+	 * @param content
+	 * @param operatorTime
+	 * @param ip
+	 * @param operate
+	 */
+	public OptLog(String systemId,String systemName,String userid,String content,long operatorTime,String ip,String operate){
+		this.systemId=systemId;
+		this.systemName=systemName;
+		this.userId=userid;
+		this.content=content;
+		this.operatorTime=operatorTime;
+		this.ip=ip;
+		this.operate=operate;
+	}
+	
+	
 	public long getLogId() {
 		return logId;
 	}

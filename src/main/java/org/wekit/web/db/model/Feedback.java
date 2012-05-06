@@ -67,6 +67,34 @@ public class Feedback implements Serializable {
 	@OneToMany(mappedBy = "parent")
 	private List<Feedback> replies;
 
+	public Feedback(){
+		
+	}
+	/**
+	 * 全参数匹配构造函数
+	 * @param typeid
+	 * @param typename
+	 * @param title
+	 * @param content
+	 * @param creater
+	 * @param createrid
+	 * @param state
+	 * @param parent
+	 * @param replies
+	 */
+	public Feedback(long typeid,String typename,String title,String content,String creater,String createrid,int state,Feedback parent,List<Feedback> replies){
+		this.typeId=typeid;
+		this.typeName=typename;
+		this.title=title;
+		this.content=content;
+		this.creater=creater;
+		this.createrId=createrid;
+		this.state=state;
+		this.parent=parent;
+		this.replies=replies;
+	}
+	
+	
 	public long getFeedbackId() {
 		return feedbackId;
 	}

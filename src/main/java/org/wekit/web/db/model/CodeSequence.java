@@ -52,6 +52,13 @@ public class CodeSequence implements Serializable {
 	@Column(name = "seq", length = 11, scale = 0)
 	private long				seq;
 
+	/**
+	 * 全参数匹配构造函数
+	 * @param codeRule
+	 * @param unitCode
+	 * @param locationCode
+	 * @param docCode
+	 */
 	public CodeSequence(String codeRule, String unitCode, String locationCode, String docCode) {
 		this();
 		this.codeRule = codeRule;

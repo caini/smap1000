@@ -87,7 +87,18 @@ public class CodeApply implements Serializable {
 	
 	
 	public CodeApply(String creater,String createrid,long creatertime,String unit,String location ,String doc,String file,String mask,String note,int state,String applayName,String applyedId){
-		
+		this.creater=creater;
+		this.createrId=createrid;
+		this.createTime=creatertime;
+		this.unit=unit;
+		this.location=location;
+		this.doc=doc;
+		this.file=file;
+		this.mask=mask;
+		this.note=note;
+		this.state=state;
+		this.applyedName=applayName;
+		this.applyedId=applyedId;
 	}
 
 	public long getApplyId() {

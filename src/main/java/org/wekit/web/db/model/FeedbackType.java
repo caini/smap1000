@@ -36,6 +36,11 @@ public class FeedbackType implements Serializable {
 	@Column(name = "name", length = 64)
 	private String name;
 
+	//英文名称
+	@Column(name="ename",length=64)
+	private String ename;
+	
+	
 	// 编码备注
 	@Column(name = "note", length = 500)
 	private String note;
@@ -54,6 +59,26 @@ public class FeedbackType implements Serializable {
 	public FeedbackType() {
 	}
 
+	/**
+	 * 全参数匹配构造函数
+	 * @param name
+	 * @param ename
+	 * @param note
+	 * @param createTime
+	 * @param creater
+	 * @param createrId
+	 */
+	public FeedbackType(String name,String ename,String note,long createTime,String creater,String createrId){
+		this.name=name;
+		this.ename=ename;
+		this.note=note;
+		this.createTime=createTime;
+		this.creater=creater;
+		this.createrId=createrId;
+	}
+	
+	
+	
 	public long getTypeId() {
 		return typeId;
 	}
@@ -101,5 +126,15 @@ public class FeedbackType implements Serializable {
 	public void setCreaterId(String createrId) {
 		this.createrId = createrId;
 	}
+
+	public String getEname() {
+		return ename;
+	}
+
+	public void setEname(String ename) {
+		this.ename = ename;
+	}
+	
+	
 
 }

@@ -59,6 +59,28 @@ public class DocCodeType implements Serializable {
 
 	public DocCodeType() {
 	}
+	
+	/**
+	 * 全参数匹配构造函数
+	 * @param name
+	 * @param ename
+	 * @param code
+	 * @param note
+	 * @param createTime
+	 * @param creater
+	 * @param createrId
+	 * @param state
+	 */
+	public DocCodeType(String name,String ename,String code,String note,long createTime,String creater,String createrId,int state){
+		this.name=name;
+		this.ename=ename;
+		this.code=code;
+		this.note=name;
+		this.createTime=createTime;
+		this.creater=creater;
+		this.createrId=createrId;
+		this.state=state;
+	}
 
 	public long getTypeId() {
 		return typeId;

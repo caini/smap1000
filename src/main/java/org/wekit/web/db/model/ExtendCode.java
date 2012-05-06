@@ -89,8 +89,36 @@ public class ExtendCode implements Serializable{
 	@Column(name="applyedname",length=64)
 	private String applyedName;
 	
+	/**
+	 * 全参数匹配构造函数
+	 * @param cratername
+	 * @param createrid
+	 * @param createtime
+	 * @param note
+	 * @param applyTitle
+	 * @param applyid
+	 * @param docCode
+	 * @param unitCode
+	 * @param locationCode
+	 * @param state
+	 * @param applyedid
+	 * @param applyedname
+	 * @param result
+	 */
 	public ExtendCode(String cratername,String createrid,long createtime,String note,String applyTitle,String applyid,String docCode,String unitCode,String locationCode,int state,String applyedid,String applyedname,String result){
-		
+		this.createrId=createrid;
+		this.creater=cratername;
+		this.createTime=createtime;
+		this.note=note;
+		this.applyTitle=applyTitle;
+		this.applyedId=applyedid;
+		this.docCode=docCode;
+		this.unitCode=unitCode;
+		this.locationCode=locationCode;
+		this.state=state;
+		this.applyedId=applyedid;
+		this.applyedName=applyedname;
+		this.result=result;
 		
 	}
 	
