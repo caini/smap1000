@@ -59,6 +59,11 @@ public abstract class BaseController<T> {
 	public final static String		STATE			= "state";
 
 	public final static String		TYPEID			= "typeid";
+	
+	public final static String 		ROLENAME		="rolename";
+	
+	public final static String 		TOKEN="t";
+
 	protected String				userkey;
 
 	protected String				userparams;
@@ -85,6 +90,10 @@ public abstract class BaseController<T> {
 
 	protected String				key;
 
+	protected String 				token;
+	
+	protected String				rulename;
+	
 	protected int					state			= -1;
 
 	@Autowired
@@ -129,6 +138,16 @@ public abstract class BaseController<T> {
 				}
 			}
 		}
+		if(this.parameters.containsKey("t"))
+		{
+			long time=Long.parseLong(this.parameters.get("t"));
+			
+		}else
+		{
+			throw new WekitException("传入的参数错误!");
+		}
+		
+		
 		paserPaginable();
 		initCommonParam();
 	}
@@ -151,6 +170,9 @@ public abstract class BaseController<T> {
 		if (remoteAcl == null)
 			throw new WekitException("不存在该授权用户");
 		String password = remoteAcl.getPassword();
+		
+		
+		
 		String temp = request.getParameter(USERPARAMS).trim();
 		temp = request.getParameter(USERPARAMS).trim();
 		temp = new String(Base64.decodeBase64(temp));

@@ -19,15 +19,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "codeapplylog")
 public class CodeApplyLog implements Serializable{
 
-	public final static String APPLYOPERATE="规则编码申请"; //有规则编码申请
-	
-	
-	public final static String CANCELOPERATE="规则编码撤销";//取消有规则编码
-	
-	public final static String UAPPLAYOPERATE="无规则编码申请";//无规则编码申请
-	
-	public final static String UCANCELOPERATE="无规则编码撤销"; //无规则编码撤销
-	
 	/**
 	 * 
 	 */

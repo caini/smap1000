@@ -19,14 +19,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name="remotelog")
 public class RemoteLog implements Serializable {
 
+	
 	private static final long	serialVersionUID	= -7477353917681736199L;
 	@Id
 	@GeneratedValue(generator = "id_gen", strategy = GenerationType.TABLE)
 	@TableGenerator(name = "id_gen", table = "sys_id_gen", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "remotelog", allocationSize = 100)
 	private long remotelogId;
 	
-	@Column(name="remoteid",length=11,nullable=false)
-	private long remoteId;
+	@Column(name="remoteid",nullable=false)
+	private String remoteId;
 	
 	@Column(name="remotename",nullable=false,length=64)
 	private String remoteName;
@@ -45,7 +46,7 @@ public class RemoteLog implements Serializable {
 		
 	}
 	
-	public RemoteLog(long remoteId,String remoteName,String operaterType,String content,long createTime){
+	public RemoteLog(String remoteId,String remoteName,String operaterType,String content,long createTime){
 		this.remoteId=remoteId;
 		this.remoteName=remoteName;
 		this.operateType=operaterType;
@@ -64,11 +65,13 @@ public class RemoteLog implements Serializable {
 		this.remotelogId = remotelogId;
 	}
 
-	public long getRemoteId() {
+	
+
+	public String getRemoteId() {
 		return remoteId;
 	}
 
-	public void setRemoteId(long remoteId) {
+	public void setRemoteId(String remoteId) {
 		this.remoteId = remoteId;
 	}
 
