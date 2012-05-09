@@ -153,4 +153,14 @@ public class UnitCodeType implements Serializable {
 		this.createrId = createrId;
 	}
 
+	public String getEname() {
+		return ename;
+	}
+
+	public void setEname(String ename) {
+		this.ename = ename;
+	}
+	
+	
+
 }

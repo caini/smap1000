@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.wekit.web.IPaginable;
@@ -63,9 +64,17 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 	@Transactional(propagation = Propagation.REQUIRED)
 	@Override
 	public ExtendCode addExtendCode(ExtendCode code) {
+		
 		return this.extendCodeDao.addExtendCode(code);
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
+	public ExtendCode addExtendCode(long codeapplyid,String code ,String note){
+		return null;
+	}
+	
+	
+	
 	@Transactional(readOnly = true)
 	@Override
 	public List<ExtendCode> queryExtendCode(Map<String, String> param, IPaginable iPaginable) {

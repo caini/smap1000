@@ -76,10 +76,11 @@ public class OptLog  implements Serializable{
 	 * @param ip
 	 * @param operate
 	 */
-	public OptLog(String systemId,String systemName,String userid,String content,long operatorTime,String ip,String operate){
+	public OptLog(String systemId,String systemName,String userid,String username,String content,long operatorTime,String ip,String operate){
 		this.systemId=systemId;
 		this.systemName=systemName;
 		this.userId=userid;
+		this.userName=username;
 		this.content=content;
 		this.operatorTime=operatorTime;
 		this.ip=ip;

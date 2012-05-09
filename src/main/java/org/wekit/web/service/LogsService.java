@@ -1,6 +1,7 @@
 package org.wekit.web.service;
 
 import org.wekit.web.db.model.CodeApplyLog;
+import org.wekit.web.db.model.OptLog;
 import org.wekit.web.db.model.RemoteLog;
 
 
@@ -19,7 +20,7 @@ public interface LogsService {
     * @param createTime
     * @return
     */
-   public CodeApplyLog addCodeApplyLog(String userid,String username,String deptId,String deptname,String fileType,String code,String content,String operateType,long createTime);
+   public CodeApplyLog addCodeApplyLog(String userid,String username,String deptId,String deptname,String fileType,String code,String content,String operateType);
 
    /**
     * 添加接口访问信息
@@ -30,6 +31,19 @@ public interface LogsService {
     * @param content
     * @return
     */
-   public RemoteLog  addRemoteLog(String remoteId,String remotename,long createTime,String operateType,String content);
+   public RemoteLog  addRemoteLog(String remoteId,String remotename,String operateType,String content);
 	
+   /**
+    * 根据参数添加通用日志功能
+    * @param systemId
+    * @param systemName
+    * @param userid
+    * @param username
+    * @param content
+    * @param operatorTime
+    * @param ip
+    * @param operate
+    * @return
+    */
+   public OptLog addOptLog(String systemId,String systemName,String userid,String username,String content,String ip,String operate);
 }

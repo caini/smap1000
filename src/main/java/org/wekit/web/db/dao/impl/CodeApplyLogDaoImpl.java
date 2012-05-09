@@ -23,4 +23,10 @@ public class CodeApplyLogDaoImpl extends HibernateBaseDao<CodeApplyLog, Long> im
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public CodeApplyLog saveCodeApplyLog(String userid, String username, String deptId, String deptname, String fileType, String code, String content, String operateType, long createTime) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

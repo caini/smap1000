@@ -60,4 +60,14 @@ public interface ExtendCodeService {
 	 */
 	public boolean deleteExtendCode(long id,String creatername,String createrid,String ip) throws Exception;
 	
+	
+	/**
+	 * 根据参入的参数添加无规则编码 
+	 * @param codeapplyid
+	 * @param code
+	 * @param note
+	 * @return
+	 */
+	public ExtendCode addExtendCode(long codeapplyid,String code ,String note);
+	
 }
