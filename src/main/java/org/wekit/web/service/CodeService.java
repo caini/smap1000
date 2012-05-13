@@ -1,10 +1,14 @@
 package org.wekit.web.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.Code;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public interface CodeService {
 
@@ -45,7 +49,7 @@ public interface CodeService {
 	 * @return
 	 */
 	
-	public boolean cancelCode(Long codeId,String creater,String createrid,String ip,String note);
+	public boolean cancelCode(Long codeId,String createrid,String ip,String note);
 	
 	
 	/**
@@ -53,7 +57,7 @@ public interface CodeService {
 	 * @param code
 	 * @return
 	 */
-	public boolean cancelCode(String code,String creater,String createrid,String ip,String note);
+	public boolean cancelCode(String code,String createrid,String ip,String note);
 	
 	
 	/**
@@ -67,7 +71,7 @@ public interface CodeService {
 	 * @param note
 	 * @return
 	 */
-	public Code fetchCode(long ruleId, String unitCode, String locationCode, String docCode,String createrId, String note,String filename,String codeName);
+	public Code fetchCode(long ruleId, String unitCode, String locationCode, String docCode, String createrId, String note, String filename, String codeName) throws JsonGenerationException, JsonMappingException, IOException;
 	
 	/**
 	 * 根据传入的信息进行批量取号操作
@@ -81,7 +85,7 @@ public interface CodeService {
 	 * @param batchSize
 	 * @return
 	 */
-	public List<Code> batchCode(long ruleId, String unitCode, String locationCode, String docCode,String createId, String note, int batchSize,String filename,String codeName);
+	public List<Code> batchCode(long ruleId, String unitCode, String locationCode, String docCode,String createId, String note, int batchSize,String filename,String codeName)throws JsonGenerationException, JsonMappingException, IOException ;
 	
 	
 	/**

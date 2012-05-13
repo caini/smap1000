@@ -1,5 +1,6 @@
 package org.wekit.web.outservice;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,6 +21,9 @@ import org.wekit.web.BaseController;
 import org.wekit.web.WekitException;
 import org.wekit.web.db.model.Code;
 import org.wekit.web.service.CodeService;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Controller("codeServiceController")
 @Scope(org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST)
@@ -204,7 +208,7 @@ public class CodeServiceController extends BaseController<Code> {
 				pagination.setMessage("传入的参数错误，请检测参数是否正确!");
 			} else {
 
-				this.codeService.cancelCode(code, creater, createrid, ip, note);
+				this.codeService.cancelCode(code,  createrid, ip, note);
 			}
 		} catch (Exception ex) {
 			pagination.setState(0);
@@ -230,8 +234,11 @@ public class CodeServiceController extends BaseController<Code> {
 
 	/**
 	 * 取号逻辑编写
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
-	protected void fetchCode(boolean isFetch) {
+	protected void fetchCode(boolean isFetch) throws JsonGenerationException, JsonMappingException, IOException {
 		if (StringUtils.isEmpty(this.unitCode)||StringUtils.isEmpty(this.locationCode) || StringUtils.isEmpty(this.docCode) || StringUtils.isEmpty(this.createrid) || (this.batchSize == 0 && isFetch == false)) {
 			throw new WekitException("传入的参数错误，请检测参数!");
 		}

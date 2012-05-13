@@ -1,5 +1,6 @@
 package org.wekit.web.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.wekit.web.IPaginable;
 import org.wekit.web.MaskParser;
 import org.wekit.web.WekitException;
+import org.wekit.web.db.dao.CodeApplyLogDao;
 import org.wekit.web.db.dao.CodeDao;
 import org.wekit.web.db.dao.CodePoolDao;
 import org.wekit.web.db.dao.CodeRuleDao;
@@ -32,6 +34,9 @@ import org.wekit.web.db.model.TempCode;
 import org.wekit.web.db.model.User;
 import org.wekit.web.service.CodeService;
 import org.wekit.web.util.DataWrapUtil;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
  * 编码功能申请服务实现
@@ -68,6 +73,10 @@ public class CodeServiceImpl implements CodeService {
 	@Qualifier("codePoolDao")
 	private CodePoolDao		codePoolDao;
 
+	@Autowired
+	@Qualifier("codeApplyLogDao")
+	private CodeApplyLogDao codeApplyLogDao;
+	
 	@Override
 	public Code getCode(Long id) {
 		if (id != null && id > 0) {
@@ -150,10 +159,13 @@ public class CodeServiceImpl implements CodeService {
 
 	/**
 	 * 独立取号和批量取号的差别是独立取号有限查找可用的序列号，在生成新的序列号，而批量操作只生成联系的新号而不关心旧的号码
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	@Override
-	public Code fetchCode(long ruleId, String unitCode, String locationCode, String docCode, String createrId, String note, String filename, String codeName) {
+	public Code fetchCode(long ruleId, String unitCode, String locationCode, String docCode, String createrId, String note, String filename, String codeName) throws JsonGenerationException, JsonMappingException, IOException {
 		CodeRule codeRule = codeRuleDao.getCodeRule(ruleId);
 		if (codeRule == null)
 			throw new WekitException("对应编码规则ID的信息不存在!");
@@ -176,6 +188,7 @@ public class CodeServiceImpl implements CodeService {
 			if (tempCode != null) {
 				String uuid = UUID.randomUUID().toString();
 				Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), unitCode, locationCode, docCode, tempCode.getCode(), 1, uuid, System.currentTimeMillis(), note, filename, user.getDeptDisplayName(), codeRule.getFileTypeName(), tempCode.getCodeName());
+				codeApplyLogDao.saveCodeApplyLog(user.getLoginName(),user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(),codeRule.getFileType(), code.getCode(),DataWrapUtil.ObjectToJson(code),CodeApplyLogDao.APPLYOPERATE,System.currentTimeMillis());
 				code = codeDao.addCode(code);
 				tempCodeDao.deleteTempCode(tempCode);
 				return code;
@@ -183,7 +196,12 @@ public class CodeServiceImpl implements CodeService {
 		}
 		List<Code> codes = createCodes(codeRule, unitCode, locationCode, docCode, user, note, 1, filename, codeName);
 		if (codes != null && codes.size() > 0)
-			return codes.get(0);
+		{
+			Code code=codes.get(0);
+			codePoolDao.insertCodePool(code.getCode());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(),DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
+			return code;
+		}
 		return null;
 	}
 
@@ -199,10 +217,13 @@ public class CodeServiceImpl implements CodeService {
 	 * @param note
 	 * @param batchSize
 	 * @return
+	 * @throws IOException 
+	 * @throws JsonMappingException 
+	 * @throws JsonGenerationException 
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	@Override
-	public List<Code> batchCode(long ruleId, String unitCode, String locationCode, String docCode, String createId, String note, int batchSize, String filename, String codeName) {
+	public List<Code> batchCode(long ruleId, String unitCode, String locationCode, String docCode, String createId, String note, int batchSize, String filename, String codeName) throws JsonGenerationException, JsonMappingException, IOException {
 		CodeRule codeRule = codeRuleDao.getCodeRule(ruleId);
 		if (codeRule == null) {
 			throw new WekitException("找不到对应的编码规则!");
@@ -211,7 +232,14 @@ public class CodeServiceImpl implements CodeService {
 		if (user == null) {
 			throw new WekitException("找不到对应的用户信息!");
 		}
-		return this.createCodes(codeRule, unitCode, locationCode, docCode, user, note, batchSize, filename, codeName);
+		List<Code> codes= this.createCodes(codeRule, unitCode, locationCode, docCode, user, note, batchSize, filename, codeName);
+		for(Code code:codes){
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(),code.getCode() ,DataWrapUtil.ObjectToJson(code),CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
+			codePoolDao.insertCodePool(code.getCode());
+		}
+		
+		
+		return codes;
 	}
 
 	/**
@@ -383,32 +411,37 @@ public class CodeServiceImpl implements CodeService {
 
 	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@Override
-	public boolean cancelCode(Long codeId, String creater, String createrid, String ip, String note) {
+	public boolean cancelCode(Long codeId,String createrid, String ip, String note) {
 		Code temp = codeDao.getCode(codeId);
-		return cancel(temp, creater, createrid, ip, note);
+		return cancel(temp,createrid, ip, note);
 	}
 
 	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@Override
-	public boolean cancelCode(String code, String creater, String createrid, String ip, String note) {
+	public boolean cancelCode(String code,  String createrid, String ip, String note) {
 		Code temp = codeDao.getCode(code);
-		return cancel(temp, creater, createrid, ip, note);
+		return cancel(temp,  createrid, ip, note);
 
 	}
 
-	protected boolean cancel(Code code, String creater, String createrid, String ip, String note) {
+	protected boolean cancel(Code code,  String createrid, String ip, String note) {
 		if (code == null)
 			throw new WekitException("该编码不存在");
+		User user=userDao.getByID(createrid);
+		if(user==null)
+			throw new WekitException("用户信息不存在!");
+		
 		CodeRule codeRule = codeRuleDao.getCodeRule(code.getRuleName(), code.getRule());
 		String oldinfo = null;
 		try {
 			if (codeRule != null) {
-				TempCode tempCode = new TempCode(code.getRule(), creater, createrid, code.getUnitCode(), code.getLocationCode(), code.getDocCode(), 0, code.getCode(), note, code.getCreateTime(), code.getCodeName(), codeRule.getMinSequence(), codeRule.getMaxSequence());
+				TempCode tempCode = new TempCode(code.getRule(),user.getDisplayName(), user.getDisplayName(), code.getUnitCode(), code.getLocationCode(), code.getDocCode(), 0, code.getCode(), note, code.getCreateTime(), code.getCodeName(), codeRule.getMinSequence(), codeRule.getMaxSequence());
 				tempCodeDao.addTempCode(tempCode);
 			}
 			oldinfo = DataWrapUtil.ObjectToJson(code);
 			codeDao.deleteCode(code);
-			logger.info("creater:" + creater + "||createrid:" + createrid + "取消:编码 " + oldinfo);
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), oldinfo, CodeApplyLogDao.CANCELOPERATE, System.currentTimeMillis());
+			logger.info("creater:" + user.getDisplayName() + "||createrid:" + createrid + "取消:编码 " + oldinfo);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new WekitException(e.getMessage());
@@ -436,4 +469,30 @@ public class CodeServiceImpl implements CodeService {
 		return true;
 	}
 
+	public UserDao getUserDao() {
+		return userDao;
+	}
+
+	public void setUserDao(UserDao userDao) {
+		this.userDao = userDao;
+	}
+
+	public CodePoolDao getCodePoolDao() {
+		return codePoolDao;
+	}
+
+	public void setCodePoolDao(CodePoolDao codePoolDao) {
+		this.codePoolDao = codePoolDao;
+	}
+
+	public CodeApplyLogDao getCodeApplyLogDao() {
+		return codeApplyLogDao;
+	}
+
+	public void setCodeApplyLogDao(CodeApplyLogDao codeApplyLogDao) {
+		this.codeApplyLogDao = codeApplyLogDao;
+	}
+
+	
+	
 }
