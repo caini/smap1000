@@ -61,15 +61,22 @@ public class TempCode implements Serializable {
 	@Column(name="code",length=255,nullable=false,unique=true)
 	private String code;
 	
-	// 批量申请ID号，一个uuid码
-	@Column(name = "batch")
-	private String batchId;
 
 	// 编码备注
 	@Column(name = "note", length = 512)
 	private String note;
 
-	public TempCode(String rule,String creater,String createrId,String unitCode,String locationCode,String docCode,int state,String code,String batchId,String note,long createTime){
+	@Column(name = "maxseq", nullable = false)
+	private int					maxSequence;
+
+	@Column(name = "minseq", nullable = false)
+	private int					minSequence;
+	
+	
+	@Column(name="codename",length=128)
+	private String codeName;
+	
+	public TempCode(String rule,String creater,String createrId,String unitCode,String locationCode,String docCode,int state,String code,String note,long createTime,String codeName,int minSequence,int maxSequence){
 		this.rule=rule;
 		this.creater=creater;
 		this.createrId=createrId;
@@ -78,9 +85,11 @@ public class TempCode implements Serializable {
 		this.docCode=docCode;
 		this.state=state;
 		this.code=code;
-		this.batchId=batchId;
 		this.note=note;
 		this.createTime=createTime;
+		this.codeName=codeName;
+		this.minSequence=minSequence;
+		this.maxSequence=maxSequence;
 	}
 	
 	
@@ -176,15 +185,6 @@ public class TempCode implements Serializable {
 		this.code = code;
 	}
 
-	
-
-	public String getBatchId() {
-		return batchId;
-	}
-
-	public void setBatchId(String batchId) {
-		this.batchId = batchId;
-	}
 
 	public String getCreaterId() {
 		return createrId;
@@ -194,5 +194,36 @@ public class TempCode implements Serializable {
 		this.createrId = createrId;
 	}
 
+
+	public String getCodeName() {
+		return codeName;
+	}
+
+
+	public void setCodeName(String codeName) {
+		this.codeName = codeName;
+	}
+
+
+	public int getMaxSequence() {
+		return maxSequence;
+	}
+
+
+	public void setMaxSequence(int maxSequence) {
+		this.maxSequence = maxSequence;
+	}
+
+
+	public int getMinSequence() {
+		return minSequence;
+	}
+
+
+	public void setMinSequence(int minSequence) {
+		this.minSequence = minSequence;
+	}
+
+	
 	
 }

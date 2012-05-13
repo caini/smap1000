@@ -89,6 +89,21 @@ public class ExtendCode implements Serializable{
 	@Column(name="applyedname",length=64)
 	private String applyedName;
 	
+	@Column(name="filename",length=512)
+	private String fileName;
+	
+	@Column(name="deptname",length=128)
+	private String deptName;
+	
+	@Column(name="mask",length=128)
+	private String mask;
+	
+	@Column(name="filetype",nullable=true)
+	private int fileType;
+	
+	@Column(name="filetypename",length=128,nullable=true)
+	private String fileTypeName;
+	
 	/**
 	 * 全参数匹配构造函数
 	 * @param cratername
@@ -105,7 +120,9 @@ public class ExtendCode implements Serializable{
 	 * @param applyedname
 	 * @param result
 	 */
-	public ExtendCode(String cratername,String createrid,long createtime,String note,String applyTitle,String applyid,String docCode,String unitCode,String locationCode,int state,String applyedid,String applyedname,String result){
+	public ExtendCode(String cratername,String createrid,long createtime,String note,String applyTitle,String applyid,String docCode,String unitCode,String locationCode,int state,String applyedid,String applyedname,String result,String filename
+			,String deptName,String mask,int fileType,String fileTypeName
+			){
 		this.createrId=createrid;
 		this.creater=cratername;
 		this.createTime=createtime;
@@ -119,6 +136,11 @@ public class ExtendCode implements Serializable{
 		this.applyedId=applyedid;
 		this.applyedName=applyedname;
 		this.result=result;
+		this.fileName=filename;
+		this.deptName=deptName;
+		this.mask=mask;
+		this.fileType=fileType;
+		this.fileTypeName=fileTypeName;
 		
 	}
 	
@@ -236,6 +258,16 @@ public class ExtendCode implements Serializable{
 
 	public void setApplyedName(String applyedName) {
 		this.applyedName = applyedName;
+	}
+
+
+	public String getFileName() {
+		return fileName;
+	}
+
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
 	}
 	
 	

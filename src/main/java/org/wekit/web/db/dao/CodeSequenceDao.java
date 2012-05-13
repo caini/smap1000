@@ -78,4 +78,19 @@ public interface CodeSequenceDao {
 	 * @return
 	 */
 	public List<CodeSequence> queryCodeSequences(String rule, String unitCode, String locationCode, String docCode, Map<String, Integer> params,IPaginable paginable);
+	
+	
+	/**
+	 *	查询序列
+	 * @param rule
+	 * @param unitCode
+	 * @param locationCode
+	 * @param docCode
+	 * @param params
+	 * @param minSequence
+	 * @param maxSequence
+	 * @param paginable
+	 * @return
+	 */
+	public List<CodeSequence> queryCodeSequences(String rule, String unitCode, String locationCode, String docCode, Map<String, Integer> params,int minSequence,int maxSequence, IPaginable paginable);
 }

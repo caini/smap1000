@@ -43,7 +43,7 @@ public class UnitCodeServiceController extends BaseController<UnitCode> {
 	@RequestMapping(value="/unitcode/query.{extend}",method=RequestMethod.GET)
 	public String queryUnitCode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		try{
-		initParam(request);
+		initParam(request,"查询点位码");
 		if(StringUtils.isEmpty(key)){
 			throw new WekitException("key参数的值不能为空!");
 		}
@@ -67,7 +67,7 @@ public class UnitCodeServiceController extends BaseController<UnitCode> {
 	public String addUnitCode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model)
 	{
 		try{
-			initParam(request);
+			initParam(request,"添加机组码");
 			//TODO
 		}catch (Exception e) {
 			logger.error(e.getMessage());
@@ -87,7 +87,7 @@ public class UnitCodeServiceController extends BaseController<UnitCode> {
 	@RequestMapping(value="/unitcode/update.{extend}",method=RequestMethod.POST)
 	public String updateUntiCode(@PathVariable("exntend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		try{
-		initParam(request);
+		initParam(request,"更新机组码");
 		//TODO
 		}catch (Exception e) {
 			logger.error(e.getMessage());
@@ -107,7 +107,7 @@ public class UnitCodeServiceController extends BaseController<UnitCode> {
 	@RequestMapping(value="/unitcode/delete.{extend}",method=RequestMethod.POST)
 	public String deleteUnitCode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		try{
-			initParam(request);
+			initParam(request,"删除机组码");
 			if(StringUtils.isEmpty(key)){
 				throw new WekitException("key参数的值不能为空");
 			}
@@ -130,7 +130,7 @@ public class UnitCodeServiceController extends BaseController<UnitCode> {
 	@RequestMapping(value="/unitcode/find.{extend}",method=RequestMethod.GET)
 	public String findUntiCode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		try{
-		initParam(request);
+		initParam(request,"查询机组码");
 		}catch (Exception e) {
 			// TODO: handle exception
 		}

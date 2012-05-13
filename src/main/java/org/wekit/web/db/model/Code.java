@@ -84,9 +84,23 @@ public class Code implements Serializable {
 	// 编码备注
 	@Column(name = "note", length = 512)
 	private String				note;
+	
+	@Column(name="filename",length=512,nullable=true)
+	private String filename;
 
+	@Column(name="rulename",length=128,nullable=true)
+	private String ruleName;
+	
+	@Column(name="deptname",length=128)
+	private String deptName;
+	
+	@Column(name="filetypename",length=128)
+	private String fileTypeName;
+	
+	@Column(name="codename",length=128)
+	private String codeName;
 	// 初始化工作
-	public Code(String rule, String creater, String createrId, String unitCode, String locationCode, String docCode, String code, int state, String batchId, long createTime, String note) {
+	public Code(String ruleName,String rule, String creater, String createrId, String unitCode, String locationCode, String docCode, String code, int state, String batchId, long createTime, String note,String filename,String deptName,String fileTypeName,String codeName) {
 		this.rule = rule;
 		this.creater = creater;
 		this.createrId = createrId;
@@ -98,6 +112,11 @@ public class Code implements Serializable {
 		this.batchId = batchId;
 		this.createTime = createTime;
 		this.note = note;
+		this.filename=filename;
+		this.ruleName=ruleName;
+		this.deptName=deptName;
+		this.fileTypeName=fileTypeName;
+		this.codeName=codeName;
 	}
 
 	public Code() {
@@ -206,5 +225,47 @@ public class Code implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public String getRuleName() {
+		return ruleName;
+	}
+
+	public void setRuleName(String ruleName) {
+		this.ruleName = ruleName;
+	}
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+	public String getFileTypeName() {
+		return fileTypeName;
+	}
+
+	public void setFileTypeName(String fileTypeName) {
+		this.fileTypeName = fileTypeName;
+	}
+
+	public String getCodeName() {
+		return codeName;
+	}
+
+	public void setCodeName(String codeName) {
+		this.codeName = codeName;
+	}
+	
+	
 
 }

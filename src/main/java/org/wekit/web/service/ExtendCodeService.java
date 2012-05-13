@@ -9,13 +9,6 @@ import org.wekit.web.db.model.ExtendCode;
 public interface ExtendCodeService {
 
 	/**
-	 * 删除无规则编码
-	 * @param id
-	 * @return
-	 */
-	public boolean deleteExtendCode(Long id);
-	
-	/**
 	 * 更新无规则编码
 	 * @param code
 	 * @return
@@ -42,6 +35,30 @@ public interface ExtendCodeService {
 	 */
 	public ExtendCode addExtendCode(ExtendCode code);
 	
+	
+	/**
+	 * 添加无规则编码
+	 * @param createrid
+	 * @param createtime
+	 * @param note
+	 * @param applyTitle
+	 * @param applyid
+	 * @param docCode
+	 * @param unitCode
+	 * @param locationCode
+	 * @param state
+	 * @param applyedid
+	 * @param applyedname
+	 * @param result
+	 * @param filename
+	 * @param mask
+	 * @param fileType
+	 * @param fileTypeName
+	 * @return
+	 */
+	public ExtendCode addExtendCode(String createrid, long createtime, String note, String applyTitle, String applyid, String docCode, String unitCode, String locationCode, int state, String applyedid, String applyedname, String result, String filename,String mask,int fileType,String fileTypeName);
+	
+	
 	/**
 	 * 查询无规则编码
 	 * @return
@@ -58,16 +75,8 @@ public interface ExtendCodeService {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean deleteExtendCode(long id,String creatername,String createrid,String ip) throws Exception;
+	public boolean deleteExtendCode(long id,String createrid,String ip,int filetype) throws Exception;
 	
-	
-	/**
-	 * 根据参入的参数添加无规则编码 
-	 * @param codeapplyid
-	 * @param code
-	 * @param note
-	 * @return
-	 */
-	public ExtendCode addExtendCode(long codeapplyid,String code ,String note);
+
 	
 }

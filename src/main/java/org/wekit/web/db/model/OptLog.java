@@ -63,6 +63,9 @@ public class OptLog  implements Serializable{
 	@Column(name="operate",length=64)
 	private String operate;
 	
+	@Column(name="deptname",length=128)
+	private String deptName;
+	
 	public OptLog()
 	{}
 
@@ -76,7 +79,7 @@ public class OptLog  implements Serializable{
 	 * @param ip
 	 * @param operate
 	 */
-	public OptLog(String systemId,String systemName,String userid,String username,String content,long operatorTime,String ip,String operate){
+	public OptLog(String systemId,String systemName,String userid,String username,String content,long operatorTime,String ip,String operate,String deptName){
 		this.systemId=systemId;
 		this.systemName=systemName;
 		this.userId=userid;
@@ -85,6 +88,7 @@ public class OptLog  implements Serializable{
 		this.operatorTime=operatorTime;
 		this.ip=ip;
 		this.operate=operate;
+		this.deptName=deptName;
 	}
 	
 	
@@ -160,6 +164,14 @@ public class OptLog  implements Serializable{
 
 	public void setSystemId(String systemId) {
 		this.systemId = systemId;
+	}
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
 	}
 	
 	

@@ -82,11 +82,24 @@ public class CodeApply implements Serializable {
 	@Column(name="applyedid",length=64)
 	private String applyedId;
 
+	@Column(name="filename",length=512,nullable=true)
+	private String fileName;
+	
+	@Column(name="deptname",length=128,nullable=true)
+	private String deptName;
+	
+	@Column(name="filetype",nullable=true)
+	private int fileType;
+	
+	@Column(name="filetypename",length=128,nullable=true)
+	private String fileTypeName;
+	
+	
 	public CodeApply() {
 	}
 	
 	
-	public CodeApply(String creater,String createrid,long creatertime,String unit,String location ,String doc,String file,String mask,String note,int state,String applayName,String applyedId){
+	public CodeApply(String creater,String createrid,long creatertime,String unit,String location ,String doc,String file,String mask,String note,int state,String applayName,String applyedId,String fileName,String deptName,int fileType,String fileTypeName){
 		this.creater=creater;
 		this.createrId=createrid;
 		this.createTime=creatertime;
@@ -99,6 +112,10 @@ public class CodeApply implements Serializable {
 		this.state=state;
 		this.applyedName=applayName;
 		this.applyedId=applyedId;
+		this.fileName=fileName;
+		this.deptName=deptName;
+		this.fileType=fileType;
+		this.fileTypeName=fileTypeName;
 	}
 
 	public long getApplyId() {
@@ -212,6 +229,18 @@ public class CodeApply implements Serializable {
 	public void setApplyedId(String applyedId) {
 		this.applyedId = applyedId;
 	}
+
+
+	public String getFileName() {
+		return fileName;
+	}
+
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+	
+	
 
 	
 }

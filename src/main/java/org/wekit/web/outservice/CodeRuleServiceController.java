@@ -1,5 +1,6 @@
 package org.wekit.web.outservice;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,7 +49,7 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	@RequestMapping(value = "/coderule/query.{extend}")
 	public String queryCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询编码规则");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key参数不能为空!");
 			}
@@ -65,7 +66,7 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	@RequestMapping(value = "/coderule/delete.{extend}")
 	public String deleteCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"删除编码规则");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key参数的值不能为空!");
 			}
@@ -81,7 +82,7 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	@RequestMapping(value = "/coderule/find.{extend}")
 	public String findCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询编码规则");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key的参数不能为空!");
 			}
@@ -107,11 +108,10 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	@RequestMapping(value = "/coderule/querybyname.{extend}")
 	public String querybyname(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询编码规则");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key参数不能为空!");
 			}
-
 			List<CodeRule> codeRules = this.ruleService.queryCodeRulesByName(key, 1, this.pagination);
 			setDatas(codeRules);
 		} catch (Exception ex) {
@@ -127,7 +127,7 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	@RequestMapping(value = "/coderule/add.{extend}")
 	public String addCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try{
-		initParam(request);
+		initParam(request,"添加编码规则");
 		//TODO
 		}catch(Exception ex){
 			logger.error(ex.getMessage());
@@ -140,8 +140,8 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 	@RequestMapping(value = "/coderule/update.{extend}")
 	public String updateCodeRule(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try{
-		initParam(request);
-		
+		initParam(request,"更新编码规则");
+		//TODO
 		
 		}catch(Exception ex){
 			logger.error(ex.getMessage());
@@ -151,6 +151,30 @@ public class CodeRuleServiceController extends BaseController<CodeRule> {
 		return displayAPIClient(extend, model);
 	}
 
+	/**
+	 * 根据编码规则名称和对应的编码获取编码ID
+	 * @param extend
+	 * @param request
+	 * @param response
+	 * @param model
+	 * @return
+	 */
+	@RequestMapping(value = "/coderule/info.{extend}", method = RequestMethod.POST)
+	public String ruleInfo(@PathVariable("extend") String extend,HttpServletRequest request,HttpServletResponse response,Model model){
+		try {
+			initParam(request,"查询编码规则信息");
+			List<CodeRule> codeRules=new ArrayList<CodeRule>();
+		    CodeRule codeRule=	ruleService.getCodeRule(this.rulename, this.rule);
+			codeRules.add(codeRule);
+			this.pagination.setDatas(codeRules);
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}		
+		return displayAPIClient(extend, model);
+	}
+	
 	public RuleService getRuleService() {
 		return ruleService;
 	}

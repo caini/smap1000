@@ -34,13 +34,18 @@ public class AdminServiceController extends BaseController<Admin> {
 	
 	@RequestMapping(value="/security/admin/query.{extend}")
 	public String queryAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
+		try{
+			//TODO
+		}catch(Exception ex){
+			
+		}
 		return null;
 	}
 
 	@RequestMapping(value="/security/admin/add.{extend}")
 	public String addAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		try{
-			initParam(request);
+			initParam(request,"增加系统管理员");
 			String userName=null;
 			String displayName=null;
 			String password=null;
@@ -68,7 +73,7 @@ public class AdminServiceController extends BaseController<Admin> {
 	@RequestMapping(value="/security/admin/delete.{extend}")
 	public String deleteAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		try{
-			initParam(request);
+			initParam(request,"删除系统管理员");
 			if(StringUtils.isEmpty(key)){
 				throw new WekitException("key参数的值不能为空!");
 			}
@@ -84,7 +89,7 @@ public class AdminServiceController extends BaseController<Admin> {
 	@RequestMapping(value="/security/admin/update.{extend}")
 	public String updateAdmin(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		try{
-			initParam(request);
+			initParam(request,"更新系统管理员");
 			//TODO
 		}catch(Exception ex){
 			logger.error(ex.getMessage());

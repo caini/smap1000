@@ -2,7 +2,6 @@ package org.wekit.web.db.dao;
 
 import java.util.List;
 
-import org.apache.taglibs.standard.lang.jstl.Coercions;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.CodeRule;
 
@@ -25,7 +24,7 @@ public interface CodeRuleDao {
 	 * @param codeRule
 	 * @return
 	 */
-	public CodeRule getCodeRule(String codeRule);
+	public CodeRule getCodeRule(String ruleName,String codeRule);
 	
 	/**
 	 * 添加编码规则

@@ -49,6 +49,12 @@ public class CodeSequence implements Serializable {
 	@Basic
 	private int					day;
 
+	@Column(name="minseq")
+	private int 				minSequence;
+	
+	@Column(name="maxseq")
+	private int 			maxSequence;
+	
 	@Column(name = "seq", length = 11, scale = 0)
 	private long				seq;
 
@@ -147,4 +153,21 @@ public class CodeSequence implements Serializable {
 		this.docCode = docCode;
 	}
 
+	public int getMinSequence() {
+		return minSequence;
+	}
+
+	public void setMinSequence(int minSequence) {
+		this.minSequence = minSequence;
+	}
+
+	public int getMaxSequence() {
+		return maxSequence;
+	}
+
+	public void setMaxSequence(int maxSequence) {
+		this.maxSequence = maxSequence;
+	}
+
+	
 }

@@ -23,5 +23,4 @@ public class UserDaoImpl extends HibernateBaseDao<User,String>  implements UserD
 		return User.class;
 	}
 
-	
 }

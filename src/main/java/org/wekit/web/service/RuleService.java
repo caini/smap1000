@@ -20,7 +20,7 @@ public interface RuleService {
 	 * @param coderule
 	 * @return
 	 */
-	public CodeRule getCodeRule(String coderule);
+	public CodeRule getCodeRule(String ruleName,String coderule);
 	
 	/**
 	 * 获取所有的编码规则
@@ -93,7 +93,7 @@ public interface RuleService {
 	 * @param maxSequence
 	 * @return
 	 */
-	public CodeRule addCodeRule(String rulename,String creater,String createrid,long createTime,String rule,String face,int state,int minSequence,int maxSequence);
+	public CodeRule addCodeRule(String rulename,String creater,String createrid,long createTime,String rule,String face,int state,int minSequence,int maxSequence,int fileType,String fileTypeName,String mask);
 	
 	
 	/**

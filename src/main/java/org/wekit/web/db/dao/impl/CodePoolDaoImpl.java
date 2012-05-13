@@ -15,6 +15,10 @@ public class CodePoolDaoImpl  extends HibernateBaseDao<CodePool, String> impleme
 	public CodePool insertCodePool(String code) {
 		return this.save(new CodePool(code));
 	}
+	
+	public void deleteCodePool(String code){
+		 this.delete(new CodePool(code));
+	}
 
 	@Override
 	protected Class<CodePool> getEntityClass() {

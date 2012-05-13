@@ -26,5 +26,5 @@ public interface CodeApplyLogDao {
 	 * @param createTime
 	 * @return
 	 */
-	public CodeApplyLog saveCodeApplyLog(String userid,String username,String deptId,String deptname,String fileType,String code,String content,String operateType,long createTime);
+	public CodeApplyLog saveCodeApplyLog(String userid,String username,String deptId,String deptname,int fileType,String code,String content,String operateType,long createTime);
 }

@@ -43,7 +43,7 @@ public class DocCodeServiceController extends BaseController<DocCode> {
 	@RequestMapping(value = "/doccode/query.{extend}", method = RequestMethod.GET)
 	public String queryDocCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询文件编码");
 			if (StringUtils.isEmpty(key))
 				throw new WekitException("传入key不能为空");
 			docCodeService.queryDocCodes(key, typeId, 1, this.pagination);
@@ -65,7 +65,7 @@ public class DocCodeServiceController extends BaseController<DocCode> {
 	@RequestMapping(value = "/doccode/update.{extend}", method = RequestMethod.POST)
 	public String updateDocCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"更新文件编码");
 			// TODO
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
@@ -85,7 +85,7 @@ public class DocCodeServiceController extends BaseController<DocCode> {
 	@RequestMapping(value = "/doccode/add.{extend}", method = RequestMethod.POST)
 	public String addDocCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"添加文件编码");
 			// TODO
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
@@ -105,7 +105,7 @@ public class DocCodeServiceController extends BaseController<DocCode> {
 	@RequestMapping(value = "/doccode/find.{extend}", method = RequestMethod.GET)
 	public String findDocCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询文件编码");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("传入的参数key不能为空!");
 			}
@@ -131,7 +131,7 @@ public class DocCodeServiceController extends BaseController<DocCode> {
 	@RequestMapping(value = "/doccode/delete.{extend}", method = RequestMethod.POST)
 	public String deleteDocCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"删除文件编码");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("传入的参数key不能为空");
 			}

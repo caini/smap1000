@@ -99,6 +99,46 @@ public class CodeSequenceDaoImpl extends HibernateBaseDao<CodeSequence, Long> im
 		}
 		return true;
 	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public List<CodeSequence> queryCodeSequences(String rule, String unitCode, String locationCode, String docCode, Map<String, Integer> params,int minSequence,int maxSequence, IPaginable paginable){
+		StringBuffer buffer = new StringBuffer();
+		buffer.append("from CodeSequence bean where 1=1");
+		
+		if (params != null) {
+			Set<Entry<String, Integer>> set = params.entrySet();
+			for (Entry<String, Integer> entry : set) {
+				buffer.append(" and bean." + entry.getKey() + "=" + entry.getValue());
+			}
+		}
+		
+		if (StringUtils.isNotEmpty(rule))
+			buffer.append(" and bean.codeRule='" + rule + "' ");
+		if (StringUtils.isNotEmpty(unitCode)) {
+			buffer.append(" and bean.unitCode='" + unitCode + "' ");
+		}
+		if (StringUtils.isNotEmpty(locationCode)) {
+			buffer.append(" and bean.locationCode='" + locationCode + "' ");
+		}
+		if (StringUtils.isNotEmpty(docCode)) {
+			buffer.append(" and bean.docCode='" + docCode + "' ");
+		}
+		if(minSequence>=0){
+			buffer.append(" and bean.minSequence="+minSequence);
+		}
+		if(maxSequence>=0){
+			buffer.append(" and bean.maxSequence="+maxSequence);
+		}
+		
+		Query query = createrQuery(buffer.toString());
+		if (paginable != null) {
+			paginationParam(query, paginable);
+		}
+		return query.list();
+	}
+	
+	
 
 	@SuppressWarnings("unchecked")
 	@Override

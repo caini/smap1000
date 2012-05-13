@@ -55,6 +55,9 @@ public class CodeRule implements Serializable {
 	@Column(name = "face", length = 500)
 	private String				face;
 
+	@Column(name="mask",length=128,nullable=false)
+	private String mask;
+	
 	// 规则状态
 	@Column(name = "state")
 	private int					state;
@@ -65,6 +68,12 @@ public class CodeRule implements Serializable {
 	@Column(name = "minseq", nullable = false)
 	private int					minSequence;
 
+	@Column(name="filetype",nullable=false)
+	private int fileType;
+
+	@Column(name="filetypename",length=512,nullable=false)
+	private String fileTypeName;
+	
 	public CodeRule() {
 		this.maxSequence=0;
 		this.minSequence=0;
@@ -83,7 +92,7 @@ public class CodeRule implements Serializable {
 	 * @param minSequence
 	 * @param maxSequence
 	 */
-	public CodeRule(String ruleName,String creater,String createrId,long createrTime,String rule,String face,int state,int minSequence,int maxSequence){
+	public CodeRule(String ruleName,String creater,String createrId,long createrTime,String rule,String face,int state,int minSequence,int maxSequence,int fileType,String fileTypeName,String mask){
 		this.ruleName=ruleName;
 		this.creater=creater;
 		this.createrId=createrId;
@@ -93,6 +102,9 @@ public class CodeRule implements Serializable {
 		this.state=state;
 		this.minSequence=minSequence;
 		this.maxSequence=maxSequence;
+		this.fileType=fileType;
+		this.fileTypeName=fileTypeName;
+		this.mask=mask;
 	}
 	
 	public String getFace() {
@@ -175,4 +187,30 @@ public class CodeRule implements Serializable {
 	public void setMinSequence(int minSequence) {
 		this.minSequence = minSequence;
 	}
+
+	public int getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(int fileType) {
+		this.fileType = fileType;
+	}
+
+	public String getFileTypeName() {
+		return fileTypeName;
+	}
+
+	public void setFileTypeName(String fileTypeName) {
+		this.fileTypeName = fileTypeName;
+	}
+
+	public String getMask() {
+		return mask;
+	}
+
+	public void setMask(String mask) {
+		this.mask = mask;
+	}
+	
+	
 }

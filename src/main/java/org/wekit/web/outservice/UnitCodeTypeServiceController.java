@@ -43,7 +43,7 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	@RequestMapping(value = "/unitcodetype/query.{extend}", method = RequestMethod.GET)
 	public String queryUnitCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询机组码类型");
 			if(StringUtils.isEmpty(this.key)){
 				throw new WekitException("参数key不能为空!");
 			}
@@ -66,7 +66,7 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	@RequestMapping(value = "/unitcodetype/add.{extend}", method = RequestMethod.POST)
 	public String addUnitCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"添加机组码类型");
 			//TODO
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -86,7 +86,7 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	@RequestMapping(value = "/unitcodetype/update.{extend}", method = RequestMethod.POST)
 	public String updateUnitCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"更新机组码类型");
 		
 			// TODO: handle exception
 		} catch (Exception e) {
@@ -108,7 +108,7 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	@RequestMapping(value = "/unitcodetype/find.{extend}", method = RequestMethod.GET)
 	public String findUnitCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询机组码类型");
 			if(StringUtils.isEmpty(this.key)){
 				throw new WekitException("参数key不能为空!");
 			}
@@ -132,7 +132,7 @@ public class UnitCodeTypeServiceController extends BaseController<UnitCodeType> 
 	@RequestMapping(value = "/unticodetype/delete.{extend}", method = RequestMethod.POST)
 	public String deleteCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try{
-		initParam(request);
+		initParam(request,"删除机组码类型");
 		if(StringUtils.isEmpty(this.key)){
 			throw new WekitException("参数key不能为空!");
 		//TODO

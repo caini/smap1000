@@ -82,7 +82,7 @@ public class TempCodeDaoImpl extends HibernateBaseDao<TempCode, Long> implements
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<TempCode> queryTempCodes(String rule, String unitcode, String locationCode, String doccode, IPaginable paginable) {
+	public List<TempCode> queryTempCodes(String rule, String unitcode, String locationCode, String doccode,int minSequence,int maxSequence,IPaginable paginable) {
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("from TempCode bean where 1=1 ");
 		if (StringUtils.isNotEmpty(rule)) {
@@ -96,6 +96,12 @@ public class TempCodeDaoImpl extends HibernateBaseDao<TempCode, Long> implements
 		}
 		if (StringUtils.isNotEmpty(doccode)) {
 			buffer.append(" and bean.docCode='" + doccode + "'");
+		}
+		if(minSequence>=0){
+			buffer.append(" and bean.minSequence="+minSequence);
+		}
+		if(maxSequence>=0){
+			buffer.append(" and bean.maxSequence="+maxSequence);
 		}
 		
 		buffer.append(" order by bean.code asc ");

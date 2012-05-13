@@ -67,7 +67,7 @@ public interface CodeService {
 	 * @param note
 	 * @return
 	 */
-	public Code fetchCode(String rule,String unitCode,String locationCode,String docCode,String creater,String createId,String note);
+	public Code fetchCode(long ruleId, String unitCode, String locationCode, String docCode,String createrId, String note,String filename,String codeName);
 	
 	/**
 	 * 根据传入的信息进行批量取号操作
@@ -81,7 +81,7 @@ public interface CodeService {
 	 * @param batchSize
 	 * @return
 	 */
-	public List<Code> batchCode(String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note, int batchSize);
+	public List<Code> batchCode(long ruleId, String unitCode, String locationCode, String docCode,String createId, String note, int batchSize,String filename,String codeName);
 	
 	
 	/**

@@ -44,7 +44,7 @@ public class DocCodeTypeServiceController extends BaseController<DocCodeType> {
 	@RequestMapping(value = "/doccodetype/query.{extend}", method = RequestMethod.GET)
 	public String queryDocType(@PathVariable("extend") String extend,HttpServletRequest request,HttpServletResponse response, Model model) {
 		try{
-		initParam(request);
+		initParam(request,"查询文件编码类型");
 		if(StringUtils.isEmpty(key)){
 			throw new WekitException("key的值不能为空!");
 		}
@@ -61,7 +61,7 @@ public class DocCodeTypeServiceController extends BaseController<DocCodeType> {
 	@RequestMapping(value = "/doccodetype/add.{extend}", method = RequestMethod.POST)
 	public String addDocType(@PathVariable("extend") String extend,HttpServletRequest request,HttpServletResponse response, Model model) {
 		try{
-			initParam(request);
+			initParam(request,"添加文件编码类型");
 			//TODO
 			}catch(Exception ex){
 				logger.error(ex.getMessage());
@@ -74,7 +74,7 @@ public class DocCodeTypeServiceController extends BaseController<DocCodeType> {
 	@RequestMapping(value = "/doccodetype/update.{extend}", method = RequestMethod.POST)
 	public String updateDocType(@PathVariable("extend") String extend,HttpServletRequest request,HttpServletResponse response, Model model) {
 		try{
-			initParam(request);
+			initParam(request,"更新文件编码类型");
 			//TODO
 			}catch(Exception ex){
 				logger.error(ex.getMessage());
@@ -87,7 +87,7 @@ public class DocCodeTypeServiceController extends BaseController<DocCodeType> {
 	@RequestMapping(value = "/doccodetype/delete.{extend}", method = RequestMethod.POST)
 	public String deleteDocType(@PathVariable("extend") String extend,HttpServletRequest request,HttpServletResponse response, Model model) {
 		try{
-			initParam(request);
+			initParam(request,"删除文件编码类型");
 			if(StringUtils.isEmpty(key)){
 				throw new WekitException("key参数的值不能为空!");
 			}
@@ -103,7 +103,7 @@ public class DocCodeTypeServiceController extends BaseController<DocCodeType> {
 	@RequestMapping(value = "/doccodetype/find.{extend}", method = RequestMethod.GET)
 	public String findDocType(@PathVariable("extend") String extend,HttpServletRequest request,HttpServletResponse response, Model model) {
 		try{
-			initParam(request);
+			initParam(request,"查询文件编码类型");
 			if(StringUtils.isEmpty(key)){
 				throw new WekitException("key参数的值不能为空!");
 			}

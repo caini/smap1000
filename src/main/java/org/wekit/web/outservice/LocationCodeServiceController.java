@@ -44,7 +44,7 @@ public class LocationCodeServiceController extends BaseController<LocationCode> 
 	@RequestMapping(value = "/locationcode/query.{extend}", method = RequestMethod.GET)
 	public String queryLocationCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询定位码");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key的参数值不能为空!");
 			}
@@ -69,7 +69,7 @@ public class LocationCodeServiceController extends BaseController<LocationCode> 
 	@RequestMapping(value = "/locationcode/update.{extend}", method = RequestMethod.POST)
 	public String updateLocationCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"更新定位码");
 			//TODO
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -90,7 +90,7 @@ public class LocationCodeServiceController extends BaseController<LocationCode> 
 	@RequestMapping(value = "/locationcode/delete.{extend}", method = RequestMethod.POST)
 	public String deleteLocationCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"删除定位码");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key的参数值不能为空!");
 			}
@@ -115,7 +115,7 @@ public class LocationCodeServiceController extends BaseController<LocationCode> 
 	@RequestMapping(value = "/localtioncode/find.{extend}", method = RequestMethod.GET)
 	public String findLocationCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询定位码");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key的参数值不能为空!");
 			}
@@ -140,7 +140,7 @@ public class LocationCodeServiceController extends BaseController<LocationCode> 
 	@RequestMapping(value = "/locationcode/add.{extend}", method = RequestMethod.POST)
 	public String addLocaitonCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"添加定位码");
 			//TODO
 		} catch (Exception e) {
 			logger.error(e.getMessage());

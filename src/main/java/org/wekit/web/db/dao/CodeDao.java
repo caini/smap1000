@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.Code;
+import org.wekit.web.db.model.CodeRule;
+import org.wekit.web.db.model.User;
 
 public interface CodeDao {
 
@@ -74,7 +76,7 @@ public interface CodeDao {
 	 * @param note
 	 * @return
 	 */
-	public List<Code> addCodes(List<String>codes,String rule,String unitCode,String locationCode,String docCode,String creater,String createId,String note);
+	public List<Code> addCodes(List<String>codes,CodeRule codeRule,String unitCode,String locationCode,String docCode,User user,String note,String fileName,String codeName);
 	
 	/**
 	 * 根据查询的数组查询编码

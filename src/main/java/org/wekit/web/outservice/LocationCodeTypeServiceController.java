@@ -46,7 +46,7 @@ public class LocationCodeTypeServiceController extends BaseController<LocationCo
 	@RequestMapping(value = "/locationcodetype/query.{extend}", method = RequestMethod.GET)
 	public String queryLocationCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询定位码类型");
 			if(StringUtils.isEmpty(key)){
 				throw new WekitException("key参数的值不能为空!");
 			}
@@ -63,7 +63,7 @@ public class LocationCodeTypeServiceController extends BaseController<LocationCo
 	@RequestMapping(value = "/locationcodetype/update.{extend}", method = RequestMethod.POST)
 	public String updateLocationCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"更新定位码类型");
 			//TODO
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
@@ -76,7 +76,7 @@ public class LocationCodeTypeServiceController extends BaseController<LocationCo
 	@RequestMapping(value = "/locationcodetype/delete.{extend}", method = RequestMethod.POST)
 	public String deleteLocationCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"删除定位码类型");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key参数的值不能为空!");
 			}
@@ -92,7 +92,7 @@ public class LocationCodeTypeServiceController extends BaseController<LocationCo
 	@RequestMapping(value = "/lcoationcodetype/find.{extend}", method = RequestMethod.GET)
 	public String findLocationCodetType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询定位码类型");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key参数的值不能为空!");
 			}
@@ -109,7 +109,7 @@ public class LocationCodeTypeServiceController extends BaseController<LocationCo
 	@RequestMapping(value = "/locationcodetype/add.{extend}", method = RequestMethod.POST)
 	public String addLocationCodeType(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"添加定位码类型");
 			// TODO
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());

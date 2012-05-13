@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.wekit.security.RC4CipherEntity;
 import org.wekit.web.db.Pagination;
 import org.wekit.web.db.model.RemoteAcl;
+import org.wekit.web.service.LogsService;
 import org.wekit.web.service.RemoteAclService;
 import org.wekit.web.util.DataWrapUtil;
 
@@ -59,47 +60,66 @@ public abstract class BaseController<T> {
 	public final static String		STATE			= "state";
 
 	public final static String		TYPEID			= "typeid";
+
+	public final static String		RULENAME		= "rulename";
+
+	public final static String		TOKEN			= "t";
+
+	public final static String		FILENAME		= "filename";
+
+	public final static String		RULE			= "rule";
+
+	public final static String		RULEID			= "ruleid";
 	
-	public final static String 		ROLENAME		="rolename";
-	
-	public final static String 		TOKEN="t";
+	public final static String 		CODENAME		="codename";
 
-	protected String				userkey;
+	protected String				userkey			= "";
 
-	protected String				userparams;
+	protected String				userparams		= "";
 
-	protected String				creatername;
+	protected String				creatername		= "";
 
-	protected String				createrid;
+	protected String				createrid		= "";
 
-	protected String				ip;
+	protected String				ip				= "";
 
-	protected String				code;
+	protected String				code			= "";
 
 	protected long					typeId			= 0;
 
-	protected String				docCode;
+	protected String				docCode			= "";
 
-	protected String				locationCode;
+	protected String				locationCode	= "";
 
-	protected String				unitCode;
+	protected String				unitCode		= "";
 
-	protected String				batchSize;
+	protected int					batchSize		= 0;
 
-	protected String				note;
+	protected String				note			= "";
 
-	protected String				key;
+	protected String				key				= "";
 
-	protected String 				token;
-	
-	protected String				rulename;
-	
+	protected String				token			= "";
+
+	protected String				rulename		= "";
+
+	protected long					ruleId			= 0;
+
 	protected int					state			= -1;
 
+	protected String				filename		= "";
+
+	protected String				rule			= "";
+	
+	protected String 				codeName="";
+	
 	@Autowired
 	@Qualifier("remoteAclService")
 	protected RemoteAclService		remoteAclService;									// 注入远程访问接口
 
+	@Autowired
+	@Qualifier("logService")
+	protected LogsService			logsService;
 	protected Pagination<T>			pagination		= new Pagination<T>();
 	protected Map<String, String>	parameters		= new HashMap<String, String>();
 	protected RemoteAcl				remoteAcl;
@@ -126,9 +146,10 @@ public abstract class BaseController<T> {
 	 * @return
 	 * @throws Exception
 	 */
-	protected void initParam(HttpServletRequest request) throws Exception {
-		//this.userparams = decode(request);
-		this.userparams=URLDecoder.decode(request.getQueryString(),"UTF-8");
+	protected void initParam(HttpServletRequest request, String operate) throws Exception {
+		// this.userparams = decode(request,operate);
+		this.userparams = URLDecoder.decode(request.getQueryString(), "UTF-8");
+		logsService.addRemoteLog(remoteAcl.getAclId(), remoteAcl.getUsername(), operate, this.userparams);// 远程操作日志
 		String[] params = this.userparams.split("&");
 		if (params != null) {
 			for (String param : params) {
@@ -138,16 +159,13 @@ public abstract class BaseController<T> {
 				}
 			}
 		}
-		if(this.parameters.containsKey("t"))
-		{
-			long time=Long.parseLong(this.parameters.get("t"));
-			
-		}else
-		{
+		if (this.parameters.containsKey("t")) {
+			long time = Long.parseLong(this.parameters.get("t"));
+
+		} else {
 			throw new WekitException("传入的参数错误!");
 		}
-		
-		
+
 		paserPaginable();
 		initCommonParam();
 	}
@@ -158,7 +176,7 @@ public abstract class BaseController<T> {
 	 * @param request
 	 * @return
 	 */
-	private String decode(HttpServletRequest request) {
+	private String decode(HttpServletRequest request, String operate) {
 		if (StringUtils.isEmpty(request.getParameter(USERKEY))) {
 			throw new WekitException("请输入用户信息");
 		}
@@ -170,13 +188,11 @@ public abstract class BaseController<T> {
 		if (remoteAcl == null)
 			throw new WekitException("不存在该授权用户");
 		String password = remoteAcl.getPassword();
-		
-		
-		
 		String temp = request.getParameter(USERPARAMS).trim();
 		temp = request.getParameter(USERPARAMS).trim();
 		temp = new String(Base64.decodeBase64(temp));
 		temp = RC4CipherEntity.code(temp, password);
+		this.userparams = temp;
 		return this.userparams;
 	}
 
@@ -199,18 +215,41 @@ public abstract class BaseController<T> {
 		if (parameters.containsKey(LOCATIONCODE)) {
 			this.locationCode = parameters.get(LOCATIONCODE);
 		}
+		
 		if (parameters.containsKey(UNITCODE)) {
 			this.unitCode = parameters.get(UNITCODE);
 		}
+		
 		if (parameters.containsKey(BATCHSIZE)) {
-			this.batchSize = parameters.get(batchSize);
+			try {
+				this.batchSize = Integer.parseInt(parameters.get(BATCHSIZE));
+			} catch (Exception ex) {
+				throw new WekitException("size参数的范围必须是大于零的整数!");
+			}
 		}
+		
 		if (parameters.containsKey(NOTE)) {
-			this.note = parameters.get(note);
+			this.note = parameters.get(NOTE);
 		}
+		
 		if (parameters.containsKey(KEY)) {
 			this.key = parameters.get(KEY);
 		}
+		
+		if (parameters.containsKey(RULENAME))
+			this.rulename = parameters.get(RULENAME);
+		
+		if (parameters.containsKey(FILENAME))
+			this.filename = parameters.get(FILENAME);
+		
+		if(parameters.containsKey(RULEID)){
+			try{
+				this.ruleId=Long.parseLong(parameters.get(RULEID));
+			}catch(Exception ex){
+				throw new WekitException("ruleId参数的类型不正确!");
+			}
+		}
+		
 		if (parameters.containsKey(STATE)) {
 			try {
 				this.state = Integer.parseInt(parameters.get(STATE));
@@ -225,6 +264,12 @@ public abstract class BaseController<T> {
 				throw new WekitException("typeid的参数范围必须是自然数!");
 			}
 
+		}
+		if (parameters.containsKey(RULE)) {
+			this.rule = parameters.get(RULE);
+		}
+		if(parameters.containsKey(CODENAME)){
+			this.codeName=parameters.get(CODENAME);
 		}
 	}
 

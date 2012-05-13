@@ -5,12 +5,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.wekit.web.WekitException;
 import org.wekit.web.db.dao.CodeApplyLogDao;
 import org.wekit.web.db.dao.OptLogDao;
 import org.wekit.web.db.dao.RemoteLogDao;
+import org.wekit.web.db.dao.UserDao;
 import org.wekit.web.db.model.CodeApplyLog;
 import org.wekit.web.db.model.OptLog;
 import org.wekit.web.db.model.RemoteLog;
+import org.wekit.web.db.model.User;
 import org.wekit.web.service.LogsService;
 
 /***
@@ -33,24 +36,31 @@ public class LogsServiceImpl implements LogsService {
 	@Qualifier("optLogDao")
 	private OptLogDao optLogDao;
 	
+	@Autowired
+	@Qualifier("userDao")
+	private UserDao userDao;
+	
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
-	public CodeApplyLog addCodeApplyLog(String userid, String username, String deptId, String deptname, String fileType, String code, String content, String operateType) {
-		CodeApplyLog codeApplyLog=new CodeApplyLog(userid, username, deptId, deptname,System.currentTimeMillis(), fileType, code, content, operateType);
+	public CodeApplyLog addCodeApplyLog(String userid,int fileType, String code, String content, String operateType) {
+		User user=userDao.getByID(userid);
+		if(user==null)
+			throw new WekitException("操作用户不存在!");
+		CodeApplyLog codeApplyLog=new CodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptDisplayName(), user.getDeptDisplayName(),System.currentTimeMillis(), fileType, code, content, operateType);
 		return codeApplyLog;
 	}
 
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
-	public RemoteLog addRemoteLog(String remoteId, String remotename, String operateType, String content) {
+	public RemoteLog addRemoteLog(long remoteId, String remotename, String operateType, String content) {
 		RemoteLog remoteLog=new RemoteLog(remoteId, remotename, operateType, content, System.currentTimeMillis());
 		return remoteLog;
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)
-	public OptLog addOptLog(String systemId,String systemName,String userid,String username,String content,String ip,String operate){
-		OptLog optLog=new OptLog(systemId,systemName,userid,username,content,System.currentTimeMillis(),ip,operate);
+	public OptLog addOptLog(String systemId,String systemName,String userid,String username,String content,String ip,String operate,String deptName){
+		OptLog optLog=new OptLog(systemId,systemName,userid,username,content,System.currentTimeMillis(),ip,operate,deptName);
 		return optLog;
 	}
 	

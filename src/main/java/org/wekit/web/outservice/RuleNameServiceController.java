@@ -52,7 +52,7 @@ public class RuleNameServiceController extends BaseController<String> {
 	@RequestMapping(value = "/coderule/names.{extend}", method = RequestMethod.POST)
 	public String ruleNames(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询编码规则名称");
 			List<String> ruleNames = ruleService.queryCodeRuleNames(this.pagination);
 			setDatas(ruleNames);
 		} catch (Exception ex) {
@@ -63,4 +63,5 @@ public class RuleNameServiceController extends BaseController<String> {
 		return displayAPIClient(extend, model);
 	}
 
+	
 }

@@ -48,6 +48,6 @@ public interface TempCodeService {
 	 * @param doccode
 	 * @return
 	 */
-	public List<TempCode> queryTempCodes(String rule,String unitcode,String locationCode,String doccode,IPaginable paginable);
+	public List<TempCode> queryTempCodes(String rule,String unitcode,String locationCode,String doccode,int minSequence,int maxDequence,IPaginable paginable);
 	
 }

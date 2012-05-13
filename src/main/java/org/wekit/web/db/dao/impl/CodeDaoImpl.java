@@ -14,6 +14,8 @@ import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.dao.CodeDao;
 import org.wekit.web.db.model.Code;
+import org.wekit.web.db.model.CodeRule;
+import org.wekit.web.db.model.User;
 
 @Repository("codeDao")
 public class CodeDaoImpl extends HibernateBaseDao<Code, Long> implements CodeDao {
@@ -88,13 +90,13 @@ public class CodeDaoImpl extends HibernateBaseDao<Code, Long> implements CodeDao
 	}
 
 	@Override
-	public List<Code> addCodes(List<String> codes, String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note) {
+	public List<Code> addCodes(List<String> codes,CodeRule codeRule, String unitCode, String locationCode, String docCode,User user, String note,String filename,String codeName) {
 		List<Code> list = new ArrayList<Code>();
 		String uuid = UUID.randomUUID().toString();
 		int i = 0;
 		for (String code : codes) {
 			i++;
-			Code newCode = new Code(rule, creater, createId, unitCode, locationCode, docCode, code, 1, uuid, System.currentTimeMillis(), note);
+			Code newCode = new Code(codeRule.getRuleName(),codeRule.getRule(),user.getDisplayName(),user.getLoginName(), unitCode, locationCode, docCode, code, 1, uuid, System.currentTimeMillis(), note,filename,user.getDeptDisplayName(),codeRule.getFileTypeName(),codeName);
 			this.save(newCode);
 			list.add(newCode);
 			if (i % 20 == 0) {

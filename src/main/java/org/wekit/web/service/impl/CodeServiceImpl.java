@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
@@ -18,13 +19,17 @@ import org.wekit.web.IPaginable;
 import org.wekit.web.MaskParser;
 import org.wekit.web.WekitException;
 import org.wekit.web.db.dao.CodeDao;
+import org.wekit.web.db.dao.CodePoolDao;
 import org.wekit.web.db.dao.CodeRuleDao;
 import org.wekit.web.db.dao.CodeSequenceDao;
 import org.wekit.web.db.dao.TempCodeDao;
+import org.wekit.web.db.dao.UserDao;
 import org.wekit.web.db.model.Code;
+import org.wekit.web.db.model.CodePool;
 import org.wekit.web.db.model.CodeRule;
 import org.wekit.web.db.model.CodeSequence;
 import org.wekit.web.db.model.TempCode;
+import org.wekit.web.db.model.User;
 import org.wekit.web.service.CodeService;
 import org.wekit.web.util.DataWrapUtil;
 
@@ -37,7 +42,7 @@ import org.wekit.web.util.DataWrapUtil;
 @Service("codeService")
 public class CodeServiceImpl implements CodeService {
 
-	private static Logger logger=Logger.getLogger(CodeServiceImpl.class);
+	private static Logger	logger	= Logger.getLogger(CodeServiceImpl.class);
 
 	@Autowired
 	@Qualifier("codeDao")
@@ -54,6 +59,14 @@ public class CodeServiceImpl implements CodeService {
 	@Autowired
 	@Qualifier("codeRuleDao")
 	private CodeRuleDao		codeRuleDao;
+
+	@Autowired
+	@Qualifier("userDao")
+	private UserDao			userDao;
+
+	@Autowired
+	@Qualifier("codePoolDao")
+	private CodePoolDao		codePoolDao;
 
 	@Override
 	public Code getCode(Long id) {
@@ -135,28 +148,43 @@ public class CodeServiceImpl implements CodeService {
 		this.codeRuleDao = codeRuleDao;
 	}
 
-	
-
 	/**
 	 * 独立取号和批量取号的差别是独立取号有限查找可用的序列号，在生成新的序列号，而批量操作只生成联系的新号而不关心旧的号码
 	 */
-	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	@Override
-	public Code fetchCode(String rule, String unitCode, String locationCode, String docCode, String creater, String createrId, String note) {
-		List<TempCode> tempCodes = tempCodeDao.queryTempCodes(rule, unitCode, locationCode, docCode, null);
-		if (tempCodes != null && tempCodes.size() > 0) {
-			TempCode tempCode = tempCodes.get(0);
-			Code code = new Code(rule, creater, createrId, unitCode, locationCode, docCode, tempCode.getCode(), 1, null, System.currentTimeMillis(), note);
-			code = codeDao.addCode(code);
-			tempCodeDao.deleteTempCode(tempCode);
-			return code;
-		} else {
-			List<Code> codes = createCodes(rule, unitCode, locationCode, docCode, creater, createrId, note, 1);
-			if (codes != null && codes.size() > 0)
-				return codes.get(0);
+	public Code fetchCode(long ruleId, String unitCode, String locationCode, String docCode, String createrId, String note, String filename, String codeName) {
+		CodeRule codeRule = codeRuleDao.getCodeRule(ruleId);
+		if (codeRule == null)
+			throw new WekitException("对应编码规则ID的信息不存在!");
+		User user = userDao.getByID(createrId);
+		if (user == null) {
+			throw new WekitException("对应的用户信息不存在!");
 		}
-		return null;
+		List<TempCode> tempCodes = tempCodeDao.queryTempCodes(codeRule.getRule(), unitCode, locationCode, docCode, codeRule.getMinSequence(), codeRule.getMaxSequence(), null);
 
+		if (tempCodes != null && tempCodes.size() > 0) {
+			TempCode tempCode = null;
+			for (TempCode code : tempCodes) {
+				if (!codePoolDao.isExistsed(code.getCode())) {
+					tempCode = code;
+					break;
+				} else {
+					tempCodeDao.deleteTempCode(code);
+				}
+			}
+			if (tempCode != null) {
+				String uuid = UUID.randomUUID().toString();
+				Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), unitCode, locationCode, docCode, tempCode.getCode(), 1, uuid, System.currentTimeMillis(), note, filename, user.getDeptDisplayName(), codeRule.getFileTypeName(), tempCode.getCodeName());
+				code = codeDao.addCode(code);
+				tempCodeDao.deleteTempCode(tempCode);
+				return code;
+			}
+		}
+		List<Code> codes = createCodes(codeRule, unitCode, locationCode, docCode, user, note, 1, filename, codeName);
+		if (codes != null && codes.size() > 0)
+			return codes.get(0);
+		return null;
 	}
 
 	/**
@@ -172,16 +200,23 @@ public class CodeServiceImpl implements CodeService {
 	 * @param batchSize
 	 * @return
 	 */
-	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	@Override
-	public List<Code> batchCode(String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note, int batchSize) {
-		return this.createCodes(rule, unitCode, locationCode, docCode, creater, createId, note, batchSize);
+	public List<Code> batchCode(long ruleId, String unitCode, String locationCode, String docCode, String createId, String note, int batchSize, String filename, String codeName) {
+		CodeRule codeRule = codeRuleDao.getCodeRule(ruleId);
+		if (codeRule == null) {
+			throw new WekitException("找不到对应的编码规则!");
+		}
+		User user = userDao.getByID(createId);
+		if (user == null) {
+			throw new WekitException("找不到对应的用户信息!");
+		}
+		return this.createCodes(codeRule, unitCode, locationCode, docCode, user, note, batchSize, filename, codeName);
 	}
-	
-	
-	
+
 	/**
 	 * 隔离事务单独的函数
+	 * 
 	 * @param rule
 	 * @param unitCode
 	 * @param locationCode
@@ -192,15 +227,12 @@ public class CodeServiceImpl implements CodeService {
 	 * @param batchSize
 	 * @return
 	 */
-	private List<Code> createCodes(String rule, String unitCode, String locationCode, String docCode, String creater, String createId, String note, int batchSize) {
-		String mask = checkRule(rule, unitCode, locationCode, docCode);
+	private List<Code> createCodes(CodeRule codeRule, String unitCode, String locationCode, String docCode, User user, String note, int batchSize, String fileName, String codeName) {
+		String mask = checkRule(codeRule.getRule(), unitCode, locationCode, docCode);
 		if (mask == null)
 			throw new WekitException("规则验证无效!");
-		CodeRule codeRule = codeRuleDao.getCodeRule(rule);
-		if (codeRule == null)
-			throw new WekitException("所选择的规则不存在!");
 		MaskParser maskParser = paserMask(mask);
-		List<CodeSequence> codeSequences = codeSequenceDao.queryCodeSequences(rule, unitCode, locationCode, docCode, maskParser.getParam(),null);
+		List<CodeSequence> codeSequences = codeSequenceDao.queryCodeSequences(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(),codeRule.getMinSequence(),codeRule.getMaxSequence(), null);
 		CodeSequence codeSequence = null;
 		int minSeq = codeRule.getMinSequence();
 		int maxSeq = codeRule.getMaxSequence();
@@ -210,19 +242,16 @@ public class CodeServiceImpl implements CodeService {
 				throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - codeSequence.getSeq() - 1) + "个编码!");
 		} else {
 			// 构造新的dequence
-			codeSequence = initCodeSequence(rule, unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence());
+			codeSequence = initCodeSequence(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence(), codeRule.getMaxSequence());
 			if (maxSeq > 0 && (maxSeq - minSeq - 1) < batchSize)
 				throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - minSeq - 1) + "个编码!");
-
 		}
 		List<String> codes = generationCode(unitCode + "-" + locationCode + "-" + docCode + "-" + maskParser.getMask(), maskParser.getCount(), codeSequence, batchSize, maxSeq);
-		List<Code> generationCodes = codeDao.addCodes(codes, rule, unitCode, locationCode, docCode, creater, createId, note);
+		List<Code> generationCodes = codeDao.addCodes(codes,codeRule, unitCode, locationCode, docCode,user, note, fileName,codeName);
 		if (!codeSequenceDao.updateCodeSequence(codeSequence))
 			throw new WekitException("生成编码时发生意外请与管理员联系!");
-		
 		return generationCodes;
 	}
-	
 
 	/**
 	 * 返回[n]中n的长度
@@ -234,7 +263,7 @@ public class CodeServiceImpl implements CodeService {
 		Map<String, Integer> param = new HashMap<String, Integer>();
 		Calendar calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH+1); //英文的1月份是0开始的
+		int month = calendar.get(Calendar.MONTH + 1); // 英文的1月份是0开始的
 		int day = calendar.get(Calendar.MONDAY);
 
 		if (mask.indexOf("[yyyy]") > 0) {
@@ -310,8 +339,8 @@ public class CodeServiceImpl implements CodeService {
 	 * @param params
 	 * @return
 	 */
-	private CodeSequence initCodeSequence(String rule, String unitCode, String locationCode, String docCode, Map<String, Integer> params, int minSeq) {
-		CodeSequence codeSequence = new CodeSequence(rule, unitCode, locationCode, docCode);
+	private CodeSequence initCodeSequence(String codeRule, String unitCode, String locationCode, String docCode, Map<String, Integer> params, int minSeq, int maxSeq) {
+		CodeSequence codeSequence = new CodeSequence(codeRule, unitCode, locationCode, docCode);
 		if (params.containsKey("year")) {
 			codeSequence.setYear(params.get("year"));
 		}
@@ -319,8 +348,10 @@ public class CodeServiceImpl implements CodeService {
 			codeSequence.setMonth(params.get("month"));
 		}
 		if (params.containsKey("day")) {
-			codeSequence.setMonth(params.get("day"));
+			codeSequence.setDay(params.get("day"));
 		}
+		codeSequence.setMinSequence(minSeq);
+		codeSequence.setMaxSequence(maxSeq);
 		codeSequence.setSeq(minSeq); // 设置起始的序列
 		codeSequenceDao.addCodeSequence(codeSequence);
 		if (codeSequence.getCodesequenceId() == 0)
@@ -350,52 +381,55 @@ public class CodeServiceImpl implements CodeService {
 		return rules[3];
 	}
 
-	@Transactional(isolation=Isolation.READ_COMMITTED,propagation=Propagation.REQUIRED)
+	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@Override
 	public boolean cancelCode(Long codeId, String creater, String createrid, String ip, String note) {
-		Code temp=codeDao.getCode(codeId);
+		Code temp = codeDao.getCode(codeId);
 		return cancel(temp, creater, createrid, ip, note);
 	}
 
-	@Transactional(isolation=Isolation.READ_COMMITTED,propagation=Propagation.REQUIRED)
+	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@Override
 	public boolean cancelCode(String code, String creater, String createrid, String ip, String note) {
-		Code temp=codeDao.getCode(code);
+		Code temp = codeDao.getCode(code);
 		return cancel(temp, creater, createrid, ip, note);
-		
+
 	}
-	
-	protected boolean cancel(Code code,String creater,String createrid,String ip ,String note){
-		if(code==null)
+
+	protected boolean cancel(Code code, String creater, String createrid, String ip, String note) {
+		if (code == null)
 			throw new WekitException("该编码不存在");
-		TempCode tempCode=new TempCode(code.getRule(), createrid, createrid,code.getUnitCode(), code.getLocationCode(), code.getDocCode(), 0, code.getCode(), code.getBatchId(), note,code.getCreateTime());
-		String oldinfo=null;
+		CodeRule codeRule = codeRuleDao.getCodeRule(code.getRuleName(), code.getRule());
+		String oldinfo = null;
 		try {
-			 oldinfo= DataWrapUtil.ObjectToJson(code);
+			if (codeRule != null) {
+				TempCode tempCode = new TempCode(code.getRule(), creater, createrid, code.getUnitCode(), code.getLocationCode(), code.getDocCode(), 0, code.getCode(), note, code.getCreateTime(), code.getCodeName(), codeRule.getMinSequence(), codeRule.getMaxSequence());
+				tempCodeDao.addTempCode(tempCode);
+			}
+			oldinfo = DataWrapUtil.ObjectToJson(code);
+			codeDao.deleteCode(code);
+			logger.info("creater:" + creater + "||createrid:" + createrid + "取消:编码 " + oldinfo);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
 			throw new WekitException(e.getMessage());
 		}
-		codeDao.deleteCode(code);
-		tempCodeDao.addTempCode(tempCode);
-		logger.info("creater:"+creater+"||createrid:"+createrid+"取消:编码 "+oldinfo);
 		return true;
 	}
 
-	@Transactional(readOnly=true)
+	@Transactional(readOnly = true)
 	@Override
-	public List<Code> queryCodes(Map<String, String> map,IPaginable paginable) {
+	public List<Code> queryCodes(Map<String, String> map, IPaginable paginable) {
 		return this.codeDao.queryCodes(map, paginable);
 	}
 
-	@Transactional(propagation=Propagation.REQUIRED,readOnly=true)
+	@Transactional(propagation = Propagation.REQUIRED, readOnly = true)
 	@Override
 	public boolean deleteCode(Long id, String creatername, String createrid, String ip) throws Exception {
-		Code code=codeDao.getCode(id);
-		if(code!=null){
-			if(codeDao.deleteCode(code)){
-			logger.info(creatername+"("+createrid+"-- ip:"+ip+") 删除编码:"+DataWrapUtil.ObjectToJson(code));
-			}else{
+		Code code = codeDao.getCode(id);
+		if (code != null) {
+			if (codeDao.deleteCode(code)) {
+				logger.info(creatername + "(" + createrid + "-- ip:" + ip + ") 删除编码:" + DataWrapUtil.ObjectToJson(code));
+			} else {
 				throw new WekitException("删除编码失败!");
 			}
 		}

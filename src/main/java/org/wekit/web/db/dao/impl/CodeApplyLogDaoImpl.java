@@ -14,19 +14,17 @@ public class CodeApplyLogDaoImpl extends HibernateBaseDao<CodeApplyLog, Long> im
 
 	@Override
 	public CodeApplyLog saveCodeApplyLog(CodeApplyLog codeApplyLog) {
-		// TODO Auto-generated method stub
-		return null;
+		return this.save(codeApplyLog);
 	}
 
 	@Override
 	protected Class<CodeApplyLog> getEntityClass() {
-		// TODO Auto-generated method stub
-		return null;
+		return CodeApplyLog.class;
 	}
 
 	@Override
-	public CodeApplyLog saveCodeApplyLog(String userid, String username, String deptId, String deptname, String fileType, String code, String content, String operateType, long createTime) {
-		// TODO Auto-generated method stub
-		return null;
+	public CodeApplyLog saveCodeApplyLog(String userid, String username, String deptId, String deptname, int fileType, String code, String content, String operateType, long createTime) {
+		CodeApplyLog codeApplyLog=new CodeApplyLog(userid,username,deptId,deptname,createTime,fileType,code,content,operateType);
+		return codeApplyLog;
 	}
 }

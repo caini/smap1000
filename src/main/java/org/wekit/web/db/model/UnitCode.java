@@ -66,6 +66,9 @@ public class UnitCode implements Serializable {
 	// 编码状态
 	@Column(name = "state")
 	private int state;
+	
+	@Column(name="filetype",nullable=true)
+	private int fileType;
 
 	public UnitCode() {
 	}
@@ -82,7 +85,7 @@ public class UnitCode implements Serializable {
 	 * @param createTime
 	 * @param state
 	 */
-	public UnitCode(String name,String ename,String code,String typeName,long typeId,String creater,String createrId,long createTime,int state){
+	public UnitCode(String name,String ename,String code,String typeName,long typeId,String creater,String createrId,long createTime,int state,int fileType){
 		this.name=name;
 		this.ename=ename;
 		this.code=code;
@@ -92,6 +95,7 @@ public class UnitCode implements Serializable {
 		this.createrId=createrId;
 		this.createTime=createTime;
 		this.state=state;
+		this.fileType=fileType;
 	}
 	
 	public long getUnitId() {
@@ -173,5 +177,15 @@ public class UnitCode implements Serializable {
 	public void setCreaterId(String createrId) {
 		this.createrId = createrId;
 	}
+
+	public int getFileType() {
+		return fileType;
+	}
+
+	public void setFileType(int fileType) {
+		this.fileType = fileType;
+	}
+	
+	
 
 }

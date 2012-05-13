@@ -49,8 +49,8 @@ public class RuleServiceImpl implements RuleService {
 
 	@Transactional(readOnly = true)
 	@Override
-	public CodeRule getCodeRule(String coderule) {
-		return this.codeRuleDao.getCodeRule(coderule);
+	public CodeRule getCodeRule(String ruleName,String coderule) {
+		return this.codeRuleDao.getCodeRule(ruleName,coderule);
 	}
 
 	@Transactional(readOnly = true)
@@ -107,8 +107,8 @@ public class RuleServiceImpl implements RuleService {
 
 	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
 	@Override
-	public CodeRule addCodeRule(String ruleName, String creater, String createrid, long createTime, String rule, String face, int state, int minSequence, int maxSequence) {
-		CodeRule codeRule = new CodeRule(ruleName, creater, createrid, createTime, rule, face, state, minSequence, maxSequence);
+	public CodeRule addCodeRule(String ruleName, String creater, String createrid, long createTime, String rule, String face, int state, int minSequence, int maxSequence,int fileType,String fileTypeName,String mask) {
+		CodeRule codeRule = new CodeRule(ruleName, creater, createrid, createTime, rule, face, state, minSequence, maxSequence,fileType,fileTypeName,mask);
 		return this.codeRuleDao.addCodeRule(codeRule);
 	}
 

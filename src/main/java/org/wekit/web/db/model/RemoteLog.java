@@ -27,7 +27,7 @@ public class RemoteLog implements Serializable {
 	private long remotelogId;
 	
 	@Column(name="remoteid",nullable=false)
-	private String remoteId;
+	private long remoteId;
 	
 	@Column(name="remotename",nullable=false,length=64)
 	private String remoteName;
@@ -46,7 +46,7 @@ public class RemoteLog implements Serializable {
 		
 	}
 	
-	public RemoteLog(String remoteId,String remoteName,String operaterType,String content,long createTime){
+	public RemoteLog(long remoteId,String remoteName,String operaterType,String content,long createTime){
 		this.remoteId=remoteId;
 		this.remoteName=remoteName;
 		this.operateType=operaterType;
@@ -65,13 +65,12 @@ public class RemoteLog implements Serializable {
 		this.remotelogId = remotelogId;
 	}
 
-	
 
-	public String getRemoteId() {
+	public long getRemoteId() {
 		return remoteId;
 	}
 
-	public void setRemoteId(String remoteId) {
+	public void setRemoteId(long remoteId) {
 		this.remoteId = remoteId;
 	}
 

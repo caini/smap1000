@@ -41,7 +41,7 @@ public class CodeServiceController extends BaseController<Code> {
 	@RequestMapping(value = "/code/query.{extend}", method = RequestMethod.GET)
 	public String queryCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询编码");
 
 			// TODO
 		} catch (Exception ex) {
@@ -62,7 +62,7 @@ public class CodeServiceController extends BaseController<Code> {
 	@RequestMapping(value = "/code/update.{extend}", method = RequestMethod.POST)
 	public String updateCode(@PathVariable("extned") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"更新编码");
 			// TODO
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
@@ -83,7 +83,7 @@ public class CodeServiceController extends BaseController<Code> {
 	@RequestMapping(value = "/code/delete.{extend}", method = RequestMethod.POST)
 	public String deleteCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"删除编码");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key参数的值不能为空!");
 			}
@@ -106,7 +106,7 @@ public class CodeServiceController extends BaseController<Code> {
 	@RequestMapping(value = "/code/find.{extend}", method = RequestMethod.GET)
 	public String findCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"查询编码");
 			if (StringUtils.isEmpty(key)) {
 				throw new WekitException("key的参数不能为空!");
 			}
@@ -130,7 +130,7 @@ public class CodeServiceController extends BaseController<Code> {
 	@RequestMapping(value = "/code/add.{extend}", method = RequestMethod.GET)
 	public String addCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"添加编码");
 			// TODO
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
@@ -141,7 +141,7 @@ public class CodeServiceController extends BaseController<Code> {
 	}
 
 	/**
-	 * 
+	 * 获取编码接口
 	 * @param extend
 	 * @param request
 	 * @param response
@@ -151,7 +151,7 @@ public class CodeServiceController extends BaseController<Code> {
 	@RequestMapping(value = "/code/fetch.{extend}", method = RequestMethod.GET)
 	public String fetchCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"获取编码");
 			this.fetchCode(true);
 		} catch (Exception ex) {
 			logger.error(ex);
@@ -165,7 +165,7 @@ public class CodeServiceController extends BaseController<Code> {
 	public String batchCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		try {
-			initParam(request);
+			initParam(request,"获取批量编码");
 			this.fetchCode(false);
 		} catch (Exception ex) {
 			logger.error(ex);
@@ -178,7 +178,7 @@ public class CodeServiceController extends BaseController<Code> {
 	@RequestMapping(value = "/code/cancel.{extend}", method = RequestMethod.GET)
 	public String cancelCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request);
+			initParam(request,"撤销编码");
 			String code = null;
 			String creater = null;
 			String createrid = null;
@@ -212,45 +212,35 @@ public class CodeServiceController extends BaseController<Code> {
 		}
 		return displayAPIClient(extend, model);
 	}
+	
+	@RequestMapping(value="/extendcode/import.{extend}")
+	public String importcode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
+		try {
+			initParam(request,"导入编码");
+			
+		} catch (Exception ex) {
+			pagination.setState(0);
+			pagination.setMessage(ex.getMessage());
+		}
+		return displayAPIClient(extend, model);
+	}
+	
+	
+	
 
 	/**
 	 * 取号逻辑编写
 	 */
 	protected void fetchCode(boolean isFetch) {
-		String rule = null;
-		String unitCode = null;
-		String locationCode = null;
-		String docCode = null;
-		String creater = null;
-		String createId = null;
-		String note = null;
-		int batchSize = 0;
-		if (parameters.containsKey("rule"))
-			rule = parameters.get("rule");
-		if (parameters.containsKey("unit"))
-			unitCode = parameters.get("unit");
-		if (parameters.containsKey("location"))
-			locationCode = parameters.get("location");
-		if (parameters.containsKey("doc"))
-			docCode = parameters.get("doc");
-		if (parameters.containsKey("creater"))
-			creater = parameters.get("creater");
-		if (parameters.containsKey("createrid"))
-			createId = parameters.get("createrid");
-		if (parameters.containsKey("note"))
-			note = parameters.get("note");
-		if (parameters.containsKey("size"))
-			batchSize = Integer.parseInt(parameters.get("size"));
-
-		if (rule == null || unitCode == null || locationCode == null || docCode == null || createId == null || creater == null || (batchSize == 0 && isFetch == false)) {
+		if (StringUtils.isEmpty(this.unitCode)||StringUtils.isEmpty(this.locationCode) || StringUtils.isEmpty(this.docCode) || StringUtils.isEmpty(this.createrid) || (this.batchSize == 0 && isFetch == false)) {
 			throw new WekitException("传入的参数错误，请检测参数!");
 		}
 		List<Code> list = null;
 		if (isFetch) {
 			list = new ArrayList<Code>();
-			list.add(this.codeService.fetchCode(rule, unitCode, locationCode, docCode, creater, createId, note));
+			list.add(this.codeService.fetchCode(this.ruleId, this.unitCode, this.locationCode, this.docCode, this.createrid, this.note,this.filename,this.codeName));
 		} else {
-			list = this.codeService.batchCode(rule, unitCode, locationCode, docCode, creater, createId, note, batchSize);
+			list = this.codeService.batchCode(this.ruleId, this.unitCode, this.locationCode, this.docCode, this.createrid, this.note, this.batchSize,this.filename,this.codeName);
 		}
 		this.pagination.setDatas(list);
 	}
