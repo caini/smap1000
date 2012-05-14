@@ -1,5 +1,8 @@
 package org.wekit.web.outservice;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.wekit.web.BaseController;
 import org.wekit.web.db.model.ExtendCode;
 import org.wekit.web.service.ExtendCodeService;
+
 /**
  * 无规则编码获取
  * @author HuangWeili
@@ -42,7 +46,6 @@ public class ExtendCodeServiceController  extends BaseController<ExtendCode>{
 		try{
 		initParam(request,"更新无规则编码");
 		//TODO
-		
 		}catch(Exception ex){
 			logger.error(ex.getMessage());
 			setState(0);
@@ -57,8 +60,11 @@ public class ExtendCodeServiceController  extends BaseController<ExtendCode>{
 		
 		try{
 			initParam(request,"获取无规则编码");
-			//TODO
-			
+			ExtendCode code= extendCodeService.addExtendCode(this.createrid, this.note, this.applyId, this.applyTitle,this.docCode, this.unitCode, this.locationCode, 1, this.code,this.filename, this.mask,this.typeId);
+			List<ExtendCode> codes=new ArrayList<ExtendCode>();
+			codes.add(code);
+			this.setDatas(codes);
+			this.setMessage("添加无规则编码成功");
 			}catch(Exception ex){
 				logger.error(ex.getMessage());
 				setState(0);
@@ -83,6 +89,20 @@ public class ExtendCodeServiceController  extends BaseController<ExtendCode>{
 			return displayAPIClient(extend, model);
 	}
 
+	@RequestMapping(value="/extendcode/delete.{extend}")
+	public String deletecode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
+		
+		try{
+			initParam(request,"删除无规则编码");
+			//TODO
+			
+			}catch(Exception ex){
+				logger.error(ex.getMessage());
+				setState(0);
+				setMessage(ex.getMessage());
+			}
+			return displayAPIClient(extend, model);
+	}
 	
 
 	public ExtendCodeService getExtendCodeService() {

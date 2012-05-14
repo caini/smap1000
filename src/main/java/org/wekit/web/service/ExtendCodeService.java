@@ -1,10 +1,14 @@
 package org.wekit.web.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.ExtendCode;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 
 public interface ExtendCodeService {
 
@@ -56,7 +60,7 @@ public interface ExtendCodeService {
 	 * @param fileTypeName
 	 * @return
 	 */
-	public ExtendCode addExtendCode(String createrid, long createtime, String note, String applyTitle, String applyid, String docCode, String unitCode, String locationCode, int state, String applyedid, String applyedname, String result, String filename,String mask,int fileType,String fileTypeName);
+	public ExtendCode addExtendCode(String createrid,String note,long applyid,String applyTitle, String docCode, String unitCode, String locationCode, int state,  String result, String filename,String mask,long filetype)throws JsonGenerationException, JsonMappingException, IOException;
 	
 	
 	/**
@@ -75,7 +79,7 @@ public interface ExtendCodeService {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean deleteExtendCode(long id,String createrid,String ip,int filetype) throws Exception;
+	public boolean deleteExtendCode(long id,String createrid,String ip) throws Exception;
 	
 
 	

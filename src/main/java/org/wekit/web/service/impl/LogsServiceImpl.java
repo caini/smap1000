@@ -43,7 +43,7 @@ public class LogsServiceImpl implements LogsService {
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
-	public CodeApplyLog addCodeApplyLog(String userid,int fileType, String code, String content, String operateType) {
+	public CodeApplyLog addCodeApplyLog(String userid,long fileType, String code, String content, String operateType) {
 		User user=userDao.getByID(userid);
 		if(user==null)
 			throw new WekitException("操作用户不存在!");

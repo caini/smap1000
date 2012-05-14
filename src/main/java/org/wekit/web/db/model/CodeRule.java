@@ -69,7 +69,7 @@ public class CodeRule implements Serializable {
 	private int					minSequence;
 
 	@Column(name="filetype",nullable=false)
-	private int fileType;
+	private long fileType;
 
 	@Column(name="filetypename",length=512,nullable=false)
 	private String fileTypeName;
@@ -92,7 +92,7 @@ public class CodeRule implements Serializable {
 	 * @param minSequence
 	 * @param maxSequence
 	 */
-	public CodeRule(String ruleName,String creater,String createrId,long createrTime,String rule,String face,int state,int minSequence,int maxSequence,int fileType,String fileTypeName,String mask){
+	public CodeRule(String ruleName,String creater,String createrId,long createrTime,String rule,String face,int state,int minSequence,int maxSequence,long fileType,String fileTypeName,String mask){
 		this.ruleName=ruleName;
 		this.creater=creater;
 		this.createrId=createrId;
@@ -188,11 +188,11 @@ public class CodeRule implements Serializable {
 		this.minSequence = minSequence;
 	}
 
-	public int getFileType() {
+	public long getFileType() {
 		return fileType;
 	}
 
-	public void setFileType(int fileType) {
+	public void setFileType(long fileType) {
 		this.fileType = fileType;
 	}
 

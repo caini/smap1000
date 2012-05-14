@@ -93,7 +93,7 @@ public interface RuleService {
 	 * @param maxSequence
 	 * @return
 	 */
-	public CodeRule addCodeRule(String rulename,String creater,String createrid,long createTime,String rule,String face,int state,int minSequence,int maxSequence,int fileType,String fileTypeName,String mask);
+	public CodeRule addCodeRule(String rulename,String creater,String createrid,long createTime,String rule,String face,int state,int minSequence,int maxSequence,long fileType,String fileTypeName,String mask);
 	
 	
 	/**

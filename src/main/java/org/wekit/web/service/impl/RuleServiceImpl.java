@@ -107,7 +107,7 @@ public class RuleServiceImpl implements RuleService {
 
 	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
 	@Override
-	public CodeRule addCodeRule(String ruleName, String creater, String createrid, long createTime, String rule, String face, int state, int minSequence, int maxSequence,int fileType,String fileTypeName,String mask) {
+	public CodeRule addCodeRule(String ruleName, String creater, String createrid, long createTime, String rule, String face, int state, int minSequence, int maxSequence,long fileType,String fileTypeName,String mask) {
 		CodeRule codeRule = new CodeRule(ruleName, creater, createrid, createTime, rule, face, state, minSequence, maxSequence,fileType,fileTypeName,mask);
 		return this.codeRuleDao.addCodeRule(codeRule);
 	}

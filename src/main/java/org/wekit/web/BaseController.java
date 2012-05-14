@@ -70,8 +70,22 @@ public abstract class BaseController<T> {
 	public final static String		RULE			= "rule";
 
 	public final static String		RULEID			= "ruleid";
-	
-	public final static String 		CODENAME		="codename";
+
+	public final static String		CODENAME		= "codename";
+
+	public final static String		DATAS			= "datas";
+
+	public final static String		APPLYID			= "applyid";
+
+	public final static String		APPLYTITLE		= "applytitle";
+
+	public final static String		MASK			= "mask";
+
+	protected String				mask			= "";
+
+	protected long					applyId			= 0;
+
+	protected String				applyTitle		= "";
 
 	protected String				userkey			= "";
 
@@ -110,9 +124,11 @@ public abstract class BaseController<T> {
 	protected String				filename		= "";
 
 	protected String				rule			= "";
-	
-	protected String 				codeName="";
-	
+
+	protected String				datas			= "";
+
+	protected String				codeName		= "";
+
 	@Autowired
 	@Qualifier("remoteAclService")
 	protected RemoteAclService		remoteAclService;									// 注入远程访问接口
@@ -215,11 +231,11 @@ public abstract class BaseController<T> {
 		if (parameters.containsKey(LOCATIONCODE)) {
 			this.locationCode = parameters.get(LOCATIONCODE);
 		}
-		
+
 		if (parameters.containsKey(UNITCODE)) {
 			this.unitCode = parameters.get(UNITCODE);
 		}
-		
+
 		if (parameters.containsKey(BATCHSIZE)) {
 			try {
 				this.batchSize = Integer.parseInt(parameters.get(BATCHSIZE));
@@ -227,29 +243,29 @@ public abstract class BaseController<T> {
 				throw new WekitException("size参数的范围必须是大于零的整数!");
 			}
 		}
-		
+
 		if (parameters.containsKey(NOTE)) {
 			this.note = parameters.get(NOTE);
 		}
-		
+
 		if (parameters.containsKey(KEY)) {
 			this.key = parameters.get(KEY);
 		}
-		
+
 		if (parameters.containsKey(RULENAME))
 			this.rulename = parameters.get(RULENAME);
-		
+
 		if (parameters.containsKey(FILENAME))
 			this.filename = parameters.get(FILENAME);
-		
-		if(parameters.containsKey(RULEID)){
-			try{
-				this.ruleId=Long.parseLong(parameters.get(RULEID));
-			}catch(Exception ex){
+
+		if (parameters.containsKey(RULEID)) {
+			try {
+				this.ruleId = Long.parseLong(parameters.get(RULEID));
+			} catch (Exception ex) {
 				throw new WekitException("ruleId参数的类型不正确!");
 			}
 		}
-		
+
 		if (parameters.containsKey(STATE)) {
 			try {
 				this.state = Integer.parseInt(parameters.get(STATE));
@@ -268,8 +284,26 @@ public abstract class BaseController<T> {
 		if (parameters.containsKey(RULE)) {
 			this.rule = parameters.get(RULE);
 		}
-		if(parameters.containsKey(CODENAME)){
-			this.codeName=parameters.get(CODENAME);
+		if (parameters.containsKey(CODENAME)) {
+			this.codeName = parameters.get(CODENAME);
+		}
+		if (parameters.containsKey(DATAS)) {
+			this.datas = parameters.get(DATAS);
+		}
+
+		if (parameters.containsKey(APPLYID)) {
+			try {
+				this.applyId = Long.parseLong(parameters.get(APPLYID));
+			} catch (Exception ex) {
+				throw new WekitException("applyid的参数范围必须是大于零的整数!");
+			}
+		}
+
+		if (parameters.containsKey(MASK)) {
+			this.mask = parameters.get(MASK);
+		}
+		if (parameters.containsKey(APPLYTITLE)) {
+			this.applyTitle = parameters.get(APPLYTITLE);
 		}
 	}
 

@@ -20,7 +20,7 @@ public interface LogsService {
     * @param createTime
     * @return
     */
-   public CodeApplyLog addCodeApplyLog(String userid,  int fileType, String code, String content, String operateType);
+   public CodeApplyLog addCodeApplyLog(String userid,  long fileType, String code, String content, String operateType);
 
    /**
     * 添加接口访问信息

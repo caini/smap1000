@@ -217,11 +217,11 @@ public class CodeServiceController extends BaseController<Code> {
 		return displayAPIClient(extend, model);
 	}
 	
-	@RequestMapping(value="/extendcode/import.{extend}")
+	@RequestMapping(value="/code/import.{extend}")
 	public String importcode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
 		try {
-			initParam(request,"导入编码");
-			
+			initParam(request,"导入规则编码");
+			//TODO 添加批量代码导入
 		} catch (Exception ex) {
 			pagination.setState(0);
 			pagination.setMessage(ex.getMessage());

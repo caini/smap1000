@@ -89,7 +89,7 @@ public class CodeApply implements Serializable {
 	private String deptName;
 	
 	@Column(name="filetype",nullable=true)
-	private int fileType;
+	private long fileType;
 	
 	@Column(name="filetypename",length=128,nullable=true)
 	private String fileTypeName;
@@ -99,7 +99,7 @@ public class CodeApply implements Serializable {
 	}
 	
 	
-	public CodeApply(String creater,String createrid,long creatertime,String unit,String location ,String doc,String file,String mask,String note,int state,String applayName,String applyedId,String fileName,String deptName,int fileType,String fileTypeName){
+	public CodeApply(String creater,String createrid,long creatertime,String unit,String location ,String doc,String file,String mask,String note,int state,String applayName,String applyedId,String fileName,String deptName,long fileType,String fileTypeName){
 		this.creater=creater;
 		this.createrId=createrid;
 		this.createTime=creatertime;
@@ -238,6 +238,36 @@ public class CodeApply implements Serializable {
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+
+	public long getFileType() {
+		return fileType;
+	}
+
+
+	public void setFileType(long fileType) {
+		this.fileType = fileType;
+	}
+
+
+	public String getFileTypeName() {
+		return fileTypeName;
+	}
+
+
+	public void setFileTypeName(String fileTypeName) {
+		this.fileTypeName = fileTypeName;
 	}
 	
 	

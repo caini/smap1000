@@ -68,7 +68,7 @@ public class UnitCode implements Serializable {
 	private int state;
 	
 	@Column(name="filetype",nullable=true)
-	private int fileType;
+	private long fileType;
 
 	public UnitCode() {
 	}
@@ -85,7 +85,7 @@ public class UnitCode implements Serializable {
 	 * @param createTime
 	 * @param state
 	 */
-	public UnitCode(String name,String ename,String code,String typeName,long typeId,String creater,String createrId,long createTime,int state,int fileType){
+	public UnitCode(String name,String ename,String code,String typeName,long typeId,String creater,String createrId,long createTime,int state,long fileType){
 		this.name=name;
 		this.ename=ename;
 		this.code=code;
@@ -178,11 +178,11 @@ public class UnitCode implements Serializable {
 		this.createrId = createrId;
 	}
 
-	public int getFileType() {
+	public long getFileType() {
 		return fileType;
 	}
 
-	public void setFileType(int fileType) {
+	public void setFileType(long fileType) {
 		this.fileType = fileType;
 	}
 	

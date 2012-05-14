@@ -99,7 +99,7 @@ public class ExtendCode implements Serializable{
 	private String mask;
 	
 	@Column(name="filetype",nullable=true)
-	private int fileType;
+	private long fileType;
 	
 	@Column(name="filetypename",length=128,nullable=true)
 	private String fileTypeName;
@@ -120,8 +120,8 @@ public class ExtendCode implements Serializable{
 	 * @param applyedname
 	 * @param result
 	 */
-	public ExtendCode(String cratername,String createrid,long createtime,String note,String applyTitle,String applyid,String docCode,String unitCode,String locationCode,int state,String applyedid,String applyedname,String result,String filename
-			,String deptName,String mask,int fileType,String fileTypeName
+	public ExtendCode(String cratername,String createrid,long createtime,String note,String applyTitle,long applyid,String docCode,String unitCode,String locationCode,int state,String applyedid,String applyedname,String result,String filename
+			,String deptName,String mask,long fileType,String fileTypeName
 			){
 		this.createrId=createrid;
 		this.creater=cratername;
@@ -133,7 +133,7 @@ public class ExtendCode implements Serializable{
 		this.unitCode=unitCode;
 		this.locationCode=locationCode;
 		this.state=state;
-		this.applyedId=applyedid;
+		this.applyId=applyid;
 		this.applyedName=applyedname;
 		this.result=result;
 		this.fileName=filename;
@@ -268,6 +268,46 @@ public class ExtendCode implements Serializable{
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
+	}
+
+
+	public String getDeptName() {
+		return deptName;
+	}
+
+
+	public void setDeptName(String deptName) {
+		this.deptName = deptName;
+	}
+
+
+	public String getMask() {
+		return mask;
+	}
+
+
+	public void setMask(String mask) {
+		this.mask = mask;
+	}
+
+
+	public long getFileType() {
+		return fileType;
+	}
+
+
+	public void setFileType(long fileType) {
+		this.fileType = fileType;
+	}
+
+
+	public String getFileTypeName() {
+		return fileTypeName;
+	}
+
+
+	public void setFileTypeName(String fileTypeName) {
+		this.fileTypeName = fileTypeName;
 	}
 	
 	
