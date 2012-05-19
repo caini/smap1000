@@ -174,7 +174,7 @@ public class CodeServiceImpl implements CodeService {
 		CodeRule codeRule = codeRuleDao.getCodeRule(ruleId);
 		if (codeRule == null)
 			throw new WekitException("对应编码规则ID的信息不存在!");
-		User user = userDao.getByID(createrId);
+		User user = userDao.getByID(createrId, 1);
 		if (user == null) {
 			throw new WekitException("对应的用户信息不存在!");
 		}
@@ -232,7 +232,7 @@ public class CodeServiceImpl implements CodeService {
 		if (codeRule == null) {
 			throw new WekitException("找不到对应的编码规则!");
 		}
-		User user = userDao.getByID(createId);
+		User user = userDao.getByID(createId, 1);
 		if (user == null) {
 			throw new WekitException("找不到对应的用户信息!");
 		}
@@ -346,11 +346,13 @@ public class CodeServiceImpl implements CodeService {
 				temp = temp.replaceAll("\\[n*\\]", relseq);
 				code = codeDao.getCode(temp);
 				if (code == null) {
-					result.add(temp);
-					ishave = false;
-					canApply++;
+					if (!codePoolDao.isExistsed(temp)) {
+						result.add(temp);
+						ishave = false;
+						canApply++;
+					}
 				}
-				if (seq >= maxseq) {
+				if (seq >= maxseq && maxseq > 0) {
 					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制 还可以申请" + canApply + "个编码!");
 				}
 			}
@@ -430,7 +432,7 @@ public class CodeServiceImpl implements CodeService {
 	protected boolean cancel(Code code, String createrid, String ip, String note) {
 		if (code == null)
 			throw new WekitException("该编码不存在");
-		User user = userDao.getByID(createrid);
+		User user = userDao.getByID(createrid, 1);
 		if (user == null)
 			throw new WekitException("用户信息不存在!");
 
@@ -472,7 +474,7 @@ public class CodeServiceImpl implements CodeService {
 		return true;
 	}
 
-	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	@Override
 	public String importCodes(String json) {
 		try {
@@ -480,17 +482,17 @@ public class CodeServiceImpl implements CodeService {
 			String uuid = UUID.randomUUID().toString();
 			for (CodeWrap wrap : wraps) {
 				try {
-					if(StringUtils.isEmpty(wrap.getCode())){
+					if (StringUtils.isEmpty(wrap.getCode())) {
 						wrap.setResult("编码存在!");
 						continue;
 					}
-					
+
 					CodeRule codeRule = codeRuleDao.getCodeRule(wrap.getRuleName(), wrap.getRule());
 					if (codeRule == null) {
 						wrap.setResult("rulename和rule没有能找到对应的规则!");
 						continue;
 					}
-					User user = userDao.getByID(wrap.getUserId());
+					User user = userDao.getByID(wrap.getUserId(), 1);
 					if (user == null) {
 						wrap.setResult("对应的userid的信息不存在");
 						continue;

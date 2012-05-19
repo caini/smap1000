@@ -34,8 +34,8 @@ public class RemoteAclServiceImpl implements RemoteAclService {
 
 	@Transactional(readOnly=true)
 	@Override
-	public RemoteAcl getRemoteAclByUserName(String userName) {
-		return remoteAclDao.getRemoteAclByUserName(userName);
+	public RemoteAcl getRemoteAclByUserName(String userName,int state) {
+		return remoteAclDao.getRemoteAclByUserName(userName,state);
 	}
 
 	@Transactional(readOnly=true)

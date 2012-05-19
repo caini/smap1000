@@ -44,24 +44,24 @@ public class LogsServiceImpl implements LogsService {
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public CodeApplyLog addCodeApplyLog(String userid,long fileType, String code, String content, String operateType) {
-		User user=userDao.getByID(userid);
+		User user=userDao.getByID(userid,1);
 		if(user==null)
 			throw new WekitException("操作用户不存在!");
 		CodeApplyLog codeApplyLog=new CodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptDisplayName(), user.getDeptDisplayName(),System.currentTimeMillis(), fileType, code, content, operateType);
-		return codeApplyLog;
+		return codeApplyLogDao.saveCodeApplyLog(codeApplyLog);
 	}
 
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
 	public RemoteLog addRemoteLog(long remoteId, String remotename, String operateType, String content) {
 		RemoteLog remoteLog=new RemoteLog(remoteId, remotename, operateType, content, System.currentTimeMillis());
-		return remoteLog;
+		return this.remoteLogDao.savelog(remoteLog);
 	}
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	public OptLog addOptLog(String systemId,String systemName,String userid,String username,String content,String ip,String operate,String deptName){
 		OptLog optLog=new OptLog(systemId,systemName,userid,username,content,System.currentTimeMillis(),ip,operate,deptName);
-		return optLog;
+		return optLogDao.addOptLog(optLog);
 	}
 	
 

@@ -1,7 +1,9 @@
 package org.wekit.web;
 
+import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.List;
@@ -80,10 +82,10 @@ public abstract class BaseController<T> {
 	public final static String		APPLYTITLE		= "applytitle";
 
 	public final static String		MASK			= "mask";
-	
-	public final static String 		JSON	="json";
-	
-	
+
+	public final static String		JSON			= "json";
+
+	public final static String		TEST			= "test";
 
 	protected String				mask			= "";
 
@@ -117,7 +119,7 @@ public abstract class BaseController<T> {
 
 	protected String				key				= "";
 
-	protected String				token			= "";
+	protected long					token			= 0;
 
 	protected String				rulename		= "";
 
@@ -132,16 +134,17 @@ public abstract class BaseController<T> {
 	protected String				datas			= "";
 
 	protected String				codeName		= "";
-	
-	protected String 				json="";
+
+	protected String				json			= "";
 
 	@Autowired
 	@Qualifier("remoteAclService")
 	protected RemoteAclService		remoteAclService;									// 注入远程访问接口
 
 	@Autowired
-	@Qualifier("logService")
+	@Qualifier("logsService")
 	protected LogsService			logsService;
+
 	protected Pagination<T>			pagination		= new Pagination<T>();
 	protected Map<String, String>	parameters		= new HashMap<String, String>();
 	protected RemoteAcl				remoteAcl;
@@ -169,8 +172,7 @@ public abstract class BaseController<T> {
 	 * @throws Exception
 	 */
 	protected void initParam(HttpServletRequest request, String operate) throws Exception {
-		// this.userparams = decode(request,operate);
-		this.userparams = URLDecoder.decode(request.getQueryString(), "UTF-8");
+		this.userparams = decode(request, operate);
 		logsService.addRemoteLog(remoteAcl.getAclId(), remoteAcl.getUsername(), operate, this.userparams);// 远程操作日志
 		String[] params = this.userparams.split("&");
 		if (params != null) {
@@ -181,13 +183,13 @@ public abstract class BaseController<T> {
 				}
 			}
 		}
-		if (this.parameters.containsKey("t")) {
-			long time = Long.parseLong(this.parameters.get("t"));
-
-		} else {
-			throw new WekitException("传入的参数错误!");
+		if(StringUtils.isEmpty(request.getParameter("test"))){
+		  this.token=Long.parseLong( this.parameters.get(TOKEN));
+		  long diff=System.currentTimeMillis()-this.token;
+		  if(diff>120000){
+			  throw new WekitException("该查询已经失效！请重新生成请求！");
+		  }
 		}
-
 		paserPaginable();
 		initCommonParam();
 	}
@@ -197,8 +199,10 @@ public abstract class BaseController<T> {
 	 * 
 	 * @param request
 	 * @return
+	 * @throws UnsupportedEncodingException
 	 */
-	private String decode(HttpServletRequest request, String operate) {
+	private String decode(HttpServletRequest request, String operate) throws UnsupportedEncodingException {
+		String test = request.getParameter(TEST);
 		if (StringUtils.isEmpty(request.getParameter(USERKEY))) {
 			throw new WekitException("请输入用户信息");
 		}
@@ -206,15 +210,18 @@ public abstract class BaseController<T> {
 		if (StringUtils.isEmpty(request.getParameter(USERPARAMS))) {
 			throw new WekitException("请输入请求参数");
 		}
-		remoteAcl = remoteAclService.getRemoteAclByUserName(userkey);
+		remoteAcl = remoteAclService.getRemoteAclByUserName(userkey, 1);
 		if (remoteAcl == null)
 			throw new WekitException("不存在该授权用户");
-		String password = remoteAcl.getPassword();
-		String temp = request.getParameter(USERPARAMS).trim();
-		temp = request.getParameter(USERPARAMS).trim();
-		temp = new String(Base64.decodeBase64(temp));
-		temp = RC4CipherEntity.code(temp, password);
-		this.userparams = temp;
+		if (StringUtils.isEmpty(test)) {
+			String password = remoteAcl.getPassword();
+			String temp = URLDecoder.decode(request.getParameter(USERPARAMS),"UTF-8");
+			temp = new String(Base64.decodeBase64(temp));
+			temp = RC4CipherEntity.code(temp, password);
+			this.userparams = temp;
+		} else {
+			this.userparams = URLDecoder.decode(request.getParameter(USERPARAMS), "UTF-8");
+		}
 		return this.userparams;
 	}
 
@@ -311,8 +318,8 @@ public abstract class BaseController<T> {
 		if (parameters.containsKey(APPLYTITLE)) {
 			this.applyTitle = parameters.get(APPLYTITLE);
 		}
-		if(parameters.containsKey(JSON)){
-			this.json=parameters.get(JSON);
+		if (parameters.containsKey(JSON)) {
+			this.json = parameters.get(JSON);
 		}
 	}
 

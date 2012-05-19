@@ -1,6 +1,7 @@
 package org.wekit.web.outservice;
 
-import java.nio.charset.Charset;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,10 +27,15 @@ public class CommonServiceController {
 	@RequestMapping(value = "/base64", method = RequestMethod.GET)
 	public String base64(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String param = request.getParameter("p");
-		if (StringUtils.isEmpty(param))
-			model.addAttribute("content", "");
-		else {
-			model.addAttribute("content", Base64.encodeBase64URLSafeString(param.getBytes()));
+		try {
+			if (StringUtils.isEmpty(param))
+				model.addAttribute("content", "");
+			else {
+				param = URLDecoder.decode(param, "UTF-8");
+				model.addAttribute("content", Base64.encodeBase64URLSafeString(param.getBytes()));
+			}
+		} catch (UnsupportedEncodingException e) {
+			model.addAttribute("content", 0);
 		}
 		return "ftl/json";
 	}
@@ -46,15 +52,15 @@ public class CommonServiceController {
 	public String encode(HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		try {
-			String input = request.getParameter("k");
-			String passowrd = request.getParameter("p");
+			String input =URLDecoder.decode(request.getParameter("k"),"UTF-8");
+			String passowrd =URLDecoder.decode(request.getParameter("p"),"UTF-8");
 			if (StringUtils.isEmpty(input) || StringUtils.isEmpty(passowrd)) {
 				model.addAttribute("content", "");
 			} else {
 				model.addAttribute("content", RC4CipherEntity.code(input, passowrd));
 			}
 		} catch (Exception e) {
-			model.addAttribute("content", e.getMessage());
+			model.addAttribute("content", 0);
 		}
 		return "ftl/json";
 	}
@@ -70,13 +76,13 @@ public class CommonServiceController {
 	@RequestMapping(value = "/encodeBase64", method = RequestMethod.GET)
 	public String encodeBase64(HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			String input = request.getParameter("k");
-			String passowrd = request.getParameter("p");
+			String input =URLDecoder.decode(request.getParameter("k"),"UTF-8")+"&t="+System.currentTimeMillis();
+			String passowrd =URLDecoder.decode(request.getParameter("p"),"UTF-8");
 			if (StringUtils.isEmpty(input) || StringUtils.isEmpty(passowrd)) {
 				model.addAttribute("content", "");
 			} else {
 				String temp = RC4CipherEntity.code(input, passowrd);
-				model.addAttribute("content",Base64.encodeBase64URLSafeString(input.getBytes()));
+				model.addAttribute("content", Base64.encodeBase64URLSafeString(temp.getBytes()));
 			}
 		} catch (Exception e) {
 			model.addAttribute("content", e.getMessage());

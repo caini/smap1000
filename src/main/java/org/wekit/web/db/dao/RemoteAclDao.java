@@ -31,7 +31,7 @@ public interface RemoteAclDao {
 	 * @param username
 	 * @return
 	 */
-	public RemoteAcl getRemoteAclByUserName(String username);
+	public RemoteAcl getRemoteAclByUserName(String username,int state);
 	
 	/**
 	 * 添加远程访问对象

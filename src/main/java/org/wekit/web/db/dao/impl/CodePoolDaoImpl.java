@@ -1,9 +1,11 @@
 package org.wekit.web.db.dao.impl;
 
+import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.db.dao.CodePoolDao;
 import org.wekit.web.db.model.CodePool;
 
+@Repository("codePoolDao")
 public class CodePoolDaoImpl  extends HibernateBaseDao<CodePool, String> implements CodePoolDao{
 
 	@Override

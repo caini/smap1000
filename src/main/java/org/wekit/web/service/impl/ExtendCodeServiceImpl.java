@@ -123,7 +123,7 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 		ExtendCode code = this.extendCodeDao.getExtendCode(id);
 		if(code==null)
 			throw new WekitException("要删除的无规则编码不存在!");
-		User user=userDao.getByID(createrid);
+		User user=userDao.getByID(createrid,1);
 		if(user==null)
 			throw new WekitException("操作用户的信息不存在!");
 		if (code != null) {
@@ -145,7 +145,7 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 	public ExtendCode addExtendCode(String createrid,String note,long applyid,String applyTitle, String docCode, String unitCode, String locationCode, int state,  String result, String filename,String mask,long filetype) throws JsonGenerationException, JsonMappingException, IOException {
 		if(codePoolDao.isExistsed(result))
 			throw new WekitException("该编码已经存在了，请选择别的编码!");
-		User user=userDao.getByID(createrid);
+		User user=userDao.getByID(createrid,1);
 		if(user==null)
 			throw new WekitException("对应的操作用户不存在!");
 		CodeApply codeApply=codeApplyDao.getCodeApply(applyid);
@@ -171,12 +171,12 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 					wrap.setResult("编码不存在!");
 					continue;
 				}
-				User applyUser= userDao.getByID(wrap.getApplyedId());
+				User applyUser= userDao.getByID(wrap.getApplyedId(),1);
 				if(applyUser==null){
 					wrap.setResult("申请用户信息不存在！");
 					continue;
 				}
-				User user=userDao.getByID(wrap.getUserId());
+				User user=userDao.getByID(wrap.getUserId(),1);
 				if(user==null){
 					wrap.setResult("审核用户信息不存在!");
 					continue;

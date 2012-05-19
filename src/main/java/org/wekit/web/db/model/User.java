@@ -1,13 +1,25 @@
 package org.wekit.web.db.model;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import org.hibernate.annotations.GenericGenerator;
+
+@XmlRootElement(name = "user")
+@XmlAccessorType(XmlAccessType.FIELD)
+@Entity
+@Table(name = "users")
 public class User {
 
 	@Id
 	@Column(name="loginname")
+	@GenericGenerator(name="assigned",strategy="assigned")
 	@GeneratedValue(generator="assigned")
 	private String loginName;
 	
@@ -23,6 +35,7 @@ public class User {
 	@Column(name="deptdisplayname",length=64,nullable=false)
 	private String deptDisplayName;
 
+	public User(){}
 	/**
 	 * 全参数匹配构造函数
 	 * @param loginName

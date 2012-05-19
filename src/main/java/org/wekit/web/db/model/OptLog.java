@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Encore
  *
  */
-@XmlRootElement(name="AclLog")
+@XmlRootElement(name="OptLog")
 @XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name="optlog")

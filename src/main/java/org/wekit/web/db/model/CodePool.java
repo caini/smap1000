@@ -9,6 +9,8 @@ import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import org.hibernate.annotations.GenericGenerator;
 /**
  * 代码池用来存储所有以申请的编码
  * @author HuangWeili
@@ -23,6 +25,7 @@ public class CodePool implements Serializable {
 	private static final long	serialVersionUID	= -4214927630464248024L;
 	
 	@Id
+	@GenericGenerator(name="assigned",strategy="assigned")
 	@GeneratedValue(generator="assigned")
 	private String code;
 	

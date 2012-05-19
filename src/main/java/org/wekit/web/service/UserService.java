@@ -8,5 +8,5 @@ import org.wekit.web.db.model.User;
  */
 public interface UserService {
 
-	public User queryUserById(String userid);
+	public User queryUserById(String userid,int state);
 }

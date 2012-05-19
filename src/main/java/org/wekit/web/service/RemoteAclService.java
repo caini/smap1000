@@ -18,7 +18,7 @@ public interface RemoteAclService {
 	 * @param userName
 	 * @return
 	 */
-	public RemoteAcl getRemoteAclByUserName(String userName);
+	public RemoteAcl getRemoteAclByUserName(String userName,int state);
 
 	/**
 	 * 获取所有的远程翻个访问用户

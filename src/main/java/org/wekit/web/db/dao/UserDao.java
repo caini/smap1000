@@ -8,6 +8,6 @@ import org.wekit.web.db.model.User;
  */
 public interface UserDao {
 
-	public User getByID(String userid);
+	public User getByID(String userid,int status);
 	
 }

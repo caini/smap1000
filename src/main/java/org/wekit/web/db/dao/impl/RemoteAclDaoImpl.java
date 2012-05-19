@@ -3,6 +3,7 @@ package org.wekit.web.db.dao.impl;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 import org.wekit.web.HibernateBaseDao;
 import org.wekit.web.IPaginable;
@@ -31,8 +32,11 @@ public class RemoteAclDaoImpl extends HibernateBaseDao<RemoteAcl, Long> implemen
 	}
 
 	@Override
-	public RemoteAcl getRemoteAclByUserName(String username) {
-		List<RemoteAcl> remoteAcls = queryByProperty("username", username);
+	public RemoteAcl getRemoteAclByUserName(String username,int state) {
+		Query query= createrQuery("from RemoteAcl where username=:username and state=:state");
+		query.setString("username", username);
+		query.setInteger("state", state);
+		List<RemoteAcl> remoteAcls = query.list();
 		if (remoteAcls != null)
 			return remoteAcls.get(0);
 		return null;

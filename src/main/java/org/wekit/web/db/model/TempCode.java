@@ -10,7 +10,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Version;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement(name = "TempCode")
+@XmlAccessorType(XmlAccessType.FIELD)
 @Entity
 @Table(name = "tempcode")
 public class TempCode implements Serializable {
