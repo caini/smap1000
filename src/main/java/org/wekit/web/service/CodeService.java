@@ -134,5 +134,11 @@ public interface CodeService {
 	 */
 	public boolean deleteCode(Long id,String creater,String createrid,String ip) throws Exception;
 	
+	
+	/**
+	 * 导入数据
+	 * @param json
+	 */
+	public String importCodes(String json);
 
  }

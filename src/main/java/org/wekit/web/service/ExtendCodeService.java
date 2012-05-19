@@ -81,6 +81,9 @@ public interface ExtendCodeService {
 	 */
 	public boolean deleteExtendCode(long id,String createrid,String ip) throws Exception;
 	
-
-	
+	/**
+	 * 无规则编码导入功能
+	 * @param json
+	 */
+	public String importCodes(String json);
 }

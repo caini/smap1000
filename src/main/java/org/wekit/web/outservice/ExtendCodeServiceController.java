@@ -79,8 +79,7 @@ public class ExtendCodeServiceController  extends BaseController<ExtendCode>{
 		
 		try{
 			initParam(request,"导入无规则编码");
-			//TODO
-			
+			extendCodeService.importCodes(this.json);
 			}catch(Exception ex){
 				logger.error(ex.getMessage());
 				setState(0);

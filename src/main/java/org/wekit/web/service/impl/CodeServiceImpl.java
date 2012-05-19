@@ -32,10 +32,14 @@ import org.wekit.web.db.model.CodeRule;
 import org.wekit.web.db.model.CodeSequence;
 import org.wekit.web.db.model.TempCode;
 import org.wekit.web.db.model.User;
+import org.wekit.web.imports.CodeWrap;
+import org.wekit.web.imports.ExtendCodeWrap;
 import org.wekit.web.service.CodeService;
+import org.wekit.web.service.RuleService;
 import org.wekit.web.util.DataWrapUtil;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 /**
@@ -75,8 +79,8 @@ public class CodeServiceImpl implements CodeService {
 
 	@Autowired
 	@Qualifier("codeApplyLogDao")
-	private CodeApplyLogDao codeApplyLogDao;
-	
+	private CodeApplyLogDao	codeApplyLogDao;
+
 	@Override
 	public Code getCode(Long id) {
 		if (id != null && id > 0) {
@@ -159,9 +163,10 @@ public class CodeServiceImpl implements CodeService {
 
 	/**
 	 * 独立取号和批量取号的差别是独立取号有限查找可用的序列号，在生成新的序列号，而批量操作只生成联系的新号而不关心旧的号码
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonGenerationException 
+	 * 
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	@Override
@@ -188,18 +193,17 @@ public class CodeServiceImpl implements CodeService {
 			if (tempCode != null) {
 				String uuid = UUID.randomUUID().toString();
 				Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), unitCode, locationCode, docCode, tempCode.getCode(), 1, uuid, System.currentTimeMillis(), note, filename, user.getDeptDisplayName(), codeRule.getFileTypeName(), tempCode.getCodeName());
-				codeApplyLogDao.saveCodeApplyLog(user.getLoginName(),user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(),codeRule.getFileType(), code.getCode(),DataWrapUtil.ObjectToJson(code),CodeApplyLogDao.APPLYOPERATE,System.currentTimeMillis());
+				codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
 				code = codeDao.addCode(code);
 				tempCodeDao.deleteTempCode(tempCode);
 				return code;
 			}
 		}
 		List<Code> codes = createCodes(codeRule, unitCode, locationCode, docCode, user, note, 1, filename, codeName);
-		if (codes != null && codes.size() > 0)
-		{
-			Code code=codes.get(0);
+		if (codes != null && codes.size() > 0) {
+			Code code = codes.get(0);
 			codePoolDao.insertCodePool(code.getCode());
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(),DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
 			return code;
 		}
 		return null;
@@ -217,9 +221,9 @@ public class CodeServiceImpl implements CodeService {
 	 * @param note
 	 * @param batchSize
 	 * @return
-	 * @throws IOException 
-	 * @throws JsonMappingException 
-	 * @throws JsonGenerationException 
+	 * @throws IOException
+	 * @throws JsonMappingException
+	 * @throws JsonGenerationException
 	 */
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	@Override
@@ -232,13 +236,12 @@ public class CodeServiceImpl implements CodeService {
 		if (user == null) {
 			throw new WekitException("找不到对应的用户信息!");
 		}
-		List<Code> codes= this.createCodes(codeRule, unitCode, locationCode, docCode, user, note, batchSize, filename, codeName);
-		for(Code code:codes){
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(),code.getCode() ,DataWrapUtil.ObjectToJson(code),CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
+		List<Code> codes = this.createCodes(codeRule, unitCode, locationCode, docCode, user, note, batchSize, filename, codeName);
+		for (Code code : codes) {
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
 			codePoolDao.insertCodePool(code.getCode());
 		}
-		
-		
+
 		return codes;
 	}
 
@@ -260,7 +263,7 @@ public class CodeServiceImpl implements CodeService {
 		if (mask == null)
 			throw new WekitException("规则验证无效!");
 		MaskParser maskParser = paserMask(mask);
-		List<CodeSequence> codeSequences = codeSequenceDao.queryCodeSequences(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(),codeRule.getMinSequence(),codeRule.getMaxSequence(), null);
+		List<CodeSequence> codeSequences = codeSequenceDao.queryCodeSequences(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence(), codeRule.getMaxSequence(), null);
 		CodeSequence codeSequence = null;
 		int minSeq = codeRule.getMinSequence();
 		int maxSeq = codeRule.getMaxSequence();
@@ -275,7 +278,7 @@ public class CodeServiceImpl implements CodeService {
 				throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - minSeq - 1) + "个编码!");
 		}
 		List<String> codes = generationCode(unitCode + "-" + locationCode + "-" + docCode + "-" + maskParser.getMask(), maskParser.getCount(), codeSequence, batchSize, maxSeq);
-		List<Code> generationCodes = codeDao.addCodes(codes,codeRule, unitCode, locationCode, docCode,user, note, fileName,codeName);
+		List<Code> generationCodes = codeDao.addCodes(codes, codeRule, unitCode, locationCode, docCode, user, note, fileName, codeName);
 		if (!codeSequenceDao.updateCodeSequence(codeSequence))
 			throw new WekitException("生成编码时发生意外请与管理员联系!");
 		return generationCodes;
@@ -411,31 +414,31 @@ public class CodeServiceImpl implements CodeService {
 
 	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@Override
-	public boolean cancelCode(Long codeId,String createrid, String ip, String note) {
+	public boolean cancelCode(Long codeId, String createrid, String ip, String note) {
 		Code temp = codeDao.getCode(codeId);
-		return cancel(temp,createrid, ip, note);
+		return cancel(temp, createrid, ip, note);
 	}
 
 	@Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
 	@Override
-	public boolean cancelCode(String code,  String createrid, String ip, String note) {
+	public boolean cancelCode(String code, String createrid, String ip, String note) {
 		Code temp = codeDao.getCode(code);
-		return cancel(temp,  createrid, ip, note);
+		return cancel(temp, createrid, ip, note);
 
 	}
 
-	protected boolean cancel(Code code,  String createrid, String ip, String note) {
+	protected boolean cancel(Code code, String createrid, String ip, String note) {
 		if (code == null)
 			throw new WekitException("该编码不存在");
-		User user=userDao.getByID(createrid);
-		if(user==null)
+		User user = userDao.getByID(createrid);
+		if (user == null)
 			throw new WekitException("用户信息不存在!");
-		
+
 		CodeRule codeRule = codeRuleDao.getCodeRule(code.getRuleName(), code.getRule());
 		String oldinfo = null;
 		try {
 			if (codeRule != null) {
-				TempCode tempCode = new TempCode(code.getRule(),user.getDisplayName(), user.getDisplayName(), code.getUnitCode(), code.getLocationCode(), code.getDocCode(), 0, code.getCode(), note, code.getCreateTime(), code.getCodeName(), codeRule.getMinSequence(), codeRule.getMaxSequence());
+				TempCode tempCode = new TempCode(code.getRule(), user.getDisplayName(), user.getDisplayName(), code.getUnitCode(), code.getLocationCode(), code.getDocCode(), 0, code.getCode(), note, code.getCreateTime(), code.getCodeName(), codeRule.getMinSequence(), codeRule.getMaxSequence());
 				tempCodeDao.addTempCode(tempCode);
 			}
 			oldinfo = DataWrapUtil.ObjectToJson(code);
@@ -469,6 +472,105 @@ public class CodeServiceImpl implements CodeService {
 		return true;
 	}
 
+	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
+	@Override
+	public String importCodes(String json) {
+		try {
+			CodeWrap[] wraps = DataWrapUtil.jsonToCodeWrapList(json);
+			String uuid = UUID.randomUUID().toString();
+			for (CodeWrap wrap : wraps) {
+				try {
+					if(StringUtils.isEmpty(wrap.getCode())){
+						wrap.setResult("编码存在!");
+						continue;
+					}
+					
+					CodeRule codeRule = codeRuleDao.getCodeRule(wrap.getRuleName(), wrap.getRule());
+					if (codeRule == null) {
+						wrap.setResult("rulename和rule没有能找到对应的规则!");
+						continue;
+					}
+					User user = userDao.getByID(wrap.getUserId());
+					if (user == null) {
+						wrap.setResult("对应的userid的信息不存在");
+						continue;
+					}
+					if (checkImport(wrap.getRule(), wrap.getCode())) {
+						if (codePoolDao.isExistsed(wrap.getCode())) {
+							wrap.setResult("该编码在数据库中已经存在!");
+							continue;
+						} else {
+							String[] temp = wrap.getCode().split("-");
+							Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), temp[0], temp[1], temp[2], wrap.getCode(), 1, uuid, System.currentTimeMillis(), wrap.getNote(), wrap.getFileName(), user.getDeptDisplayName(), codeRule.getFileTypeName(), wrap.getCodeName());
+							codeDao.addCode(code);
+							codePoolDao.insertCodePool(wrap.getCode());
+						}
+
+					} else {
+						wrap.setResult("编码规则和编码不匹配!");
+						continue;
+					}
+				} catch (Exception ex) {
+					wrap.setResult(ex.getMessage());
+				}
+			}
+			return DataWrapUtil.ObjectToJson(wraps);
+
+		} catch (JsonParseException e) {
+			logger.error(e.getMessage());
+			throw new WekitException(e.getMessage());
+		} catch (JsonMappingException e) {
+			logger.error(e.getMessage());
+			throw new WekitException(e.getMessage());
+		} catch (IOException e) {
+			logger.error(e.getMessage());
+			throw new WekitException(e.getMessage());
+		}
+	}
+
+	private boolean checkImport(String rule, String code) {
+		String[] rules = rule.split("-");
+		String[] codes = code.split("-");
+		if (!rules[0].endsWith("x") && !rules[0].equals(codes[0]))
+			return false;
+		if (!rules[1].equals("xxx") && !rules[1].equals(codes[1]))
+			return false;
+		if (!rules[2].equals("xxx") && !rules[2].equals(codes[2])) {
+			return false;
+		}
+		if (!checkMask(rules[3], codes[3])) {
+			return false;
+		}
+
+		return true;
+	}
+
+	private boolean checkMask(String mask, String code) {
+
+		int index = 1;
+		String temp = null;
+		String temp2 = null;
+		if (mask.length() != code.length()) {
+			return false;
+		}
+		while (true) {
+			index = mask.indexOf("[");
+			if (index == -1)
+				break;
+			temp = mask.substring(0, index);
+			temp2 = code.substring(0, index);
+			if (!temp.equals(temp2))
+				return false;
+			index = mask.indexOf("]");
+			if (index == -1)
+				return false;
+
+			mask = mask.substring(index + 1, mask.length());
+			code = code.substring(index + 1, code.length());
+		}
+		return true;
+	}
+
 	public UserDao getUserDao() {
 		return userDao;
 	}
@@ -493,6 +595,4 @@ public class CodeServiceImpl implements CodeService {
 		this.codeApplyLogDao = codeApplyLogDao;
 	}
 
-	
-	
 }

@@ -77,6 +77,7 @@ public interface CodeDao {
 	 * @return
 	 */
 	public List<Code> addCodes(List<String>codes,CodeRule codeRule,String unitCode,String locationCode,String docCode,User user,String note,String fileName,String codeName);
+
 	
 	/**
 	 * 根据查询的数组查询编码

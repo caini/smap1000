@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,10 +24,13 @@ import org.wekit.web.db.model.CodeApply;
 import org.wekit.web.db.model.ExtendCode;
 import org.wekit.web.db.model.RuleType;
 import org.wekit.web.db.model.User;
+import org.wekit.web.imports.CodeWrap;
+import org.wekit.web.imports.ExtendCodeWrap;
 import org.wekit.web.service.ExtendCodeService;
 import org.wekit.web.util.DataWrapUtil;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 
 @Service("extendCodeService")
@@ -155,6 +159,61 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 		codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), extendCode.getFileType(), extendCode.getResult(),DataWrapUtil.ObjectToJson(extendCode), CodeApplyLogDao.UAPPLAYOPERATE, System.currentTimeMillis());
 		return this.addExtendCode(extendCode);
 	}
+	
+	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
+	@Override
+	public String importCodes(String json) {
+	  try {
+		ExtendCodeWrap[] wraps=	DataWrapUtil.jsonToExtendCodeWrapList(json);
+		for(ExtendCodeWrap wrap:wraps){
+			try{
+				if(StringUtils.isEmpty(wrap.getCode())){
+					wrap.setResult("编码不存在!");
+					continue;
+				}
+				User applyUser= userDao.getByID(wrap.getApplyedId());
+				if(applyUser==null){
+					wrap.setResult("申请用户信息不存在！");
+					continue;
+				}
+				User user=userDao.getByID(wrap.getUserId());
+				if(user==null){
+					wrap.setResult("审核用户信息不存在!");
+					continue;
+				}
+				
+				String fileTypeName=" ";
+				RuleType ruleType=ruleTypeDao.getRuleType(wrap.getFilType());
+				if(ruleType!=null)
+					fileTypeName=ruleType.getTypeName();
+				String[] temp=wrap.getCode().split("-");
+				if(!codePoolDao.isExistsed(wrap.getCode())){
+					ExtendCode code=new ExtendCode(user.getDisplayName(), user.getLoginName(), System.currentTimeMillis(), wrap.getNote(),wrap.getApplyTitle(), wrap.getApplyId(), temp[2], temp[0], temp[1],1, applyUser.getLoginName(), applyUser.getDisplayName(), wrap.getCode(),wrap.getFileName(), applyUser.getDeptDisplayName(), wrap.getMask(), wrap.getFilType(), fileTypeName);
+					extendCodeDao.addExtendCode(code);
+					codePoolDao.insertCodePool(wrap.getCode());
+				}else{
+					wrap.setResult("该编码已经在数据库中存在了！");
+				}
+			}catch(Exception ex){
+				wrap.setResult(ex.getMessage());
+			}
+		}
+		
+		return DataWrapUtil.ObjectToJson(wraps);
+		
+	} catch (JsonParseException e) {
+		logger.error(e.getMessage());
+		throw new WekitException(e.getMessage());
+	} catch (JsonMappingException e) {
+		logger.error(e.getMessage());
+		throw new WekitException(e.getMessage());
+	} catch (IOException e) {
+		logger.error(e.getMessage());
+		throw new WekitException(e.getMessage());
+	}
+		
+	}
+	
 
 	public CodePoolDao getCodePoolDao() {
 		return codePoolDao;
@@ -195,8 +254,4 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 	public void setRuleTypeDao(RuleTypeDao ruleTypeDao) {
 		this.ruleTypeDao = ruleTypeDao;
 	}
-	
-	
-	
-
 }

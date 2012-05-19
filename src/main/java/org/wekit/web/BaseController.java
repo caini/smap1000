@@ -80,6 +80,10 @@ public abstract class BaseController<T> {
 	public final static String		APPLYTITLE		= "applytitle";
 
 	public final static String		MASK			= "mask";
+	
+	public final static String 		JSON	="json";
+	
+	
 
 	protected String				mask			= "";
 
@@ -128,6 +132,8 @@ public abstract class BaseController<T> {
 	protected String				datas			= "";
 
 	protected String				codeName		= "";
+	
+	protected String 				json="";
 
 	@Autowired
 	@Qualifier("remoteAclService")
@@ -304,6 +310,9 @@ public abstract class BaseController<T> {
 		}
 		if (parameters.containsKey(APPLYTITLE)) {
 			this.applyTitle = parameters.get(APPLYTITLE);
+		}
+		if(parameters.containsKey(JSON)){
+			this.json=parameters.get(JSON);
 		}
 	}
 
