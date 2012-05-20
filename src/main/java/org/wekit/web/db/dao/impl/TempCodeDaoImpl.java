@@ -103,7 +103,7 @@ public class TempCodeDaoImpl extends HibernateBaseDao<TempCode, Long> implements
 		if(maxSequence>=0){
 			buffer.append(" and bean.maxSequence="+maxSequence);
 		}
-		buffer.append(" and bean.year=:year and bean.month:month=:month and bean.day=:day");
+		buffer.append(" and bean.year=:year and bean.month=:month and bean.day=:day");
 		
 		buffer.append(" order by bean.code asc ");
 		Query query = createrQuery(buffer.toString());

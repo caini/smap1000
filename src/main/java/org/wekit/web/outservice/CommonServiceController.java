@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,7 +25,7 @@ public class CommonServiceController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/base64", method = RequestMethod.GET)
+	@RequestMapping(value = "/base64")
 	public String base64(HttpServletRequest request, HttpServletResponse response, Model model) {
 		String param = request.getParameter("p");
 		try {
@@ -48,7 +49,7 @@ public class CommonServiceController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/encode", method = RequestMethod.GET)
+	@RequestMapping(value = "/encode")
 	public String encode(HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		try {
@@ -73,7 +74,7 @@ public class CommonServiceController {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/encodeBase64", method = RequestMethod.GET)
+	@RequestMapping(value = "/encodeBase64")
 	public String encodeBase64(HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			String input =URLDecoder.decode(request.getParameter("k"),"UTF-8")+"&t="+System.currentTimeMillis();
@@ -81,8 +82,9 @@ public class CommonServiceController {
 			if (StringUtils.isEmpty(input) || StringUtils.isEmpty(passowrd)) {
 				model.addAttribute("content", "");
 			} else {
-				String temp = RC4CipherEntity.code(input, passowrd);
-				model.addAttribute("content", Base64.encodeBase64URLSafeString(temp.getBytes()));
+				BasicTextEncryptor strongTextEncryptor=new BasicTextEncryptor();
+				strongTextEncryptor.setPassword(passowrd);
+				model.addAttribute("content",strongTextEncryptor.encrypt(input));
 			}
 		} catch (Exception e) {
 			model.addAttribute("content", e.getMessage());

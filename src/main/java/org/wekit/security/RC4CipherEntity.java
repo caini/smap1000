@@ -1,6 +1,5 @@
 package org.wekit.security;
 
-import java.io.UnsupportedEncodingException;
 
 
 
@@ -52,4 +51,5 @@ public  class RC4CipherEntity
          
          return new String(iOutputChar);
     }    
+   
 }

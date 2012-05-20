@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.ui.Model;
@@ -215,10 +216,12 @@ public abstract class BaseController<T> {
 			throw new WekitException("不存在该授权用户");
 		if (StringUtils.isEmpty(test)) {
 			String password = remoteAcl.getPassword();
-			String temp = URLDecoder.decode(request.getParameter(USERPARAMS),"UTF-8");
-			temp = new String(Base64.decodeBase64(temp));
-			temp = RC4CipherEntity.code(temp, password);
-			this.userparams = temp;
+			String temp =request.getQueryString();
+			int index=temp.indexOf("&p=");
+			temp=temp.substring(index+3);
+			BasicTextEncryptor basicTextEncryptor=new BasicTextEncryptor();
+			basicTextEncryptor.setPassword(password);
+			this.userparams = basicTextEncryptor.decrypt(temp);
 		} else {
 			this.userparams = URLDecoder.decode(request.getParameter(USERPARAMS), "UTF-8");
 		}

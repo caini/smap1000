@@ -137,6 +137,7 @@ public class CodeServiceController extends BaseController<Code> {
 			initParam(request,"添加编码");
 			// TODO
 		} catch (Exception ex) {
+			ex.printStackTrace();
 			logger.error(ex.getMessage());
 			setState(0);
 			setMessage(ex.getMessage());
