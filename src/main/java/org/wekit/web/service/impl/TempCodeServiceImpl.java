@@ -47,8 +47,8 @@ public class TempCodeServiceImpl implements TempCodeService {
 	}
 
 	@Override
-	public List<TempCode> queryTempCodes(String rule, String unitcode, String locationCode, String doccode,int minSequence,int maxDequence, IPaginable paginable) {
-		return this.tempCodeDao.queryTempCodes(rule, unitcode, locationCode, doccode, minSequence, maxDequence, paginable);
+	public List<TempCode> queryTempCodes(String rule, String unitcode, String locationCode, String doccode,int minSequence,int maxDequence,int year,int month,int day, IPaginable paginable) {
+		return this.tempCodeDao.queryTempCodes(rule, unitcode, locationCode, doccode, minSequence, maxDequence,year,month,day, paginable);
 	}
 
 }

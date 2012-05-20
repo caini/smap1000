@@ -90,13 +90,13 @@ public class CodeDaoImpl extends HibernateBaseDao<Code, Long> implements CodeDao
 	}
 
 	@Override
-	public List<Code> addCodes(List<String> codes,CodeRule codeRule, String unitCode, String locationCode, String docCode,User user, String note,String filename,String codeName) {
+	public List<Code> addCodes(List<String> codes,CodeRule codeRule, String unitCode, String locationCode, String docCode,User user, String note,String filename,String codeName,int year,int month,int day) {
 		List<Code> list = new ArrayList<Code>();
 		String uuid = UUID.randomUUID().toString();
 		int i = 0;
 		for (String code : codes) {
 			i++;
-			Code newCode = new Code(codeRule.getRuleName(),codeRule.getRule(),user.getDisplayName(),user.getLoginName(), unitCode, locationCode, docCode, code, 1, uuid, System.currentTimeMillis(), note,filename,user.getDeptDisplayName(),codeRule.getFileTypeName(),codeName);
+			Code newCode = new Code(codeRule.getRuleName(),codeRule.getRule(),user.getDisplayName(),user.getLoginName(), unitCode, locationCode, docCode, code, 1, uuid, System.currentTimeMillis(), note,filename,user.getDeptDisplayName(),codeRule.getFileTypeName(),codeName,year,month,day);
 			this.save(newCode);
 			list.add(newCode);
 			if (i % 20 == 0) {

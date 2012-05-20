@@ -183,32 +183,11 @@ public class CodeServiceController extends BaseController<Code> {
 	public String cancelCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request,"撤销编码");
-			String code = null;
-			String creater = null;
-			String createrid = null;
-			String ip = "";
-			String note = "";
-			if (parameters.containsKey("code")) {
-				code = parameters.get("code");
-			}
-			if (parameters.containsKey("creater")) {
-				creater = parameters.get("creater");
-			}
-			if (parameters.containsKey("createrid")) {
-				createrid = parameters.get("createrid");
-			}
-			if (parameters.containsKey("ip")) {
-				ip = parameters.get("ip");
-			}
-			if (parameters.containsKey("note")) {
-				note = parameters.get(note);
-			}
-			if (StringUtils.isEmpty(code) || StringUtils.isEmpty(createrid) || StringUtils.isEmpty(creater)) {
+			if (StringUtils.isEmpty(code) || StringUtils.isEmpty(createrid) ) {
 				pagination.setState(0);
 				pagination.setMessage("传入的参数错误，请检测参数是否正确!");
 			} else {
-
-				this.codeService.cancelCode(code,  createrid, ip, note);
+				this.codeService.cancelCode(this.code,this.createrid, this.ip, this.note);
 			}
 		} catch (Exception ex) {
 			pagination.setState(0);

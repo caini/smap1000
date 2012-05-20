@@ -1,6 +1,7 @@
 package org.wekit.web.service.impl;
 
 import java.io.IOException;
+import java.io.ObjectOutputStream.PutField;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -172,34 +173,30 @@ public class CodeServiceImpl implements CodeService {
 	@Override
 	public Code fetchCode(long ruleId, String unitCode, String locationCode, String docCode, String createrId, String note, String filename, String codeName) throws JsonGenerationException, JsonMappingException, IOException {
 		CodeRule codeRule = codeRuleDao.getCodeRule(ruleId);
+
 		if (codeRule == null)
 			throw new WekitException("对应编码规则ID的信息不存在!");
+		String mask = checkRule(codeRule.getRule(), unitCode, locationCode, docCode);
+		if (mask == null)
+			throw new WekitException("规则验证无效!");
+		MaskParser maskParser = paserMask(mask);
 		User user = userDao.getByID(createrId, 1);
 		if (user == null) {
 			throw new WekitException("对应的用户信息不存在!");
 		}
-		List<TempCode> tempCodes = tempCodeDao.queryTempCodes(codeRule.getRule(), unitCode, locationCode, docCode, codeRule.getMinSequence(), codeRule.getMaxSequence(), null);
 
+		List<TempCode> tempCodes = tempCodeDao.queryTempCodes(codeRule.getRule(), unitCode, locationCode, docCode, codeRule.getMinSequence(), codeRule.getMaxSequence(), maskParser.getParam().get("year"), maskParser.getParam().get("month"), maskParser.getParam().get("day"), null);
 		if (tempCodes != null && tempCodes.size() > 0) {
-			TempCode tempCode = null;
-			for (TempCode code : tempCodes) {
-				if (!codePoolDao.isExistsed(code.getCode())) {
-					tempCode = code;
-					break;
-				} else {
-					tempCodeDao.deleteTempCode(code);
-				}
-			}
-			if (tempCode != null) {
-				String uuid = UUID.randomUUID().toString();
-				Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), unitCode, locationCode, docCode, tempCode.getCode(), 1, uuid, System.currentTimeMillis(), note, filename, user.getDeptDisplayName(), codeRule.getFileTypeName(), tempCode.getCodeName());
-				codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
-				code = codeDao.addCode(code);
-				tempCodeDao.deleteTempCode(tempCode);
-				return code;
-			}
+			TempCode tempCode = tempCodes.get(0);
+			String uuid = UUID.randomUUID().toString();
+			Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), unitCode, locationCode, docCode, tempCode.getCode(), 1, uuid, System.currentTimeMillis(), note, filename, user.getDeptDisplayName(), codeRule.getFileTypeName(), tempCode.getCodeName(), tempCode.getYear(), tempCode.getMonth(), tempCode.getDay());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
+			code = codeDao.addCode(code);
+			tempCodeDao.deleteTempCode(tempCode);
+			return code;
+
 		}
-		List<Code> codes = createCodes(codeRule, unitCode, locationCode, docCode, user, note, 1, filename, codeName);
+		List<Code> codes = createCodes(codeRule, unitCode, locationCode, docCode, user, note, 1, filename, codeName, maskParser);
 		if (codes != null && codes.size() > 0) {
 			Code code = codes.get(0);
 			codePoolDao.insertCodePool(code.getCode());
@@ -232,11 +229,15 @@ public class CodeServiceImpl implements CodeService {
 		if (codeRule == null) {
 			throw new WekitException("找不到对应的编码规则!");
 		}
+		String mask = checkRule(codeRule.getRule(), unitCode, locationCode, docCode);
+		if (mask == null)
+			throw new WekitException("规则验证无效!");
+		MaskParser maskParser = paserMask(mask);
 		User user = userDao.getByID(createId, 1);
 		if (user == null) {
 			throw new WekitException("找不到对应的用户信息!");
 		}
-		List<Code> codes = this.createCodes(codeRule, unitCode, locationCode, docCode, user, note, batchSize, filename, codeName);
+		List<Code> codes = this.createCodes(codeRule, unitCode, locationCode, docCode, user, note, batchSize, filename, codeName, maskParser);
 		for (Code code : codes) {
 			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
 			codePoolDao.insertCodePool(code.getCode());
@@ -258,11 +259,8 @@ public class CodeServiceImpl implements CodeService {
 	 * @param batchSize
 	 * @return
 	 */
-	private List<Code> createCodes(CodeRule codeRule, String unitCode, String locationCode, String docCode, User user, String note, int batchSize, String fileName, String codeName) {
-		String mask = checkRule(codeRule.getRule(), unitCode, locationCode, docCode);
-		if (mask == null)
-			throw new WekitException("规则验证无效!");
-		MaskParser maskParser = paserMask(mask);
+	private List<Code> createCodes(CodeRule codeRule, String unitCode, String locationCode, String docCode, User user, String note, int batchSize, String fileName, String codeName, MaskParser maskParser) {
+
 		List<CodeSequence> codeSequences = codeSequenceDao.queryCodeSequences(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence(), codeRule.getMaxSequence(), null);
 		CodeSequence codeSequence = null;
 		int minSeq = codeRule.getMinSequence();
@@ -278,7 +276,7 @@ public class CodeServiceImpl implements CodeService {
 				throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - minSeq - 1) + "个编码!");
 		}
 		List<String> codes = generationCode(unitCode + "-" + locationCode + "-" + docCode + "-" + maskParser.getMask(), maskParser.getCount(), codeSequence, batchSize, maxSeq);
-		List<Code> generationCodes = codeDao.addCodes(codes, codeRule, unitCode, locationCode, docCode, user, note, fileName, codeName);
+		List<Code> generationCodes = codeDao.addCodes(codes, codeRule, unitCode, locationCode, docCode, user, note, fileName, codeName, maskParser.getParam().get("year"), maskParser.getParam().get("month"), maskParser.getParam().get("day"));
 		if (!codeSequenceDao.updateCodeSequence(codeSequence))
 			throw new WekitException("生成编码时发生意外请与管理员联系!");
 		return generationCodes;
@@ -297,28 +295,36 @@ public class CodeServiceImpl implements CodeService {
 		int month = calendar.get(Calendar.MONTH + 1); // 英文的1月份是0开始的
 		int day = calendar.get(Calendar.MONDAY);
 
-		if (mask.indexOf("[yyyy]") > 0) {
+		if (mask.indexOf("[yyyy]") != -1) {
 			mask = mask.replace("[yyyy]", String.valueOf(year));
 			param.put("year", year);
+		} else {
+			param.put("year", 0);
 		}
-		if (mask.indexOf("[yy]") > 0) {
+		if (mask.indexOf("[yy]") != -1) {
 			mask = mask.replace("[yy]", String.valueOf(year % 100));
 			param.put("year", year);
+		} else {
+			param.put("year", 0);
 		}
-		if (mask.indexOf("[mm]") > 0) {
+		if (mask.indexOf("[mm]") != -1) {
 			if (month > 9)
 				mask = mask.replace("[mm]", String.valueOf(month));
 			else
 				mask = mask.replace("[mm]", "0" + String.valueOf(month));
 			param.put("month", month);
+		} else {
+			param.put("month", 0);
 		}
-		if (mask.indexOf("[dd]") > 0) {
+		if (mask.indexOf("[dd]") != -1) {
 			if (day > 9) {
 				mask = mask.replace("[dd]", String.valueOf(day));
 			} else {
 				mask = mask.replace("[dd]", "0" + String.valueOf(day));
 			}
 			param.put("day", day);
+		} else {
+			param.put("day", 0);
 		}
 		int left = mask.indexOf('[');
 		if (left < 0) {
@@ -440,7 +446,7 @@ public class CodeServiceImpl implements CodeService {
 		String oldinfo = null;
 		try {
 			if (codeRule != null) {
-				TempCode tempCode = new TempCode(code.getRule(), user.getDisplayName(), user.getDisplayName(), code.getUnitCode(), code.getLocationCode(), code.getDocCode(), 0, code.getCode(), note, code.getCreateTime(), code.getCodeName(), codeRule.getMinSequence(), codeRule.getMaxSequence());
+				TempCode tempCode = new TempCode(code.getRule(), user.getDisplayName(), user.getDisplayName(), code.getUnitCode(), code.getLocationCode(), code.getDocCode(), 0, code.getCode(), note, code.getCreateTime(), code.getCodeName(), codeRule.getMinSequence(), codeRule.getMaxSequence(), code.getYear(), code.getMonth(), code.getDay());
 				tempCodeDao.addTempCode(tempCode);
 			}
 			oldinfo = DataWrapUtil.ObjectToJson(code);
@@ -492,18 +498,20 @@ public class CodeServiceImpl implements CodeService {
 						wrap.setResult("rulename和rule没有能找到对应的规则!");
 						continue;
 					}
+
 					User user = userDao.getByID(wrap.getUserId(), 1);
 					if (user == null) {
 						wrap.setResult("对应的userid的信息不存在");
 						continue;
 					}
-					if (checkImport(wrap.getRule(), wrap.getCode())) {
+					Map<String, Integer> param = new HashMap<String, Integer>();
+					if (checkImport(wrap.getRule(), wrap.getCode(), param)) {
 						if (codePoolDao.isExistsed(wrap.getCode())) {
 							wrap.setResult("该编码在数据库中已经存在!");
 							continue;
 						} else {
 							String[] temp = wrap.getCode().split("-");
-							Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), temp[0], temp[1], temp[2], wrap.getCode(), 1, uuid, System.currentTimeMillis(), wrap.getNote(), wrap.getFileName(), user.getDeptDisplayName(), codeRule.getFileTypeName(), wrap.getCodeName());
+							Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), temp[0], temp[1], temp[2], wrap.getCode(), 1, uuid, System.currentTimeMillis(), wrap.getNote(), wrap.getFileName(), user.getDeptDisplayName(), codeRule.getFileTypeName(), wrap.getCodeName(), param.get("year"), param.get("month"), param.get("day"));
 							codeDao.addCode(code);
 							codePoolDao.insertCodePool(wrap.getCode());
 						}
@@ -530,7 +538,7 @@ public class CodeServiceImpl implements CodeService {
 		}
 	}
 
-	private boolean checkImport(String rule, String code) {
+	private boolean checkImport(String rule, String code, Map<String, Integer> params) {
 		String[] rules = rule.split("-");
 		String[] codes = code.split("-");
 		if (!rules[0].endsWith("x") && !rules[0].equals(codes[0]))
@@ -540,10 +548,35 @@ public class CodeServiceImpl implements CodeService {
 		if (!rules[2].equals("xxx") && !rules[2].equals(codes[2])) {
 			return false;
 		}
+		int index = 0;
+		index = rule.indexOf("[yyyy]");
+		if (index != -1) {
+			params.put("year", Integer.parseInt(code.substring(index, index + 5)));
+		} else {
+			params.put("year", 0);
+		}
+		index = rule.indexOf("[yy]");
+		if (index != -1) {
+			params.put("year", Integer.parseInt(code.substring(index, index + 3)));
+		} else {
+			params.put("year", 0);
+		}
+		index = rule.indexOf("[mm]");
+		if (index != -1) {
+			params.put("month", Integer.parseInt(code.substring(index, index + 3)));
+		} else {
+			params.put("month", 0);
+		}
+
+		index = rule.indexOf("[dd]");
+		if (index != -1) {
+			params.put("day", Integer.parseInt(code.substring(index, index + 3)));
+		} else {
+			params.put("day", 0);
+		}
 		if (!checkMask(rules[3], codes[3])) {
 			return false;
 		}
-
 		return true;
 	}
 

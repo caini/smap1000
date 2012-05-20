@@ -2,6 +2,7 @@ package org.wekit.web.db.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -99,8 +100,19 @@ public class Code implements Serializable {
 	
 	@Column(name="codename",length=128)
 	private String codeName;
+	
+	@Basic
+	private int					year;
+
+	@Basic
+	private int					month;
+
+	@Basic
+	private int					day;
+	
+	
 	// 初始化工作
-	public Code(String ruleName,String rule, String creater, String createrId, String unitCode, String locationCode, String docCode, String code, int state, String batchId, long createTime, String note,String filename,String deptName,String fileTypeName,String codeName) {
+	public Code(String ruleName,String rule, String creater, String createrId, String unitCode, String locationCode, String docCode, String code, int state, String batchId, long createTime, String note,String filename,String deptName,String fileTypeName,String codeName,int year,int month,int day) {
 		this.rule = rule;
 		this.creater = creater;
 		this.createrId = createrId;
@@ -117,6 +129,9 @@ public class Code implements Serializable {
 		this.deptName=deptName;
 		this.fileTypeName=fileTypeName;
 		this.codeName=codeName;
+		this.year=year;
+		this.month=month;
+		this.day=day;
 	}
 
 	public Code() {
@@ -265,6 +280,31 @@ public class Code implements Serializable {
 	public void setCodeName(String codeName) {
 		this.codeName = codeName;
 	}
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+	public int getMonth() {
+		return month;
+	}
+
+	public void setMonth(int month) {
+		this.month = month;
+	}
+
+	public int getDay() {
+		return day;
+	}
+
+	public void setDay(int day) {
+		this.day = day;
+	}
+	
 	
 	
 

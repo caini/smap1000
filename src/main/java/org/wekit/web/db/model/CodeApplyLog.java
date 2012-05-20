@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.xml.bind.annotation.XmlAccessType;
@@ -24,9 +25,9 @@ public class CodeApplyLog implements Serializable{
 	 */
 	private static final long	serialVersionUID	= 4524873629802707437L;
 	@Id
-	@Column(name="codeapplylogid")
+	@Column(name="applylogid")
 	@GeneratedValue(generator = "id_gen", strategy = GenerationType.TABLE)
-	@TableGenerator(name = "id_gen", table = "sys_id_gen", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "remotelog", allocationSize = 100)
+	@TableGenerator(name = "id_gen", table = "sys_id_gen", pkColumnName = "S_ID", valueColumnName = "S_NEXTNUM", pkColumnValue = "codeapplylog", allocationSize = 100)
 	private long codeApplyLogId;
 	
 	@Column(name="userid",length=64,nullable=false)
@@ -50,6 +51,7 @@ public class CodeApplyLog implements Serializable{
 	@Column(name="code",nullable=false)
 	private String code;
 	
+	@Lob
 	@Column(name="content",nullable=true,length=2000)
 	private String content;
 	

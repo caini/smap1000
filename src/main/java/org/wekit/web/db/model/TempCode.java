@@ -2,6 +2,7 @@ package org.wekit.web.db.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -77,11 +78,19 @@ public class TempCode implements Serializable {
 	@Column(name = "minseq", nullable = false)
 	private int					minSequence;
 	
+	@Basic
+	private int					year;
+
+	@Basic
+	private int					month;
+
+	@Basic
+	private int					day;
 	
 	@Column(name="codename",length=128)
 	private String codeName;
 	
-	public TempCode(String rule,String creater,String createrId,String unitCode,String locationCode,String docCode,int state,String code,String note,long createTime,String codeName,int minSequence,int maxSequence){
+	public TempCode(String rule,String creater,String createrId,String unitCode,String locationCode,String docCode,int state,String code,String note,long createTime,String codeName,int minSequence,int maxSequence,int year,int month,int day){
 		this.rule=rule;
 		this.creater=creater;
 		this.createrId=createrId;
@@ -95,6 +104,9 @@ public class TempCode implements Serializable {
 		this.codeName=codeName;
 		this.minSequence=minSequence;
 		this.maxSequence=maxSequence;
+		this.year=year;
+		this.month=month;
+		this.day=day;
 	}
 	
 	
@@ -227,6 +239,36 @@ public class TempCode implements Serializable {
 
 	public void setMinSequence(int minSequence) {
 		this.minSequence = minSequence;
+	}
+
+
+	public int getYear() {
+		return year;
+	}
+
+
+	public void setYear(int year) {
+		this.year = year;
+	}
+
+
+	public int getMonth() {
+		return month;
+	}
+
+
+	public void setMonth(int month) {
+		this.month = month;
+	}
+
+
+	public int getDay() {
+		return day;
+	}
+
+
+	public void setDay(int day) {
+		this.day = day;
 	}
 
 	

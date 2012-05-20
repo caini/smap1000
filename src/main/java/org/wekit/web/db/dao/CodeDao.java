@@ -76,7 +76,7 @@ public interface CodeDao {
 	 * @param note
 	 * @return
 	 */
-	public List<Code> addCodes(List<String>codes,CodeRule codeRule,String unitCode,String locationCode,String docCode,User user,String note,String fileName,String codeName);
+	public List<Code> addCodes(List<String>codes,CodeRule codeRule,String unitCode,String locationCode,String docCode,User user,String note,String fileName,String codeName,int year,int month,int day);
 
 	
 	/**

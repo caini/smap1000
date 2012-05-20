@@ -37,8 +37,10 @@ public class RemoteAclDaoImpl extends HibernateBaseDao<RemoteAcl, Long> implemen
 		query.setString("username", username);
 		query.setInteger("state", state);
 		List<RemoteAcl> remoteAcls = query.list();
-		if (remoteAcls != null)
+		if (remoteAcls != null && remoteAcls.size()>=1){
 			return remoteAcls.get(0);
+		}
+			
 		return null;
 	}
 
