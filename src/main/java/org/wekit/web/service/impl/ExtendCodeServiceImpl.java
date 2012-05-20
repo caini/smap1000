@@ -162,7 +162,7 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 	
 	@Transactional(propagation=Propagation.REQUIRED,isolation=Isolation.READ_COMMITTED)
 	@Override
-	public String importCodes(String json) {
+	public ExtendCodeWrap[] importCodes(String json) {
 	  try {
 		ExtendCodeWrap[] wraps=	DataWrapUtil.jsonToExtendCodeWrapList(json);
 		for(ExtendCodeWrap wrap:wraps){
@@ -199,7 +199,7 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 			}
 		}
 		
-		return DataWrapUtil.ObjectToJson(wraps);
+		return wraps;
 		
 	} catch (JsonParseException e) {
 		logger.error(e.getMessage());

@@ -482,7 +482,7 @@ public class CodeServiceImpl implements CodeService {
 
 	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.READ_COMMITTED)
 	@Override
-	public String importCodes(String json) {
+	public CodeWrap[] importCodes(String json) {
 		try {
 			CodeWrap[] wraps = DataWrapUtil.jsonToCodeWrapList(json);
 			String uuid = UUID.randomUUID().toString();
@@ -520,11 +520,12 @@ public class CodeServiceImpl implements CodeService {
 						wrap.setResult("编码规则和编码不匹配!");
 						continue;
 					}
+					wrap.setResult("导入成功!");
 				} catch (Exception ex) {
 					wrap.setResult(ex.getMessage());
 				}
 			}
-			return DataWrapUtil.ObjectToJson(wraps);
+			return wraps;
 
 		} catch (JsonParseException e) {
 			logger.error(e.getMessage());
@@ -585,9 +586,7 @@ public class CodeServiceImpl implements CodeService {
 		int index = 1;
 		String temp = null;
 		String temp2 = null;
-		if (mask.length() != code.length()) {
-			return false;
-		}
+		
 		while (true) {
 			index = mask.indexOf("[");
 			if (index == -1)
@@ -601,7 +600,7 @@ public class CodeServiceImpl implements CodeService {
 				return false;
 
 			mask = mask.substring(index + 1, mask.length());
-			code = code.substring(index + 1, code.length());
+			code = code.substring(index -1, code.length());
 		}
 		return true;
 	}

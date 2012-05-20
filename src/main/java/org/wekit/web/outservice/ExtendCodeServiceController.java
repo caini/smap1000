@@ -74,19 +74,7 @@ public class ExtendCodeServiceController  extends BaseController<ExtendCode>{
 		
 	}
 	
-	@RequestMapping(value="/extendcode/import.{extend}")
-	public String importcode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-		
-		try{
-			initParam(request,"导入无规则编码");
-			extendCodeService.importCodes(this.json);
-			}catch(Exception ex){
-				logger.error(ex.getMessage());
-				setState(0);
-				setMessage(ex.getMessage());
-			}
-			return displayAPIClient(extend, model);
-	}
+	
 
 	@RequestMapping(value="/extendcode/delete.{extend}")
 	public String deletecode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){

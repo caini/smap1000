@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.ExtendCode;
+import org.wekit.web.imports.ExtendCodeWrap;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -85,5 +86,5 @@ public interface ExtendCodeService {
 	 * 无规则编码导入功能
 	 * @param json
 	 */
-	public String importCodes(String json);
+	public ExtendCodeWrap[] importCodes(String json);
 }

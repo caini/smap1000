@@ -38,6 +38,8 @@ public class TestAction {
 		basicTextEncryptor.setPassword("caini");
 		System.out.println(test2);
 		System.out.println(strongTextEncryptor.decrypt("3nfXi9cJ7IaZfWOuQeMLi6XzTZbYCZoQbwJVJGLEzxdXW2l/tNKda97xkYVz8wRpmWKNHbBJrldqUl+gouRzAag4EBmq+d6MLDItEFDei7SJv6jupN6ayDExo2TKHMdUxv6EtntM9v0AJxeEehScIlSW8shAdeMPezLgw+vfez+kTGusR/QRog=="));
+	
+		
 	}
 	
 }

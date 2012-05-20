@@ -6,6 +6,7 @@ import java.util.Map;
 
 import org.wekit.web.IPaginable;
 import org.wekit.web.db.model.Code;
+import org.wekit.web.imports.CodeWrap;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -139,6 +140,6 @@ public interface CodeService {
 	 * 导入数据
 	 * @param json
 	 */
-	public String importCodes(String json);
+	public CodeWrap[] importCodes(String json);
 
  }

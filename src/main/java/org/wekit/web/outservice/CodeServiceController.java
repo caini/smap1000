@@ -197,17 +197,7 @@ public class CodeServiceController extends BaseController<Code> {
 		return displayAPIClient(extend, model);
 	}
 	
-	@RequestMapping(value="/code/import.{extend}")
-	public String importcode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-		try {
-			initParam(request,"导入规则编码");
-			codeService.importCodes(this.json);
-		} catch (Exception ex) {
-			pagination.setState(0);
-			pagination.setMessage(ex.getMessage());
-		}
-		return displayAPIClient(extend, model);
-	}
+	
 	
 
 	/**
