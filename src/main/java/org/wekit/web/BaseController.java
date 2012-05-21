@@ -217,8 +217,13 @@ public abstract class BaseController<T> {
 		if (StringUtils.isEmpty(test)) {
 			String password = remoteAcl.getPassword();
 			String temp =request.getQueryString();
-			int index=temp.indexOf("&p=");
-			temp=temp.substring(index+3);
+			if(StringUtils.isEmpty(temp)){
+				temp=request.getParameter(USERPARAMS);
+			}else
+			{
+				int index=temp.indexOf("&p=");
+				temp=temp.substring(index+3);
+			}
 			BasicTextEncryptor basicTextEncryptor=new BasicTextEncryptor();
 			basicTextEncryptor.setPassword(password);
 			this.userparams = basicTextEncryptor.decrypt(temp);
