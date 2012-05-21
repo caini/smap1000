@@ -203,6 +203,7 @@ public abstract class BaseController<T> {
 	 * @throws UnsupportedEncodingException
 	 */
 	private String decode(HttpServletRequest request, String operate) throws UnsupportedEncodingException {
+		
 		String test = request.getParameter(TEST);
 		if (StringUtils.isEmpty(request.getParameter(USERKEY))) {
 			throw new WekitException("请输入用户信息");
@@ -224,9 +225,13 @@ public abstract class BaseController<T> {
 				int index=temp.indexOf("&p=");
 				temp=temp.substring(index+3);
 			}
+			try{
 			BasicTextEncryptor basicTextEncryptor=new BasicTextEncryptor();
 			basicTextEncryptor.setPassword(password);
 			this.userparams = basicTextEncryptor.decrypt(temp);
+			}catch(Exception ex){
+			   throw new WekitException("传入不合加密规则的查询字符！");
+			}
 		} else {
 			this.userparams = URLDecoder.decode(request.getParameter(USERPARAMS), "UTF-8");
 		}
