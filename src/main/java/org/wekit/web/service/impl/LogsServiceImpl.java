@@ -9,10 +9,12 @@ import org.wekit.web.WekitException;
 import org.wekit.web.db.dao.CodeApplyLogDao;
 import org.wekit.web.db.dao.OptLogDao;
 import org.wekit.web.db.dao.RemoteLogDao;
+import org.wekit.web.db.dao.RuleTypeDao;
 import org.wekit.web.db.dao.UserDao;
 import org.wekit.web.db.model.CodeApplyLog;
 import org.wekit.web.db.model.OptLog;
 import org.wekit.web.db.model.RemoteLog;
+import org.wekit.web.db.model.RuleType;
 import org.wekit.web.db.model.User;
 import org.wekit.web.service.LogsService;
 
@@ -40,6 +42,9 @@ public class LogsServiceImpl implements LogsService {
 	@Qualifier("userDao")
 	private UserDao userDao;
 	
+	@Autowired
+	@Qualifier("ruleTypeDao")
+	private RuleTypeDao ruleTypeDao;
 	
 	@Transactional(propagation=Propagation.REQUIRED)
 	@Override
@@ -47,7 +52,10 @@ public class LogsServiceImpl implements LogsService {
 		User user=userDao.getByID(userid,1);
 		if(user==null)
 			throw new WekitException("操作用户不存在!");
-		CodeApplyLog codeApplyLog=new CodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptDisplayName(), user.getDeptDisplayName(),System.currentTimeMillis(), fileType, code, content, operateType);
+		RuleType ruleType=	ruleTypeDao.getRuleType(fileType);
+		if(ruleType==null)
+			throw new WekitException("fileType不存在!");
+		CodeApplyLog codeApplyLog=new CodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptDisplayName(), user.getDeptDisplayName(),System.currentTimeMillis(), ruleType.getTypeId(), code, content, operateType,ruleType.getTypeName());
 		return codeApplyLogDao.saveCodeApplyLog(codeApplyLog);
 	}
 

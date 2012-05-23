@@ -17,24 +17,27 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.wekit.web.BaseController;
 import org.wekit.web.db.model.ExtendCode;
 import org.wekit.web.service.ExtendCodeService;
+import org.wekit.web.util.DataWrapUtil;
 
 /**
  * 无规则编码获取
+ * 
  * @author HuangWeili
- *
+ * 
  */
 @Controller("extendCodeServiceController")
 @Scope(org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST)
-public class ExtendCodeServiceController  extends BaseController<ExtendCode>{
+public class ExtendCodeServiceController extends BaseController<ExtendCode> {
 
-	private final static Logger logger=Logger.getLogger(ExtendCodeServiceController.class);
-	
+	private final static Logger	logger	= Logger.getLogger(ExtendCodeServiceController.class);
+
 	@Autowired
 	@Qualifier("extendCodeService")
-	private ExtendCodeService extendCodeService;
-	
+	private ExtendCodeService	extendCodeService;
+
 	/**
 	 * 更新无规则编码接口
+	 * 
 	 * @param extend
 	 * @param request
 	 * @param response
@@ -43,54 +46,53 @@ public class ExtendCodeServiceController  extends BaseController<ExtendCode>{
 	 */
 	@RequestMapping(value = "/extendcode/update.{extend}")
 	public String updateCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
-		try{
-		initParam(request,"更新无规则编码");
-		//TODO
-		}catch(Exception ex){
+		try {
+			initParam(request, "更新无规则编码");
+			// TODO
+		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 			setState(0);
 			setMessage(ex.getMessage());
 		}
 		return displayAPIClient(extend, model);
 	}
-	
-	
-	@RequestMapping(value="/extendcode/fetch.{extend}")
-	public String fetch(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-		
-		try{
-			initParam(request,"获取无规则编码");
-			ExtendCode code= extendCodeService.addExtendCode(this.createrid, this.note, this.applyId, this.applyTitle,this.docCode, this.unitCode, this.locationCode, 1, this.code,this.filename, this.mask,this.typeId);
-			List<ExtendCode> codes=new ArrayList<ExtendCode>();
+
+	@RequestMapping(value = "/extendcode/fetch.{extend}")
+	public String fetch(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+		try {
+			initParam(request, "获取无规则编码");
+			ExtendCode code = extendCodeService.addExtendCode(this.createrid, this.note, this.applyId, this.applyTitle, this.docCode, this.unitCode, this.locationCode, 1, this.code, this.filename, this.mask, this.typeId);
+			List<ExtendCode> codes = new ArrayList<ExtendCode>();
 			codes.add(code);
 			this.setDatas(codes);
 			this.setMessage("添加无规则编码成功");
-			}catch(Exception ex){
-				logger.error(ex.getMessage());
-				setState(0);
-				setMessage(ex.getMessage());
-			}
-			return displayAPIClient(extend, model);
-		
-	}
-	
-	
+			addRemoteLog(DataWrapUtil.ObjectToJson(code), "获取无规则编码");
+		} catch (Exception ex) {
+			addRemoteLog("添加无规则编码：" + this.code + "发生错误：" + ex.getMessage(), "获取无规则编码");
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}
 
-	@RequestMapping(value="/extendcode/delete.{extend}")
-	public String deletecode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-		
-		try{
-			initParam(request,"删除无规则编码");
-			//TODO
-			
-			}catch(Exception ex){
-				logger.error(ex.getMessage());
-				setState(0);
-				setMessage(ex.getMessage());
-			}
-			return displayAPIClient(extend, model);
+		return displayAPIClient(extend, model);
+
 	}
-	
+
+	@RequestMapping(value = "/extendcode/delete.{extend}")
+	public String deletecode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
+
+		try {
+			initParam(request, "删除无规则编码");
+			// TODO
+
+		} catch (Exception ex) {
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}
+		return displayAPIClient(extend, model);
+	}
 
 	public ExtendCodeService getExtendCodeService() {
 		return extendCodeService;
@@ -100,5 +102,4 @@ public class ExtendCodeServiceController  extends BaseController<ExtendCode>{
 		this.extendCodeService = extendCodeService;
 	}
 
-	
 }

@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.jasypt.util.text.BasicTextEncryptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -32,6 +33,7 @@ import org.wekit.web.util.DataWrapUtil;
  */
 public abstract class BaseController<T> {
 
+	private static Logger logger=Logger.getLogger(BaseController.class);
 	public final static String		IP				= "ip";
 
 	public final static String		CODE			= "code";
@@ -137,6 +139,7 @@ public abstract class BaseController<T> {
 	protected String				codeName		= "";
 
 	protected String				json			= "";
+	
 
 	@Autowired
 	@Qualifier("remoteAclService")
@@ -173,8 +176,12 @@ public abstract class BaseController<T> {
 	 * @throws Exception
 	 */
 	protected void initParam(HttpServletRequest request, String operate) throws Exception {
+		try{
 		this.userparams = decode(request, operate);
-		logsService.addRemoteLog(remoteAcl.getAclId(), remoteAcl.getUsername(), operate, this.userparams);// 远程操作日志
+		}catch (Exception e) {
+			throw new WekitException("传入了非法加密的查询!");
+		}
+		logger.info(remoteAcl.getUsername()+":"+this.userparams);
 		String[] params = this.userparams.split("&");
 		if (params != null) {
 			for (String param : params) {
@@ -211,11 +218,11 @@ public abstract class BaseController<T> {
 		if (StringUtils.isEmpty(request.getParameter(USERPARAMS))) {
 			throw new WekitException("请输入请求参数");
 		}
-		remoteAcl = remoteAclService.getRemoteAclByUserName(userkey, 1);
-		if (remoteAcl == null)
+		this.remoteAcl = remoteAclService.getRemoteAclByUserName(userkey, 1);
+		if (this.remoteAcl == null)
 			throw new WekitException("不存在该授权用户");
 		if (StringUtils.isEmpty(test)) {
-			String password = remoteAcl.getPassword();
+			String password = this.remoteAcl.getPassword();
 			String temp =request.getQueryString();
 			int index=temp.indexOf("&p=");
 			temp=temp.substring(index+3);
@@ -324,6 +331,7 @@ public abstract class BaseController<T> {
 		if (parameters.containsKey(JSON)) {
 			this.json = parameters.get(JSON);
 		}
+		
 	}
 
 	protected void addData(T data) {
@@ -349,6 +357,14 @@ public abstract class BaseController<T> {
 
 	protected void setDatas(List<T> datas) {
 		this.pagination.setDatas(datas);
+	}
+	
+	protected void addRemoteLog(String operate){
+		logsService.addRemoteLog(remoteAcl.getAclId(), remoteAcl.getUsername(), operate, this.userparams);// 远程操作日志
+	}
+	
+	protected void addRemoteLog(String content,String operateType){
+		logsService.addRemoteLog(remoteAcl.getAclId(),remoteAcl.getUsername(), operateType, content);
 	}
 
 }

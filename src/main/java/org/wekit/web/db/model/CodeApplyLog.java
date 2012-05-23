@@ -48,6 +48,9 @@ public class CodeApplyLog implements Serializable{
 	@Column(name="filetype")
 	private long fileType;
 	
+	@Column(name="filetypename")
+	private String fileTypeName;
+	
 	@Column(name="code",nullable=false)
 	private String code;
 	
@@ -74,7 +77,7 @@ public class CodeApplyLog implements Serializable{
 	 * @param content
 	 * @param operateType
 	 */
-	public CodeApplyLog(String userId,String userName,String deptid,String deptname,long createTime,long fileType,String code,String content,String operateType){
+	public CodeApplyLog(String userId,String userName,String deptid,String deptname,long createTime,long fileType,String code,String content,String operateType,String fileTypeName){
 		this.userId=userId;
 		this.userName=userName;
 		this.deptId=deptid;
@@ -84,6 +87,7 @@ public class CodeApplyLog implements Serializable{
 		this.code=code;
 		this.content=content;
 		this.operateType=operateType;
+		this.fileTypeName=fileTypeName;
 	}
 	
 	
@@ -169,8 +173,13 @@ public class CodeApplyLog implements Serializable{
 	public void setFileType(long fileType) {
 		this.fileType = fileType;
 	}
-	
-	
-	
-	
+
+	public String getFileTypeName() {
+		return fileTypeName;
+	}
+
+	public void setFileTypeName(String fileTypeName) {
+		this.fileTypeName = fileTypeName;
+	}
+
 }

@@ -21,6 +21,7 @@ import org.wekit.web.BaseController;
 import org.wekit.web.WekitException;
 import org.wekit.web.db.model.Code;
 import org.wekit.web.service.CodeService;
+import org.wekit.web.util.DataWrapUtil;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
@@ -156,12 +157,13 @@ public class CodeServiceController extends BaseController<Code> {
 	@RequestMapping(value = "/code/fetch.{extend}", method = RequestMethod.GET)
 	public String fetchCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request,"获取编码");
+			initParam(request,"获取有规则编码");
 			this.fetchCode(true);
 		} catch (Exception ex) {
 			logger.error(ex);
 			pagination.setState(0);
 			pagination.setMessage(ex.getMessage());
+			addRemoteLog("获取编码时发生错误："+extend, "获取有规则编码");
 		}
 		return displayAPIClient(extend, model);
 	}
@@ -176,6 +178,7 @@ public class CodeServiceController extends BaseController<Code> {
 			logger.error(ex);
 			pagination.setState(0);
 			pagination.setMessage(ex.getMessage());
+			addRemoteLog("获取批量编码时发出错误："+ex.getMessage(), "获取批量编码");
 		}
 		return displayAPIClient(extend, model);
 	}
@@ -191,9 +194,12 @@ public class CodeServiceController extends BaseController<Code> {
 				this.codeService.cancelCode(this.code,this.createrid, this.ip, this.note);
 			}
 		} catch (Exception ex) {
+			logger.error(ex.getMessage());
 			pagination.setState(0);
 			pagination.setMessage(ex.getMessage());
+			addRemoteLog("撤销编码"+this.code+"时发生错误："+ex.getMessage(),"撤销有规则编码");
 		}
+		addRemoteLog("撤销编码"+this.code+"成功!", "撤销有规则编码");
 		return displayAPIClient(extend, model);
 	}
 	
@@ -217,6 +223,7 @@ public class CodeServiceController extends BaseController<Code> {
 		} else {
 			list = this.codeService.batchCode(this.ruleId, this.unitCode, this.locationCode, this.docCode, this.createrid, this.note, this.batchSize,this.filename,this.codeName);
 		}
+		addRemoteLog(DataWrapUtil.ObjectToJson(list),"获取有规则编码");
 		this.pagination.setDatas(list);
 	}
 

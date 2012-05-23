@@ -25,12 +25,14 @@ import org.wekit.web.db.dao.CodeDao;
 import org.wekit.web.db.dao.CodePoolDao;
 import org.wekit.web.db.dao.CodeRuleDao;
 import org.wekit.web.db.dao.CodeSequenceDao;
+import org.wekit.web.db.dao.RuleTypeDao;
 import org.wekit.web.db.dao.TempCodeDao;
 import org.wekit.web.db.dao.UserDao;
 import org.wekit.web.db.model.Code;
 import org.wekit.web.db.model.CodePool;
 import org.wekit.web.db.model.CodeRule;
 import org.wekit.web.db.model.CodeSequence;
+import org.wekit.web.db.model.RuleType;
 import org.wekit.web.db.model.TempCode;
 import org.wekit.web.db.model.User;
 import org.wekit.web.imports.CodeWrap;
@@ -81,6 +83,10 @@ public class CodeServiceImpl implements CodeService {
 	@Autowired
 	@Qualifier("codeApplyLogDao")
 	private CodeApplyLogDao	codeApplyLogDao;
+	
+	@Autowired
+	@Qualifier("ruleTypeDao")
+	private RuleTypeDao ruleTypeDao;
 
 	@Override
 	public Code getCode(Long id) {
@@ -184,13 +190,13 @@ public class CodeServiceImpl implements CodeService {
 		if (user == null) {
 			throw new WekitException("对应的用户信息不存在!");
 		}
-
 		List<TempCode> tempCodes = tempCodeDao.queryTempCodes(codeRule.getRule(), unitCode, locationCode, docCode, codeRule.getMinSequence(), codeRule.getMaxSequence(), maskParser.getParam().get("year"), maskParser.getParam().get("month"), maskParser.getParam().get("day"), null);
 		if (tempCodes != null && tempCodes.size() > 0) {
 			TempCode tempCode = tempCodes.get(0);
 			String uuid = UUID.randomUUID().toString();
 			Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), unitCode, locationCode, docCode, tempCode.getCode(), 1, uuid, System.currentTimeMillis(), note, filename, user.getDeptDisplayName(), codeRule.getFileTypeName(), tempCode.getCodeName(), tempCode.getYear(), tempCode.getMonth(), tempCode.getDay());
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
+			
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis(),codeRule.getFileTypeName());
 			code = codeDao.addCode(code);
 			tempCodeDao.deleteTempCode(tempCode);
 			return code;
@@ -200,7 +206,7 @@ public class CodeServiceImpl implements CodeService {
 		if (codes != null && codes.size() > 0) {
 			Code code = codes.get(0);
 			codePoolDao.insertCodePool(code.getCode());
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis(),codeRule.getFileTypeName());
 			return code;
 		}
 		return null;
@@ -239,7 +245,7 @@ public class CodeServiceImpl implements CodeService {
 		}
 		List<Code> codes = this.createCodes(codeRule, unitCode, locationCode, docCode, user, note, batchSize, filename, codeName, maskParser);
 		for (Code code : codes) {
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis(),codeRule.getFileTypeName());
 			codePoolDao.insertCodePool(code.getCode());
 		}
 
@@ -451,7 +457,7 @@ public class CodeServiceImpl implements CodeService {
 			}
 			oldinfo = DataWrapUtil.ObjectToJson(code);
 			codeDao.deleteCode(code);
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), oldinfo, CodeApplyLogDao.CANCELOPERATE, System.currentTimeMillis());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), oldinfo, CodeApplyLogDao.CANCELOPERATE, System.currentTimeMillis(),codeRule.getFileTypeName());
 			logger.info("creater:" + user.getDisplayName() + "||createrid:" + createrid + "取消:编码 " + oldinfo);
 		} catch (Exception e) {
 			logger.error(e.getMessage());

@@ -56,10 +56,12 @@ public class RuleNameServiceController extends BaseController<String> {
 			List<String> ruleNames = ruleService.queryCodeRuleNames(this.pagination);
 			setDatas(ruleNames);
 		} catch (Exception ex) {
+			addRemoteLog("查询编码规则名称时发生错误:"+ex.getMessage(),"查询编码规则名称");
 			logger.error(ex.getMessage());
 			setState(0);
 			setMessage(ex.getMessage());
 		}
+		addRemoteLog("查询编码规则名称成功!","查询编码规则名称");
 		return displayAPIClient(extend, model);
 	}
 

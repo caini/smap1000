@@ -128,7 +128,7 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 			throw new WekitException("操作用户的信息不存在!");
 		if (code != null) {
 			if (this.extendCodeDao.deleteExtendCode(code)) {				
-				codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(),code.getFileType(), code.getResult(),DataWrapUtil.ObjectToJson(code),CodeApplyLogDao.UCANCELOPERATE, System.currentTimeMillis());
+				codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(),code.getFileType(), code.getResult(),DataWrapUtil.ObjectToJson(code),CodeApplyLogDao.UCANCELOPERATE, System.currentTimeMillis(),code.getFileTypeName());
 				codePoolDao.deleteCodePool(code.getResult());
 				if(logger.isInfoEnabled()){
 				logger.info(user.getDisplayName()+"("+createrid+"-- ip:"+ip+") 删除无规则编码:"+DataWrapUtil.ObjectToJson(code));
@@ -156,7 +156,7 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 		if(ruleType==null)
 			throw new WekitException("对应的文件类型不存在!");
 		ExtendCode extendCode=new ExtendCode(user.getDisplayName(),user.getLoginName(), System.currentTimeMillis(), note, applyTitle,codeApply.getApplyId(), docCode, unitCode, locationCode, state, codeApply.getApplyedId(), codeApply.getApplyedName(), result, filename,codeApply.getDeptName(),mask,ruleType.getTypeId(),ruleType.getTypeName());
-		codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), extendCode.getFileType(), extendCode.getResult(),DataWrapUtil.ObjectToJson(extendCode), CodeApplyLogDao.UAPPLAYOPERATE, System.currentTimeMillis());
+		codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), extendCode.getFileType(), extendCode.getResult(),DataWrapUtil.ObjectToJson(extendCode), CodeApplyLogDao.UAPPLAYOPERATE, System.currentTimeMillis(),extendCode.getFileTypeName());
 		return this.addExtendCode(extendCode);
 	}
 	

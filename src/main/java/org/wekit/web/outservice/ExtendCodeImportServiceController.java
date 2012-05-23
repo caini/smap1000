@@ -20,26 +20,29 @@ import org.wekit.web.service.ExtendCodeService;
 @Controller("extendCodeImportServiceController")
 @Scope(org.springframework.web.context.WebApplicationContext.SCOPE_REQUEST)
 public class ExtendCodeImportServiceController extends BaseController<ExtendCodeWrap> {
-	
-	private static Logger logger=Logger.getLogger(ExtendCodeImportServiceController.class);
-	
+
+	private static Logger		logger	= Logger.getLogger(ExtendCodeImportServiceController.class);
+
 	@Autowired
 	@Qualifier("extendCodeService")
-	private ExtendCodeService extendCodeService;
-	
-	@RequestMapping(value="/extendcode/import.{extend}")
-	public String importcode(@PathVariable("extend")String extend,HttpServletRequest request,HttpServletResponse response,Model model){
-		
-		try{
-			initParam(request,"导入无规则编码");
-			ExtendCodeWrap[] extendCodeWraps=extendCodeService.importCodes(this.json);
+	private ExtendCodeService	extendCodeService;
+
+	@RequestMapping(value = "/extendcode/import.{extend}")
+	public String importcode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
+		String cid = request.getParameter("cid");
+		try {
+			initParam(request, "无规则编码导入");
+
+			ExtendCodeWrap[] extendCodeWraps = extendCodeService.importCodes(this.json);
 			this.setDatas(Arrays.asList(extendCodeWraps));
-			}catch(Exception ex){
-				logger.error(ex.getMessage());
-				setState(0);
-				setMessage(ex.getMessage());
-			}
-			return displayAPIClient(extend, model);
+		} catch (Exception ex) {
+			addRemoteLog(cid + "导入无规则编码是发生错误：" + ex.getMessage(), "无规则编码导入");
+			logger.error(ex.getMessage());
+			setState(0);
+			setMessage(ex.getMessage());
+		}
+		addRemoteLog(cid + "导入无规则编码成功!", "无规则编码导入");
+		return displayAPIClient(extend, model);
 	}
 
 }
