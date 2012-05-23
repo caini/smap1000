@@ -43,7 +43,7 @@ public class CodeServiceController extends BaseController<Code> {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/code/query.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/code/query.{extend}")
 	public String queryCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request,"查询编码");
@@ -64,7 +64,7 @@ public class CodeServiceController extends BaseController<Code> {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/code/update.{extend}", method = RequestMethod.POST)
+	@RequestMapping(value = "/code/update.{extend}")
 	public String updateCode(@PathVariable("extned") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request,"更新编码");
@@ -85,7 +85,7 @@ public class CodeServiceController extends BaseController<Code> {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/code/delete.{extend}", method = RequestMethod.POST)
+	@RequestMapping(value = "/code/delete.{extend}")
 	public String deleteCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request,"删除编码");
@@ -108,7 +108,7 @@ public class CodeServiceController extends BaseController<Code> {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/code/find.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/code/find.{extend}")
 	public String findCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request,"查询编码");
@@ -132,7 +132,7 @@ public class CodeServiceController extends BaseController<Code> {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/code/add.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/code/add.{extend}")
 	public String addCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request,"添加编码");
@@ -154,7 +154,7 @@ public class CodeServiceController extends BaseController<Code> {
 	 * @param model
 	 * @return
 	 */
-	@RequestMapping(value = "/code/fetch.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/code/fetch.{extend}")
 	public String fetchCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request,"获取有规则编码");
@@ -168,7 +168,7 @@ public class CodeServiceController extends BaseController<Code> {
 		return displayAPIClient(extend, model);
 	}
 
-	@RequestMapping(value = "/code/batch.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/code/batch.{extend}")
 	public String batchCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 
 		try {
@@ -183,7 +183,7 @@ public class CodeServiceController extends BaseController<Code> {
 		return displayAPIClient(extend, model);
 	}
 
-	@RequestMapping(value = "/code/cancel.{extend}", method = RequestMethod.GET)
+	@RequestMapping(value = "/code/cancel.{extend}")
 	public String cancelCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
 			initParam(request,"撤销编码");
