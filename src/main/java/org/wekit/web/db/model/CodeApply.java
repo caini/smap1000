@@ -61,7 +61,7 @@ public class CodeApply implements Serializable {
 	private String location;
 
 	// 文件名称
-	@Column(name = "file", length = 500)
+	@Column(name = "filepath", length = 500)
 	private String file;
 	// 掩码描述
 	@Column(name = "mask", length = 500)
