@@ -84,8 +84,7 @@ public class ExtendCodeServiceController extends BaseController<ExtendCode> {
 
 		try {
 			initParam(request, "删除无规则编码");
-			// TODO
-
+			this.extendCodeService.deleteExtendCode(this.id, this.createrid, this.ip);
 		} catch (Exception ex) {
 			logger.error(ex.getMessage());
 			setState(0);

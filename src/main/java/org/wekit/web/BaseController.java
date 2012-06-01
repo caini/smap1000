@@ -33,7 +33,7 @@ import org.wekit.web.util.DataWrapUtil;
  */
 public abstract class BaseController<T> {
 
-	private static Logger logger=Logger.getLogger(BaseController.class);
+	private static Logger			logger			= Logger.getLogger(BaseController.class);
 	public final static String		IP				= "ip";
 
 	public final static String		CODE			= "code";
@@ -90,6 +90,8 @@ public abstract class BaseController<T> {
 
 	public final static String		TEST			= "test";
 
+	public final static String		ID				= "id";
+
 	protected String				mask			= "";
 
 	protected long					applyId			= 0;
@@ -139,11 +141,11 @@ public abstract class BaseController<T> {
 	protected String				codeName		= "";
 
 	protected String				json			= "";
-	
 
+	protected long					id				= 0;
 	@Autowired
 	@Qualifier("remoteAclService")
-	protected RemoteAclService		remoteAclService;									// 注入远程访问接口
+	protected RemoteAclService		remoteAclService;											// 注入远程访问接口
 
 	@Autowired
 	@Qualifier("logsService")
@@ -176,12 +178,12 @@ public abstract class BaseController<T> {
 	 * @throws Exception
 	 */
 	protected void initParam(HttpServletRequest request, String operate) throws Exception {
-		try{
-		this.userparams = decode(request, operate);
-		}catch (Exception e) {
+		try {
+			this.userparams = decode(request, operate);
+		} catch (Exception e) {
 			throw new WekitException("传入了非法加密的查询!");
 		}
-		logger.info(remoteAcl.getUsername()+":"+this.userparams);
+		logger.info(remoteAcl.getUsername() + ":" + this.userparams);
 		String[] params = this.userparams.split("&");
 		if (params != null) {
 			for (String param : params) {
@@ -191,12 +193,12 @@ public abstract class BaseController<T> {
 				}
 			}
 		}
-		if(StringUtils.isEmpty(request.getParameter("test"))){
-		  this.token=Long.parseLong( this.parameters.get(TOKEN));
-		  long diff=System.currentTimeMillis()-this.token;
-		  if(diff>120000){
-			  throw new WekitException("该查询已经失效！请重新生成请求！");
-		  }
+		if (StringUtils.isEmpty(request.getParameter("test"))) {
+			this.token = Long.parseLong(this.parameters.get(TOKEN));
+			long diff = System.currentTimeMillis() - this.token;
+			if (diff > 120000) {
+				throw new WekitException("该查询已经失效！请重新生成请求！");
+			}
 		}
 		paserPaginable();
 		initCommonParam();
@@ -210,7 +212,7 @@ public abstract class BaseController<T> {
 	 * @throws UnsupportedEncodingException
 	 */
 	private String decode(HttpServletRequest request, String operate) throws UnsupportedEncodingException {
-		
+
 		String test = request.getParameter(TEST);
 		if (StringUtils.isEmpty(request.getParameter(USERKEY))) {
 			throw new WekitException("请输入用户信息");
@@ -224,20 +226,19 @@ public abstract class BaseController<T> {
 			throw new WekitException("不存在该授权用户");
 		if (StringUtils.isEmpty(test)) {
 			String password = this.remoteAcl.getPassword();
-			String temp =request.getQueryString();
-			if(StringUtils.isEmpty(temp)){
-				temp=request.getParameter(USERPARAMS);
-			}else
-			{
-				int index=temp.indexOf("&p=");
-				temp=temp.substring(index+3);
+			String temp = request.getQueryString();
+			if (StringUtils.isEmpty(temp)) {
+				temp = request.getParameter(USERPARAMS);
+			} else {
+				int index = temp.indexOf("&p=");
+				temp = temp.substring(index + 3);
 			}
-			try{
-			BasicTextEncryptor basicTextEncryptor=new BasicTextEncryptor();
-			basicTextEncryptor.setPassword(password);
-			this.userparams = basicTextEncryptor.decrypt(temp);
-			}catch(Exception ex){
-			   throw new WekitException("传入不合加密规则的查询字符！");
+			try {
+				BasicTextEncryptor basicTextEncryptor = new BasicTextEncryptor();
+				basicTextEncryptor.setPassword(password);
+				this.userparams = basicTextEncryptor.decrypt(temp);
+			} catch (Exception ex) {
+				throw new WekitException("传入不合加密规则的查询字符！");
 			}
 		} else {
 			this.userparams = URLDecoder.decode(request.getParameter(USERPARAMS), "UTF-8");
@@ -332,6 +333,13 @@ public abstract class BaseController<T> {
 			}
 		}
 
+		if(parameters.containsKey(ID)){
+			try{
+				this.id=Long.parseLong(parameters.get(ID));
+			}catch(Exception ex){
+				throw new WekitException("传入的主键错误!");
+			}
+		}
 		if (parameters.containsKey(MASK)) {
 			this.mask = parameters.get(MASK);
 		}
@@ -341,7 +349,7 @@ public abstract class BaseController<T> {
 		if (parameters.containsKey(JSON)) {
 			this.json = parameters.get(JSON);
 		}
-		
+
 	}
 
 	protected void addData(T data) {
@@ -368,13 +376,13 @@ public abstract class BaseController<T> {
 	protected void setDatas(List<T> datas) {
 		this.pagination.setDatas(datas);
 	}
-	
-	protected void addRemoteLog(String operate){
+
+	protected void addRemoteLog(String operate) {
 		logsService.addRemoteLog(remoteAcl.getAclId(), remoteAcl.getUsername(), operate, this.userparams);// 远程操作日志
 	}
-	
-	protected void addRemoteLog(String content,String operateType){
-		logsService.addRemoteLog(remoteAcl.getAclId(),remoteAcl.getUsername(), operateType, content);
+
+	protected void addRemoteLog(String content, String operateType) {
+		logsService.addRemoteLog(remoteAcl.getAclId(), remoteAcl.getUsername(), operateType, content);
 	}
 
 }
