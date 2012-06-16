@@ -365,8 +365,6 @@ public class CodeServiceImpl implements CodeService {
 				}
 				temp = new String(rule);
 				relseq = String.format("%0" + count + "d", seq);
-				if(maxseq==0)
-				
 				temp = temp.replaceAll("\\[n*\\]", relseq);
 				code = codeDao.getCode(temp);
 				if (code == null) {
