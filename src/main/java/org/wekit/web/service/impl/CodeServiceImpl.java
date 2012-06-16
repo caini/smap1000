@@ -355,11 +355,18 @@ public class CodeServiceImpl implements CodeService {
 		while (batchNums > 0) {
 			ishave = true;
 			while (ishave) {
+				if(maxseq==0){
+					if(count<Long.toString(seq).length()){
+						throw new WekitException("需要生成的编码已经超过了该规则可生成的最大数量限制 还可以申请" + canApply + "个编码!");
+					}
+				}
 				if (seq > maxseq && maxseq > 0) {
 					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制 还可以申请" + canApply + "个编码!");
 				}
 				temp = new String(rule);
 				relseq = String.format("%0" + count + "d", seq);
+				if(maxseq==0)
+				
 				temp = temp.replaceAll("\\[n*\\]", relseq);
 				code = codeDao.getCode(temp);
 				if (code == null) {
