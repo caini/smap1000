@@ -1,7 +1,6 @@
 package org.wekit.web.service.impl;
 
 import java.io.IOException;
-import java.io.ObjectOutputStream.PutField;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -29,16 +28,12 @@ import org.wekit.web.db.dao.RuleTypeDao;
 import org.wekit.web.db.dao.TempCodeDao;
 import org.wekit.web.db.dao.UserDao;
 import org.wekit.web.db.model.Code;
-import org.wekit.web.db.model.CodePool;
 import org.wekit.web.db.model.CodeRule;
 import org.wekit.web.db.model.CodeSequence;
-import org.wekit.web.db.model.RuleType;
 import org.wekit.web.db.model.TempCode;
 import org.wekit.web.db.model.User;
 import org.wekit.web.imports.CodeWrap;
-import org.wekit.web.imports.ExtendCodeWrap;
 import org.wekit.web.service.CodeService;
-import org.wekit.web.service.RuleService;
 import org.wekit.web.util.DataWrapUtil;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -274,13 +269,13 @@ public class CodeServiceImpl implements CodeService {
 			int maxSeq = codeRule.getMaxSequence();
 			if (codeSequences != null && codeSequences.size() > 0) {
 				codeSequence = codeSequences.get(0);
-				if (maxSeq > 0 && (codeSequence.getSeq() + batchSize) >= maxSeq)
-					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - codeSequence.getSeq() - 1) + "个编码!");
+				if (maxSeq > 0 && (codeSequence.getSeq() + batchSize-1) >= maxSeq)
+					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - codeSequence.getSeq() +1) + "个编码!");
 			} else {
 				// 构造新的dequence
 				codeSequence = initCodeSequence(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence(), codeRule.getMaxSequence());
 				if (maxSeq > 0 && (maxSeq - codeSequence.getSeq() +1) <= batchSize)
-					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - minSeq - 1) + "个编码!");
+					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - codeSequence.getSeq()+1) + "个编码!");
 			}
 
 			codes = generationCode(unitCode + "-" + locationCode + "-" + docCode + "-" + maskParser.getMask(), maskParser.getCount(), codeSequence, batchSize, maxSeq);
@@ -388,7 +383,6 @@ public class CodeServiceImpl implements CodeService {
 			throw new WekitException("该申请的编码已经存在了！请选择其他的编码！");
 		}
 		list.add(rule);
-
 		return list;
 	}
 
