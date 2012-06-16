@@ -269,12 +269,12 @@ public class CodeServiceImpl implements CodeService {
 			int maxSeq = codeRule.getMaxSequence();
 			if (codeSequences != null && codeSequences.size() > 0) {
 				codeSequence = codeSequences.get(0);
-				if (maxSeq > 0 && (codeSequence.getSeq() + batchSize-1) >= maxSeq)
+				if (maxSeq > 0 && (maxSeq - codeSequence.getSeq() +1) < batchSize)
 					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - codeSequence.getSeq() +1) + "个编码!");
 			} else {
 				// 构造新的dequence
 				codeSequence = initCodeSequence(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence(), codeRule.getMaxSequence());
-				if (maxSeq > 0 && (maxSeq - codeSequence.getSeq() +1) <= batchSize)
+				if (maxSeq > 0 && (maxSeq - codeSequence.getSeq() +1) < batchSize)
 					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - codeSequence.getSeq()+1) + "个编码!");
 			}
 
@@ -355,7 +355,7 @@ public class CodeServiceImpl implements CodeService {
 		while (batchNums > 0) {
 			ishave = true;
 			while (ishave) {
-				if(maxseq==0){
+				if(maxseq<1){
 					if(count<Long.toString(seq).length()){
 						throw new WekitException("需要生成的编码已经超过了该规则可生成的最大数量限制 还可以申请" + canApply + "个编码!");
 					}
