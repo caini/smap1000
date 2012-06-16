@@ -83,10 +83,10 @@ public class CodeServiceImpl implements CodeService {
 	@Autowired
 	@Qualifier("codeApplyLogDao")
 	private CodeApplyLogDao	codeApplyLogDao;
-	
+
 	@Autowired
 	@Qualifier("ruleTypeDao")
-	private RuleTypeDao ruleTypeDao;
+	private RuleTypeDao		ruleTypeDao;
 
 	@Override
 	public Code getCode(Long id) {
@@ -195,7 +195,7 @@ public class CodeServiceImpl implements CodeService {
 			TempCode tempCode = tempCodes.get(0);
 			String uuid = UUID.randomUUID().toString();
 			Code code = new Code(codeRule.getRuleName(), codeRule.getRule(), user.getDisplayName(), user.getLoginName(), unitCode, locationCode, docCode, tempCode.getCode(), 1, uuid, System.currentTimeMillis(), note, filename, user.getDeptDisplayName(), codeRule.getFileTypeName(), tempCode.getCodeName(), tempCode.getYear(), tempCode.getMonth(), tempCode.getDay());
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis(),codeRule.getFileTypeName());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis(), codeRule.getFileTypeName());
 			code = codeDao.addCode(code);
 			tempCodeDao.deleteTempCode(tempCode);
 			return code;
@@ -205,7 +205,7 @@ public class CodeServiceImpl implements CodeService {
 		if (codes != null && codes.size() > 0) {
 			Code code = codes.get(0);
 			codePoolDao.insertCodePool(code.getCode());
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis(),codeRule.getFileTypeName());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis(), codeRule.getFileTypeName());
 			return code;
 		}
 		return null;
@@ -242,10 +242,10 @@ public class CodeServiceImpl implements CodeService {
 		if (user == null) {
 			throw new WekitException("找不到对应的用户信息!");
 		}
-		
+
 		List<Code> codes = this.createCodes(codeRule, unitCode, locationCode, docCode, user, note, batchSize, filename, codeName, maskParser);
 		for (Code code : codes) {
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis(),codeRule.getFileTypeName());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), DataWrapUtil.ObjectToJson(code), CodeApplyLogDao.APPLYOPERATE, System.currentTimeMillis(), codeRule.getFileTypeName());
 			codePoolDao.insertCodePool(code.getCode());
 		}
 
@@ -266,32 +266,31 @@ public class CodeServiceImpl implements CodeService {
 	 * @return
 	 */
 	private List<Code> createCodes(CodeRule codeRule, String unitCode, String locationCode, String docCode, User user, String note, int batchSize, String fileName, String codeName, MaskParser maskParser) {
-		List<String> codes=null;
-		if(maskParser.getCount()!=0){
-		List<CodeSequence> codeSequences = codeSequenceDao.queryCodeSequences(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence(), codeRule.getMaxSequence(), null);
-		CodeSequence codeSequence = null;
-		int minSeq = codeRule.getMinSequence();
-		int maxSeq = codeRule.getMaxSequence();
-		if (codeSequences != null && codeSequences.size() > 0) {
-			codeSequence = codeSequences.get(0);
-			if (maxSeq > 0 && (codeSequence.getSeq() + batchSize) >= maxSeq)
-				throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - codeSequence.getSeq() - 1) + "个编码!");
+		List<String> codes = null;
+		if (maskParser.getCount() != 0) {
+			List<CodeSequence> codeSequences = codeSequenceDao.queryCodeSequences(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence(), codeRule.getMaxSequence(), null);
+			CodeSequence codeSequence = null;
+			int minSeq = codeRule.getMinSequence();
+			int maxSeq = codeRule.getMaxSequence();
+			if (codeSequences != null && codeSequences.size() > 0) {
+				codeSequence = codeSequences.get(0);
+				if (maxSeq > 0 && (codeSequence.getSeq() + batchSize) >= maxSeq)
+					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - codeSequence.getSeq() - 1) + "个编码!");
+			} else {
+				// 构造新的dequence
+				codeSequence = initCodeSequence(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence(), codeRule.getMaxSequence());
+				if (maxSeq > 0 && (maxSeq - codeSequence.getSeq() +1) <= batchSize)
+					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - minSeq - 1) + "个编码!");
+			}
+
+			codes = generationCode(unitCode + "-" + locationCode + "-" + docCode + "-" + maskParser.getMask(), maskParser.getCount(), codeSequence, batchSize, maxSeq);
+			if (!codeSequenceDao.updateCodeSequence(codeSequence))
+				throw new WekitException("生成编码时发生意外请与管理员联系!");
 		} else {
-			// 构造新的dequence
-			codeSequence = initCodeSequence(codeRule.getRule(), unitCode, locationCode, docCode, maskParser.getParam(), codeRule.getMinSequence(), codeRule.getMaxSequence());
-			if (maxSeq > 0 && (maxSeq - minSeq - 1) < batchSize)
-				throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制!还可以申请" + (maxSeq - minSeq - 1) + "个编码!");
-		}
-		
-		codes = generationCode(unitCode + "-" + locationCode + "-" + docCode + "-" + maskParser.getMask(), maskParser.getCount(), codeSequence, batchSize, maxSeq);
-		if (!codeSequenceDao.updateCodeSequence(codeSequence))
-			throw new WekitException("生成编码时发生意外请与管理员联系!");
-		}else
-		{
-			if(batchSize>1){
+			if (batchSize > 1) {
 				throw new WekitException("该编码规则没有流水号不能进行批量申请！");
 			}
-			codes=generationNoSeqCode(unitCode + "-" + locationCode + "-" + docCode + "-" + maskParser.getMask());
+			codes = generationNoSeqCode(unitCode + "-" + locationCode + "-" + docCode + "-" + maskParser.getMask());
 		}
 		List<Code> generationCodes = codeDao.addCodes(codes, codeRule, unitCode, locationCode, docCode, user, note, fileName, codeName, maskParser.getParam().get("year"), maskParser.getParam().get("month"), maskParser.getParam().get("day"));
 		return generationCodes;
@@ -361,8 +360,10 @@ public class CodeServiceImpl implements CodeService {
 		while (batchNums > 0) {
 			ishave = true;
 			while (ishave) {
+				if (seq > maxseq && maxseq > 0) {
+					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制 还可以申请" + canApply + "个编码!");
+				}
 				temp = new String(rule);
-				
 				relseq = String.format("%0" + count + "d", seq);
 				temp = temp.replaceAll("\\[n*\\]", relseq);
 				code = codeDao.getCode(temp);
@@ -373,9 +374,6 @@ public class CodeServiceImpl implements CodeService {
 						canApply++;
 					}
 				}
-				if (seq >= maxseq && maxseq > 0) {
-					throw new WekitException("需要生成的编码已经超过了该规则可生成的数量限制 还可以申请" + canApply + "个编码!");
-				}
 				seq++;
 			}
 			batchNums--;
@@ -383,14 +381,14 @@ public class CodeServiceImpl implements CodeService {
 		codeSequence.setSeq(seq);
 		return result;
 	}
-	
-	public List<String> generationNoSeqCode(String rule){
-		List<String> list=new ArrayList<String>();
-		if(codePoolDao.isExistsed(rule)){
+
+	public List<String> generationNoSeqCode(String rule) {
+		List<String> list = new ArrayList<String>();
+		if (codePoolDao.isExistsed(rule)) {
 			throw new WekitException("该申请的编码已经存在了！请选择其他的编码！");
 		}
 		list.add(rule);
-		
+
 		return list;
 	}
 
@@ -417,7 +415,11 @@ public class CodeServiceImpl implements CodeService {
 		}
 		codeSequence.setMinSequence(minSeq);
 		codeSequence.setMaxSequence(maxSeq);
-		codeSequence.setSeq(minSeq); // 设置起始的序列
+		if (minSeq == 0) {
+			codeSequence.setSeq(1); // 设置起始的序列
+		} else {
+			codeSequence.setSeq(minSeq); // 设置起始的序列
+		}
 		codeSequenceDao.addCodeSequence(codeSequence);
 		if (codeSequence.getCodesequenceId() == 0)
 			throw new WekitException("生成编码时发生意外请与管理员联系!");
@@ -477,7 +479,7 @@ public class CodeServiceImpl implements CodeService {
 			}
 			oldinfo = DataWrapUtil.ObjectToJson(code);
 			codeDao.deleteCode(code);
-			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), oldinfo, CodeApplyLogDao.CANCELOPERATE, System.currentTimeMillis(),codeRule.getFileTypeName());
+			codeApplyLogDao.saveCodeApplyLog(user.getLoginName(), user.getDisplayName(), user.getDeptName(), user.getDeptDisplayName(), codeRule.getFileType(), code.getCode(), oldinfo, CodeApplyLogDao.CANCELOPERATE, System.currentTimeMillis(), codeRule.getFileTypeName());
 			logger.info("creater:" + user.getDisplayName() + "||createrid:" + createrid + "取消:编码 " + oldinfo);
 		} catch (Exception e) {
 			logger.error(e.getMessage());
@@ -612,7 +614,7 @@ public class CodeServiceImpl implements CodeService {
 		int index = 1;
 		String temp = null;
 		String temp2 = null;
-		
+
 		while (true) {
 			index = mask.indexOf("[");
 			if (index == -1)
@@ -626,7 +628,7 @@ public class CodeServiceImpl implements CodeService {
 				return false;
 
 			mask = mask.substring(index + 1, mask.length());
-			code = code.substring(index -1, code.length());
+			code = code.substring(index - 1, code.length());
 		}
 		return true;
 	}
