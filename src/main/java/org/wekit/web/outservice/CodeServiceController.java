@@ -185,7 +185,7 @@ public class CodeServiceController extends BaseController<Code> {
 	@RequestMapping(value = "/code/cancel.{extend}")
 	public String cancelCode(@PathVariable("extend") String extend, HttpServletRequest request, HttpServletResponse response, Model model) {
 		try {
-			initParam(request,"撤销编码");
+			initParam(request,"撤销有规则编码");
 			if (StringUtils.isEmpty(code) || StringUtils.isEmpty(createrid) ) {
 				pagination.setState(0);
 				pagination.setMessage("传入的参数错误，请检测参数是否正确!");
