@@ -67,7 +67,7 @@ public class ExtendCodeServiceController extends BaseController<ExtendCode> {
 			codes.add(code);
 			this.setDatas(codes);
 			this.setMessage("添加无规则编码成功");
-			addRemoteLog(DataWrapUtil.ObjectToJson(code), "获取无规则编码");
+			addRemoteLog("申请无规则编码"+this.code+"成功", "获取无规则编码");
 		} catch (Exception ex) {
 			addRemoteLog("添加无规则编码：" + this.code + "发生错误：" + ex.getMessage(), "获取无规则编码");
 			logger.error(ex.getMessage());

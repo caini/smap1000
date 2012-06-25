@@ -222,7 +222,13 @@ public class CodeServiceController extends BaseController<Code> {
 		} else {
 			list = this.codeService.batchCode(this.ruleId, this.unitCode, this.locationCode, this.docCode, this.createrid, this.note, this.batchSize,this.filename,this.codeName);
 		}
-		addRemoteLog(DataWrapUtil.ObjectToJson(list),"获取有规则编码");
+		StringBuffer buffer=new StringBuffer();
+		buffer.append("申请有规则编码  ");
+		for(Code code:list){
+			buffer.append(code.getCode()+"  ");
+		}
+		buffer.append("成功.");
+		addRemoteLog(buffer.toString(),"获取有规则编码");
 		this.pagination.setDatas(list);
 	}
 
