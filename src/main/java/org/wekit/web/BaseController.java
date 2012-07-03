@@ -246,7 +246,7 @@ public abstract class BaseController<T> {
 		return this.userparams;
 	}
 
-	protected void initCommonParam() {
+	protected void initCommonParam() throws Exception{
 		if (parameters.containsKey(CREATER)) {
 			this.creatername = parameters.get(CREATER);
 		}
@@ -352,7 +352,7 @@ public abstract class BaseController<T> {
 
 	}
 
-	private String decode(String str){
+	private String decode(String str)throws Exception{
 		return URLDecoder.decode(str, "UTF-8");
 	}
 	
