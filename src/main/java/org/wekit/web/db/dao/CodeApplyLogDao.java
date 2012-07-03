@@ -3,9 +3,9 @@ package org.wekit.web.db.dao;
 import org.wekit.web.db.model.CodeApplyLog;
 
 public interface CodeApplyLogDao {
-	public final static String APPLYOPERATE="规则编码申请"; //有规则编码申请
+	public final static String APPLYOPERATE="有规则编码申请"; //有规则编码申请
 
-	public final static String CANCELOPERATE="规则编码撤销";//取消有规则编码
+	public final static String CANCELOPERATE="有规则编码撤销";//取消有规则编码
 	
 	public final static String UAPPLAYOPERATE="无规则编码申请";//无规则编码申请
 	

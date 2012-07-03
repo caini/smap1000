@@ -279,7 +279,7 @@ public abstract class BaseController<T> {
 		}
 
 		if (parameters.containsKey(NOTE)) {
-			this.note = parameters.get(NOTE);
+			this.note =decode(parameters.get(NOTE));
 		}
 
 		if (parameters.containsKey(KEY)) {
@@ -287,10 +287,10 @@ public abstract class BaseController<T> {
 		}
 
 		if (parameters.containsKey(RULENAME))
-			this.rulename = parameters.get(RULENAME);
+			this.rulename = decode(parameters.get(RULENAME));
 
 		if (parameters.containsKey(FILENAME))
-			this.filename = parameters.get(FILENAME);
+			this.filename = decode(parameters.get(FILENAME));
 
 		if (parameters.containsKey(RULEID)) {
 			try {
@@ -319,7 +319,7 @@ public abstract class BaseController<T> {
 			this.rule = parameters.get(RULE);
 		}
 		if (parameters.containsKey(CODENAME)) {
-			this.codeName = parameters.get(CODENAME);
+			this.codeName = decode(parameters.get(CODENAME));
 		}
 		if (parameters.containsKey(DATAS)) {
 			this.datas = parameters.get(DATAS);
@@ -344,14 +344,18 @@ public abstract class BaseController<T> {
 			this.mask = parameters.get(MASK);
 		}
 		if (parameters.containsKey(APPLYTITLE)) {
-			this.applyTitle = parameters.get(APPLYTITLE);
+			this.applyTitle =decode(parameters.get(APPLYTITLE));
 		}
 		if (parameters.containsKey(JSON)) {
-			this.json = parameters.get(JSON);
+			this.json =decode(parameters.get(JSON));
 		}
 
 	}
 
+	private String decode(String str){
+		return URLDecoder.decode(str, "UTF-8");
+	}
+	
 	protected void addData(T data) {
 		pagination.getDatas().add(data);
 	}
