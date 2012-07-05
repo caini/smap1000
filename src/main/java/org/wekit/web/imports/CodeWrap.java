@@ -32,6 +32,8 @@ public class CodeWrap implements Serializable {
 	
 	private String result;
 	
+	private int flag;
+	
 	public CodeWrap(){
 		
 		
@@ -49,6 +51,15 @@ public class CodeWrap implements Serializable {
 	}
 	
 	
+
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
+	}
+
 	public String getRuleName() {
 		return ruleName;
 	}
@@ -114,8 +125,4 @@ public class CodeWrap implements Serializable {
 	public void setResult(String result) {
 		this.result = result;
 	}
-
-
-	
-
 }

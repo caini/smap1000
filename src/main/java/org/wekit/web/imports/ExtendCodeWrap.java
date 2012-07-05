@@ -34,6 +34,7 @@ public class ExtendCodeWrap  implements Serializable{
 	
 	private long filType;
 	
+	private int flag;
 	
 	private String fileName;
 
@@ -143,6 +144,14 @@ public class ExtendCodeWrap  implements Serializable{
 
 	public void setApplyTitle(String applyTitle) {
 		this.applyTitle = applyTitle;
+	}
+
+	public int getFlag() {
+		return flag;
+	}
+
+	public void setFlag(int flag) {
+		this.flag = flag;
 	}
 	
 	

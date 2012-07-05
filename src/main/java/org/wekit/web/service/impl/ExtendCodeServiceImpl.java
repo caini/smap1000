@@ -167,6 +167,7 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 		ExtendCodeWrap[] wraps=	DataWrapUtil.jsonToExtendCodeWrapList(json);
 		for(ExtendCodeWrap wrap:wraps){
 			try{
+				wrap.setFlag(0);
 				if(StringUtils.isEmpty(wrap.getCode())){
 					wrap.setResult("编码不存在!");
 					continue;
@@ -194,11 +195,12 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 				}else{
 					wrap.setResult("该编码已经在数据库中存在了！");
 				}
+				wrap.setFlag(1);
+				wrap.setResult("导入成功!");
 			}catch(Exception ex){
 				wrap.setResult(ex.getMessage());
 			}
 		}
-		
 		return wraps;
 		
 	} catch (JsonParseException e) {
@@ -210,11 +212,9 @@ public class ExtendCodeServiceImpl implements ExtendCodeService {
 	} catch (IOException e) {
 		logger.error(e.getMessage());
 		throw new WekitException(e.getMessage());
-	}
-		
+		}
 	}
 	
-
 	public CodePoolDao getCodePoolDao() {
 		return codePoolDao;
 	}

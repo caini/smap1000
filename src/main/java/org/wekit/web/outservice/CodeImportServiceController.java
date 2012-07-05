@@ -42,5 +42,4 @@ public class CodeImportServiceController  extends BaseController<CodeWrap>{
 		addRemoteLog(cid+"导入有规则编码成功!", "有规则编码导入");
 		return displayAPIClient(extend, model);
 	}
-
 }

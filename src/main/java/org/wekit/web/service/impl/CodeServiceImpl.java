@@ -515,6 +515,7 @@ public class CodeServiceImpl implements CodeService {
 			String uuid = UUID.randomUUID().toString();
 			for (CodeWrap wrap : wraps) {
 				try {
+					wrap.setFlag(0);
 					if (StringUtils.isEmpty(wrap.getCode())) {
 						wrap.setResult("编码存在!");
 						continue;
@@ -547,13 +548,14 @@ public class CodeServiceImpl implements CodeService {
 						wrap.setResult("编码规则和编码不匹配!");
 						continue;
 					}
+					wrap.setFlag(1);
 					wrap.setResult("导入成功!");
 				} catch (Exception ex) {
+					logger.error(ex.getMessage());
 					wrap.setResult(ex.getMessage());
 				}
 			}
 			return wraps;
-
 		} catch (JsonParseException e) {
 			logger.error(e.getMessage());
 			throw new WekitException(e.getMessage());
@@ -567,6 +569,7 @@ public class CodeServiceImpl implements CodeService {
 	}
 
 	private boolean checkImport(String rule, String code, Map<String, Integer> params) {
+		
 		String[] rules = rule.split("-");
 		String[] codes = code.split("-");
 		if (!rules[0].endsWith("x") && !rules[0].equals(codes[0]))
