@@ -55,7 +55,7 @@ public class CodeApplyLog implements Serializable{
 	private String code;
 	
 	@Lob
-	@Column(name="content",nullable=true,length=2000)
+	@Column(name="content",nullable=true,length=4096)
 	private String content;
 	
 	@Column(name="operatetype",nullable=false)

@@ -84,12 +84,10 @@ public class Code implements Serializable {
 	private String				batchId;
 
 	// 编码备注
-	@Column(name = "note")
-	@Lob
+	@Column(name = "note",length=1024)
 	private String				note;
 	
-	@Column(name="filename",nullable=true)
-	@Lob
+	@Column(name="filename",nullable=true,length=1024)
 	private String filename;
 
 	@Column(name="rulename",length=128,nullable=true)

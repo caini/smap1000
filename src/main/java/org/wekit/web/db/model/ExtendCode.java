@@ -57,8 +57,7 @@ public class ExtendCode implements Serializable{
 	private long createTime;
 	
 	//无规则编码的备注
-	@Column(name="note")
-	@Lob
+	@Column(name="note",length=1024)
 	private String note;
 	
 	//编码申请时的标题
@@ -91,8 +90,7 @@ public class ExtendCode implements Serializable{
 	@Column(name="applyedname",length=64)
 	private String applyedName;
 	
-	@Column(name="filename")
-	@Lob
+	@Column(name="filename",length=1024)
 	private String fileName;
 	
 	@Column(name="deptname",length=128)
