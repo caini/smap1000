@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Version;
@@ -83,10 +84,12 @@ public class Code implements Serializable {
 	private String				batchId;
 
 	// 编码备注
-	@Column(name = "note", length = 512)
+	@Column(name = "note")
+	@Lob
 	private String				note;
 	
-	@Column(name="filename",length=512,nullable=true)
+	@Column(name="filename",nullable=true)
+	@Lob
 	private String filename;
 
 	@Column(name="rulename",length=128,nullable=true)
